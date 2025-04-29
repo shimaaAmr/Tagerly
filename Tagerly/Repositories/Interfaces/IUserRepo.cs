@@ -1,21 +1,12 @@
 ﻿using Tagerly.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Tagerly.Repositories.Interfaces
 {
-    public interface IUserRepo
+    public interface IUserRepo : IBaseRepo<ApplicationUser>
     {
-        public void Add(ApplicationUser obj);
-
-        public void Update(ApplicationUser obj);
-
-        public void Delete(ApplicationUser obj);
-
-        public List<ApplicationUser> GetAll();
-
-        public ApplicationUser GetById(string id);
-
-
-        //best practice
-        public void Save();
+        // يمكن إضافة دوال خاصة بالمستخدمين هنا
+        Task<ApplicationUser> GetUserWithOrdersAsync(string userId);
     }
 }

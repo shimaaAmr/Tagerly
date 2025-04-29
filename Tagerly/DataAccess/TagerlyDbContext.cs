@@ -18,6 +18,7 @@ namespace Tagerly.DataAccess
         }
         // DbSets
         public DbSet<Cart> Carts { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Favourite> Favourites { get; set; }
         public DbSet<Notification> Notifications { get; set; }
@@ -35,6 +36,7 @@ namespace Tagerly.DataAccess
             modelBuilder.ApplyConfiguration(new ProfileConfiguration());
             modelBuilder.ApplyConfiguration(new ApplicationUserConfiguration());
             modelBuilder.ApplyConfiguration(new CartConfiguration());
+            modelBuilder.ApplyConfiguration(new CartItemConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
             modelBuilder.ApplyConfiguration(new FavouriteConfiguration());
             modelBuilder.ApplyConfiguration(new NotificationConfiguration());

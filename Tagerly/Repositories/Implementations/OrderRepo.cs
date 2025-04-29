@@ -1,46 +1,52 @@
 ﻿using Tagerly.DataAccess;
 using Tagerly.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
 using Tagerly.Repositories.Interfaces;
 
 namespace Tagerly.Repositories.Implementations
 {
-    public class OrderRepo : IOrderRepo
+    public class OrderRepo : BaseRepo<Order>, IOrderRepo
     {
-        TagerlyDbContext _context;
-        public OrderRepo(TagerlyDbContext context)
+        public OrderRepo(TagerlyDbContext context) : base(context) { }
+
+        public async Task<List<Order>> GetUserOrdersAsync(string userId)
         {
-            _context = context;
-        }
-        public void Add(Order obj)
-        {
-            _context.Orders.Add(obj);
+            return await _context.Orders
+                .Where(o => o.UserId == userId)
+                .Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Product)
+                .ToListAsync();
         }
 
-        public void Delete(Order obj)
+        public async Task<Order> CreateOrderFromCartAsync(string userId, Payment payment)
         {
-            _context.Orders.Remove(obj);
-        }
+            var cart = await _context.Carts
+                .Include(c => c.CartItems)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
 
-        public List<Order> GetAll()
-        {
-            return _context.Orders.ToList();
-        }
+            if (cart == null) return null;
 
-        public Order GetById(int id)
-        {
-            return _context.Orders.FirstOrDefault(O => O.Id == id);
-        }
+            var order = new Order
+            {
+                UserId = userId,
+                OrderDate = DateTime.UtcNow,
+                Status = "Pending",
+                Payment = payment,
+                OrderDetails = cart.CartItems.Select(ci => new OrderDetail
+                {
+                    ProductId = ci.ProductId,
+                    Quantity = ci.Quantity,
+                    Price = ci.Product.Price
+                }).ToList()
+            };
 
-        public void Update(Order obj)
-        {
-            _context.Orders.Update(obj);
-        }
+            await _context.Orders.AddAsync(order);
+            _context.CartItems.RemoveRange(cart.CartItems);
 
-        //best practice
-        public void Save()
-        {
-            _context.SaveChanges();
+            return order;
         }
-
     }
 }

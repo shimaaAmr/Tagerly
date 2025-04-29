@@ -15,8 +15,10 @@ namespace Tagerly.DataAccess.ConfigurationClasses
                    .HasForeignKey<Cart>(c => c.UserId)
                    .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany(c => c.Products)
-                   .WithOne(p => p.Cart);
+            builder.HasMany(c => c.CartItems) // علاقة مع CartItems وليس مع Products مباشرة
+                   .WithOne(ci => ci.Cart)
+                   .HasForeignKey(ci => ci.CartId)
+                   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

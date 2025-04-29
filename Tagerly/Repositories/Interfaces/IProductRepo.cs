@@ -1,21 +1,13 @@
 ﻿using Tagerly.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Tagerly.Repositories.Interfaces
 {
-    public interface IProductRepo
+    public interface IProductRepo : IBaseRepo<Product>
     {
-        public void Add(Product obj);
-
-        public void Update(Product obj);
-
-        public void Delete(Product obj);
-
-        public List<Product> GetAll();
-
-        public Product GetById(int id);
-
-
-        //best practice
-        public void Save();
+        // يمكن إضافة دوال خاصة بالمنتجات هنا
+        Task<List<Product>> GetProductsByCategoryAsync(int categoryId);
+        
     }
 }
