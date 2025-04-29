@@ -1,21 +1,12 @@
 ﻿using Tagerly.Models;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Tagerly.Repositories.Interfaces
 {
-    public interface IOrderRepo
+    public interface IOrderRepo : IBaseRepo<Order>
     {
-        public void Add(Order obj);
-
-        public void Update(Order obj);
-
-        public void Delete(Order obj);
-
-        public List<Order> GetAll();
-
-        public Order GetById(int id);
-
-
-        //best practice
-        public void Save();
+        Task<List<Order>> GetUserOrdersAsync(string userId);
+        Task<Order> CreateOrderFromCartAsync(string userId, Payment payment);
     }
 }

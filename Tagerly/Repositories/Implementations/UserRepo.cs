@@ -42,5 +42,39 @@ namespace Tagerly.Repositories.Implementations
             _context.SaveChanges();
         }
 
+        public Task<ApplicationUser> GetUserWithOrdersAsync(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task AddAsync(ApplicationUser entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateAsync(ApplicationUser entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteAsync(ApplicationUser entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<ApplicationUser>> GetAllAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ApplicationUser> GetByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SaveAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

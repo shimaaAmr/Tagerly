@@ -1,44 +1,30 @@
 ﻿using Tagerly.DataAccess;
 using Tagerly.Models;
+using Tagerly.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Tagerly.Repositories.Implementations
 {
-    public class ProductRepo
+    public class ProductRepo : BaseRepo<Product>, IProductRepo
     {
-        TagerlyDbContext _context;
-        public ProductRepo(TagerlyDbContext context)
+        public ProductRepo(TagerlyDbContext context) : base(context) { }
+
+        public async Task<List<Product>> GetProductsByCategoryAsync(int categoryId)
         {
-            _context = context;
-        }
-        public void Add(Product obj)
-        {
-            _context.Products.Add(obj);
+            return await _context.Products
+                .Where(p => p.CategoryId == categoryId)
+                .ToListAsync();
         }
 
-        public void Delete(Product obj)
+        public async Task<List<Product>> GetAllProductsAsync()
         {
-            _context.Products.Remove(obj);
+            return await _context.Products.ToListAsync();
         }
 
-        public List<Product> GetAll()
-        {
-            return _context.Products.ToList();
-        }
-
-        public Product GetById(int id)
-        {
-            return _context.Products.FirstOrDefault(O => O.Id == id);
-        }
-
-        public void Update(Product obj)
-        {
-            _context.Products.Update(obj);
-        }
-
-        //best practice
-        public void Save()
-        {
-            _context.SaveChanges();
-        }
+       
+    
+        
     }
 }

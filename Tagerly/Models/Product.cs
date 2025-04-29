@@ -19,6 +19,7 @@ namespace Tagerly.Models
         public Cart Cart { get; set; }
         public ICollection<OrderDetail> OrderDetails { get; set; }
         public ICollection<Favourite> Favourites { get; set; }
-        
+        public ICollection<CartItem> CartItems { get; set; }
+
     }
 }

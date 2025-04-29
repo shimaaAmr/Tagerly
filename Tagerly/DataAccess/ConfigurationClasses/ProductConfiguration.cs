@@ -18,8 +18,6 @@ namespace Tagerly.DataAccess.ConfigurationClasses
                    .HasForeignKey(p => p.CategoryId)
                    .OnDelete(DeleteBehavior.Restrict);
 
-            // Many-to-Many with Cart (configured in CartConfiguration)
-
             // One-to-Many with OrderDetails
             builder.HasMany(p => p.OrderDetails)
                    .WithOne(od => od.Product)
@@ -31,6 +29,12 @@ namespace Tagerly.DataAccess.ConfigurationClasses
                    .WithOne(f => f.Product)
                    .HasForeignKey(f => f.ProductId)
                    .OnDelete(DeleteBehavior.Cascade);
+
+            // إضافة العلاقة مع CartItems
+            builder.HasMany(p => p.CartItems)
+                   .WithOne(ci => ci.Product)
+                   .HasForeignKey(ci => ci.ProductId)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
