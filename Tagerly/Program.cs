@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Tagerly.DataAccess;
+using Tagerly.Repositories.Implementations;
+using Tagerly.Repositories.Interfaces;
 
 namespace Tagerly
 {
@@ -17,6 +19,14 @@ namespace Tagerly
                 //options.UseSqlServer("Data Source=.;Initial Catalog=Organization;Integrated Security=True;Encrypt=False;Trust Server Certificate=True");
                 options.UseSqlServer(builder.Configuration.GetConnectionString("CS"));
             });
+
+            builder.Services.AddScoped<ICategoryRepo,CategoryRepo>();
+            builder.Services.AddScoped<IOrderRepo,OrderRepo>();
+            builder.Services.AddScoped<IUserRepo,UserRepo>();
+            //builder.Services.AddScoped<IProductRepo, ProductRepo>();
+
+
+
 
             var app = builder.Build();
 
