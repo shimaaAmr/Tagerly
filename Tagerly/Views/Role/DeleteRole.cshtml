@@ -1,0 +1,20 @@
+﻿@{
+	ViewBag.Title = "Delete Role";
+}
+
+<h2>Delete Role</h2>
+
+<form asp-action="DeleteRole" method="post">
+	<div class="form-group">
+		<label for="selectedRole">Select Role to Delete</label>
+		<select asp-items="ViewBag.Roles" class="form-control" name="selectedRole">
+			<option value="">-- Select Role --</option>
+		</select>
+	</div>
+	<button type="submit" class="btn btn-danger mt-2">Delete Role</button>
+</form>
+
+@if (ViewBag.Message != null)
+{
+	<div class="alert alert-success mt-3">@ViewBag.Message</div>
+}
