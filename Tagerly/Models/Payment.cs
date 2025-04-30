@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Tagerly.Models.Enums;
 
 namespace Tagerly.Models
 {
