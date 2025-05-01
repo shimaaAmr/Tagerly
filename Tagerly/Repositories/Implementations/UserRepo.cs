@@ -4,47 +4,11 @@ using Tagerly.Repositories.Interfaces;
 
 namespace Tagerly.Repositories.Implementations
 {
-    public class UserRepo:IUserRepo
+    public class UserRepo : GenericRepo<ApplicationUser>,IUserRepo
     {
         TagerlyDbContext _context;
-        public UserRepo(TagerlyDbContext context)
+        public UserRepo(TagerlyDbContext context) : base(context)
         {
-            _context = context;
-        }
-        public void Add(ApplicationUser obj)
-        {
-            _context.Users.Add(obj);
-        }
-
-        public void Delete(ApplicationUser obj)
-        {
-            _context.Users.Remove(obj);
-        }
-
-        public List<ApplicationUser> GetAll()
-        {
-            return _context.Users.ToList();
-        }
-
-        public ApplicationUser GetById(string id)
-        {
-            return _context.Users.FirstOrDefault(u => u.Id == id);
-        }
-
-        public void Update(ApplicationUser obj)
-        {
-            _context.Users.Update(obj);
-        }
-
-        //best practice
-        public void Save()
-        {
-            _context.SaveChanges();
-        }
-
-        public Task<ApplicationUser> GetUserWithOrdersAsync(string userId)
-        {
-            throw new NotImplementedException();
         }
 
         public Task AddAsync(ApplicationUser entity)
@@ -52,17 +16,12 @@ namespace Tagerly.Repositories.Implementations
             throw new NotImplementedException();
         }
 
-        public Task UpdateAsync(ApplicationUser entity)
+        public void Delete(ApplicationUser entity)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteAsync(ApplicationUser entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<ApplicationUser>> GetAllAsync()
+        public Task<IEnumerable<ApplicationUser>> GetAllAsync()
         {
             throw new NotImplementedException();
         }
@@ -72,7 +31,17 @@ namespace Tagerly.Repositories.Implementations
             throw new NotImplementedException();
         }
 
-        public Task SaveAsync()
+        public Task<ApplicationUser> GetUserWithOrdersAsync(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SaveChangesAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update(ApplicationUser entity)
         {
             throw new NotImplementedException();
         }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Tagerly.Repositories.Interfaces
 {
-    public interface ICartRepo : IBaseRepo<Cart>
+    public interface ICartRepo : IGenericRepo<Cart>
     {
         Task<Cart> GetUserCartAsync(string userId);
         Task<CartItem> GetCartItemAsync(int cartId, int productId);
