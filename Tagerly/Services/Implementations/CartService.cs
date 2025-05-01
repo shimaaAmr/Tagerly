@@ -44,7 +44,7 @@ namespace Tagerly.Services.Implementations
                 });
             }
 
-            await _cartRepo.SaveAsync();
+            await _cartRepo.SaveChangesAsync();
         }
 
         public async Task UpdateCartItem(string userId, int productId, int quantity)
@@ -56,7 +56,7 @@ namespace Tagerly.Services.Implementations
             {
                 item.Quantity = quantity;
                 await _cartRepo.UpdateCartItemAsync(item);
-                await _cartRepo.SaveAsync();
+                await _cartRepo.SaveChangesAsync();
             }
         }
 
@@ -68,7 +68,7 @@ namespace Tagerly.Services.Implementations
             if (item != null)
             {
                 await _cartRepo.RemoveCartItemAsync(item);
-                await _cartRepo.SaveAsync();
+                await _cartRepo.SaveChangesAsync();
             }
         }
 
@@ -79,7 +79,7 @@ namespace Tagerly.Services.Implementations
             {
                 await _cartRepo.RemoveCartItemAsync(item);
             }
-            await _cartRepo.SaveAsync();
+            await _cartRepo.SaveChangesAsync();
         }
     }
 }

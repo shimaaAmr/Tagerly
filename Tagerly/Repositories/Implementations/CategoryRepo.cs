@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Tagerly.Repositories.Implementations
 {
-    public class CategoryRepo : BaseRepo<Category>, ICategoryRepo
+    public class CategoryRepo : GenericRepo<Category>, ICategoryRepo
     {
         public CategoryRepo(TagerlyDbContext context) : base(context) { }
 
