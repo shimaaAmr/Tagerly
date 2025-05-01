@@ -8,7 +8,7 @@ using Tagerly.Repositories.Interfaces;
 
 namespace Tagerly.Repositories.Implementations
 {
-    public class OrderRepo : BaseRepo<Order>, IOrderRepo
+    public class OrderRepo : GenericRepo<Order>, IOrderRepo
     {
         public OrderRepo(TagerlyDbContext context) : base(context) { }
 

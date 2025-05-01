@@ -7,7 +7,7 @@ using Tagerly.Repositories.Interfaces;
 
 namespace Tagerly.Repositories.Implementations
 {
-    public class CartRepo : BaseRepo<Cart>, ICartRepo
+    public class CartRepo : GenericRepo<Cart>, ICartRepo
     {
         public CartRepo(TagerlyDbContext context) : base(context) { }
 
