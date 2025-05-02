@@ -14,12 +14,12 @@ namespace Tagerly.DataAccess.ConfigurationClasses
                    .HasForeignKey<ApplicationUser>(u => u.ProfileId)
                    .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(u => u.Cart)
-                   .WithOne(c => c.User)
-                   .HasForeignKey<ApplicationUser>(u => u.CartId)
-                   .OnDelete(DeleteBehavior.Cascade);
+			builder.HasOne(u => u.Cart)
+				   .WithOne(c => c.User)
+				   .HasForeignKey<ApplicationUser>(u => u.CartId)
+				   .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany(u => u.Orders)
+			builder.HasMany(u => u.Orders)
                    .WithOne(o => o.User)
                    .HasForeignKey(o => o.UserId);
 
