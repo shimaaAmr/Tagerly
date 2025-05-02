@@ -1,0 +1,92 @@
+﻿@model Tagerly.ViewModels.CategoryViewModel
+
+@{
+    ViewData["Title"] = "Delete Category";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    :root {
+        --wood-dark: #5E3023;
+        --wood-medium: #895737;
+        --wood-light: #B88B4A;
+        --cream: #E3DCCB;
+        --beige: #D8C4A7;
+        --light-bg: #F5F1EB;
+    }
+
+    body {
+        background-color: var(--light-bg);
+    }
+
+    .delete-box {
+        background-color: var(--cream);
+        padding: 30px;
+        border-radius: 12px;
+        max-width: 600px;
+        margin: 50px auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    h2 {
+        color: var(--wood-dark);
+        margin-bottom: 20px;
+    }
+
+    .info-label {
+        font-weight: bold;
+        color: var(--wood-dark);
+    }
+
+    .info-value {
+        color: var(--wood-medium);
+        margin-bottom: 15px;
+    }
+
+    .btn-wood {
+        background-color: var(--wood-dark);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        margin-right: 10px;
+        text-decoration: none;
+    }
+
+        .btn-wood:hover {
+            background-color: var(--wood-medium);
+        }
+
+    .btn-cancel {
+        background-color: var(--beige);
+        color: var(--wood-dark);
+        padding: 10px 20px;
+        border-radius: 6px;
+        text-decoration: none;
+    }
+
+        .btn-cancel:hover {
+            background-color: var(--wood-light);
+            color: white;
+        }
+</style>
+
+<div class="delete-box">
+    <h2>Confirm Delete</h2>
+
+    <div class="info-label">Name</div>
+    <div class="info-value">@Model.Name</div>
+
+    <div class="info-label">Description</div>
+    <div class="info-value">@Model.Description</div>
+
+    <form asp-action="Delete" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+
+        <button type="submit" class="btn-wood">Delete</button>
+        <a asp-action="Index" class="btn-cancel">Cancel</a>
+    </form>
+</div>
+
