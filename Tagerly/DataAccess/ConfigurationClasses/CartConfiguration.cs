@@ -4,21 +4,21 @@ using Tagerly.Models;
 
 namespace Tagerly.DataAccess.ConfigurationClasses
 {
-    public class CartConfiguration : IEntityTypeConfiguration<Cart>
-    {
-        public void Configure(EntityTypeBuilder<Cart> builder)
-        {
-            builder.HasKey(c => c.Id);
+	public class CartConfiguration : IEntityTypeConfiguration<Cart>
+	{
+		public void Configure(EntityTypeBuilder<Cart> builder)
+		{
+			builder.HasKey(c => c.Id);
 
-            builder.HasOne(c => c.User)
-                   .WithOne(u => u.Cart)
-                   .HasForeignKey<Cart>(c => c.UserId)
-                   .OnDelete(DeleteBehavior.Cascade);
+			builder.HasOne(c => c.User)
+				   .WithOne(u => u.Cart)
+				   .HasForeignKey<Cart>(c => c.UserId)
+				   .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany(c => c.CartItems) // علاقة مع CartItems وليس مع Products مباشرة
-                   .WithOne(ci => ci.Cart)
-                   .HasForeignKey(ci => ci.CartId)
-                   .OnDelete(DeleteBehavior.Cascade);
-        }
-    }
+			builder.HasMany(c => c.CartItems) // علاقة مع CartItems وليس مع Products مباشرة
+				   .WithOne(ci => ci.Cart)
+				   .HasForeignKey(ci => ci.CartId)
+				   .OnDelete(DeleteBehavior.Cascade);
+		}
+	}
 }
