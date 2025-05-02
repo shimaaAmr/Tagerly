@@ -27,8 +27,8 @@ namespace Tagerly
 				//options.UseSqlServer("Data Source=.;Initial Catalog=Organization;Integrated Security=True;Encrypt=False;Trust Server Certificate=True");
 				options.UseSqlServer(builder.Configuration.GetConnectionString("CS"));
 			});
-
-			builder.Services.AddScoped<ICategoryRepo, CategoryRepo>();
+            builder.Services.AddScoped<ICartRepo, CartRepo>();
+            builder.Services.AddScoped<ICategoryRepo, CategoryRepo>();
 			builder.Services.AddScoped<IOrderRepo, OrderRepo>();
 			builder.Services.AddScoped<IUserRepo, UserRepo>();
 			builder.Services.AddScoped<IProductRepo, ProductRepo>();
@@ -36,8 +36,9 @@ namespace Tagerly
 			// builder.Services.AddScoped<IProductService, ProductService>();
 			builder.Services.AddScoped<ICategoryService, CategoryService>();
 			builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ICartService, CartService>();
 
-			builder.Services.AddControllersWithViews()
+            builder.Services.AddControllersWithViews()
 		   .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<SignUpViewModelValidator>());
 
 			// AutoMapper
