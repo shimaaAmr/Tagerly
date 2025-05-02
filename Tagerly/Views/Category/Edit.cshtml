@@ -1,0 +1,92 @@
+﻿@model Tagerly.ViewModels.CategoryViewModel
+
+@{
+    ViewData["Title"] = "Edit Category";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    :root {
+        --wood-dark: #5E3023;
+        --wood-medium: #895737;
+        --wood-light: #B88B4A;
+        --cream: #E3DCCB;
+        --beige: #D8C4A7;
+        --light-bg: #F5F1EB;
+    }
+
+    body {
+        background-color: var(--light-bg);
+    }
+
+    .form-container {
+        background-color: var(--cream);
+        border-radius: 12px;
+        padding: 30px;
+        max-width: 600px;
+        margin: auto;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        color: var(--wood-dark);
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    label {
+        color: var(--wood-dark);
+    }
+
+    input.form-control,
+    textarea.form-control {
+        border: 1px solid var(--wood-light);
+        border-radius: 8px;
+        padding: 8px;
+        background-color: var(--light-bg);
+    }
+
+    .btn-wood {
+        background-color: var(--wood-dark);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        transition: background-color 0.3s;
+    }
+
+        .btn-wood:hover {
+            background-color: var(--wood-medium);
+        }
+</style>
+
+<div class="form-container mt-5">
+    <h2>Edit Category</h2>
+
+    <form asp-action="Edit" method="post">
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group mb-3">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="Description" class="form-label"></label>
+            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn-wood">Update</button>
+            <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+

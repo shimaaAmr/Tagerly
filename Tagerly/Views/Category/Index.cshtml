@@ -1,0 +1,134 @@
+﻿@model IEnumerable<Tagerly.ViewModels.CategoryViewModel>
+
+@{
+    ViewData["Title"] = "Categories";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    :root {
+        --wood-dark: #5E3023;
+        --wood-medium: #895737;
+        --wood-light: #B88B4A;
+        --cream: #E3DCCB;
+        --beige: #D8C4A7;
+        --light-bg: #F5F1EB;
+    }
+
+    body {
+        background-color: var(--light-bg);
+    }
+
+    .table-container {
+        background-color: var(--cream);
+        border-radius: 12px;
+        padding: 30px;
+        max-width: 1000px;
+        margin: auto;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        color: var(--wood-dark);
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: var(--light-bg);
+    }
+
+    th, td {
+        padding: 12px 15px;
+        border: 1px solid var(--wood-light);
+        text-align: left;
+    }
+
+    th {
+        background-color: var(--wood-dark);
+        color: white;
+    }
+
+    tr:nth-child(even) {
+        background-color: var(--beige);
+    }
+
+    a.btn-wood {
+        background-color: var(--wood-dark);
+        color: white;
+        padding: 6px 10px;
+        border-radius: 6px;
+        text-decoration: none;
+        margin-right: 5px;
+        font-size: 0.9rem;
+    }
+
+        a.btn-wood:hover {
+            background-color: var(--wood-medium);
+        }
+
+    .create-btn-container {
+        text-align: right;
+        margin-bottom: 15px;
+    }
+
+    .btn-create {
+        background-color: var(--wood-medium);
+        color: white;
+        padding: 8px 14px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+        .btn-create:hover {
+            background-color: var(--wood-dark);
+        }
+</style>
+
+<div class="table-container mt-5">
+    <h2>Category List</h2>
+
+    <div class="create-btn-container">
+        <a asp-action="Create" class="btn-create">+ Add New Category</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                int i = 1;
+                foreach (var category in Model)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@category.Name</td>
+                        <td>@category.Description</td>
+                        <td>
+@*                             <a class="btn-wood" asp-action="Details" asp-route-id="@category.Id">Details</a>
+ *@                            <a class="btn-wood" asp-action="Edit" asp-route-id="@category.Id">Edit</a>
+                            <a class="btn-wood" asp-action="Delete" asp-route-id="@category.Id">Delete</a>
+                        </td>
+                    </tr>
+                    i++;
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="4" style="text-align:center; color: var(--wood-dark);">No categories found.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
