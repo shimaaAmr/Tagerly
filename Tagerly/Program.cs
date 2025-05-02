@@ -1,3 +1,4 @@
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Tagerly.DataAccess;
@@ -5,8 +6,10 @@ using Tagerly.Mapping;
 using Tagerly.Models;
 using Tagerly.Repositories.Implementations;
 using Tagerly.Repositories.Interfaces;
+using Tagerly.Services;
 using Tagerly.Services.Implementations;
 using Tagerly.Services.Interfaces;
+using Tagerly.ViewModels.Configurations;
 
 namespace Tagerly
 {
@@ -29,14 +32,18 @@ namespace Tagerly
 			builder.Services.AddScoped<IOrderRepo, OrderRepo>();
 			builder.Services.AddScoped<IUserRepo, UserRepo>();
 			builder.Services.AddScoped<IProductRepo, ProductRepo>();
-            // Add Services
-           // builder.Services.AddScoped<IProductService, ProductService>();
-            builder.Services.AddScoped<ICategoryService, CategoryService>();
+			// Add Services
+			// builder.Services.AddScoped<IProductService, ProductService>();
+			builder.Services.AddScoped<ICategoryService, CategoryService>();
+			builder.Services.AddScoped<IUserService, UserService>();
 
-            // AutoMapper
-            builder.Services.AddAutoMapper(typeof(ProductProfile));
+			builder.Services.AddControllersWithViews()
+		   .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<SignUpViewModelValidator>());
 
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+			// AutoMapper
+			builder.Services.AddAutoMapper(typeof(ProductProfile));
+
+			builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 			{
 				options.Password.RequireNonAlphanumeric = false;
 			})
