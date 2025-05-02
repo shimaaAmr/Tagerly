@@ -24,16 +24,21 @@ namespace Tagerly.Controllers
             return "dummy-user";
         }
 
-
         public async Task<IActionResult> Index()
         {
-
             var userId = GetUserId();
             var cart = await _cartService.GetUserCart(userId);
+
+            if (cart == null)
+            {
+                // لو مفيش كارت، ارجع ViewModel فاضي
+                return View(new CartViewModel { UserId = userId });
+            }
 
             var viewModel = MapToViewModel(cart);
             return View(viewModel);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
