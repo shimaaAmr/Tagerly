@@ -33,7 +33,7 @@ namespace Tagerly
 			builder.Services.AddScoped<IUserRepo, UserRepo>();
 			builder.Services.AddScoped<IProductRepo, ProductRepo>();
 			// Add Services
-			// builder.Services.AddScoped<IProductService, ProductService>();
+			builder.Services.AddScoped<IProductService, ProductService>();
 			builder.Services.AddScoped<ICategoryService, CategoryService>();
 			builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ICartService, CartService>();
