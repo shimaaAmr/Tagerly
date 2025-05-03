@@ -20,8 +20,7 @@ namespace Tagerly.Controllers
 
         private string GetUserId()
         {
-            // مؤقتًا نرجع ID ثابت لتجربة الكارت من غير لوجين
-            return "dummy-user";
+            return User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
 
         public async Task<IActionResult> Index()

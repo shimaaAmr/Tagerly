@@ -1,0 +1,37 @@
+﻿@model CartViewModel
+
+<div class="card border-primary mb-4">
+    <div class="card-header bg-primary text-white">
+        Order Summary
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.CartItems)
+                {
+                    <tr>
+                        <td>
+                            <img src="@item.ImageUrl" width="50" class="me-2">
+                            @item.ProductName
+                        </td>
+                        <td>@item.ProductPrice.ToString("C")</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.TotalPrice.ToString("C")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="text-end fw-bold fs-5">
+            Total: @Model.Total.ToString("C")
+        </div>
+    </div>
+</div>

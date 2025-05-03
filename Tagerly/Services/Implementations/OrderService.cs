@@ -1,8 +1,9 @@
-﻿using Tagerly.Repositories.Interfaces;
-using Tagerly.Models;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
-using System.Collections.Generic;
+using Tagerly.Models;
 using Tagerly.Models.Enums;
+using Tagerly.Repositories.Interfaces;
 using Tagerly.Services.Interfaces;
 
 namespace Tagerly.Services.Implementations
@@ -11,29 +12,40 @@ namespace Tagerly.Services.Implementations
     {
         private readonly IOrderRepo _orderRepo;
         private readonly ICartRepo _cartRepo;
+        private readonly IProductRepo _productRepo;
 
-        public OrderService(IOrderRepo orderRepo, ICartRepo cartRepo)
+        public OrderService(
+            IOrderRepo orderRepo,
+            ICartRepo cartRepo,
+            IProductRepo productRepo)
         {
             _orderRepo = orderRepo;
             _cartRepo = cartRepo;
+            _productRepo = productRepo;
         }
 
-        public async Task<List<Order>> GetUserOrders(string userId)
-        {
-            return await _orderRepo.GetUserOrdersAsync(userId);
-        }
-
-        public async Task<Order> PlaceOrder(string userId, PaymentMethod paymentMethod)
+        public async Task<Order> PlaceOrder(
+            string userId,
+            PaymentMethod paymentMethod,
+            string shippingAddress,
+            string email)
         {
             var cart = await _cartRepo.GetUserCartAsync(userId);
-            if (cart == null || cart.CartItems == null || !cart.CartItems.Any())
-                return null;
 
-            var total = cart.CartItems.Sum(ci => ci.Product.Price * ci.Quantity);
+            if (cart == null || !cart.CartItems.Any())
+                throw new InvalidOperationException("Cart is empty");
+
+            // حساب الإجمالي وإنشاء التفاصيل
+            var orderDetails = cart.CartItems.Select(ci => new OrderDetail
+            {
+                ProductId = ci.ProductId,
+                Quantity = ci.Quantity,
+                Price = ci.Product.Price
+            }).ToList();
 
             var payment = new Payment
             {
-                Amount = total,
+                Amount = orderDetails.Sum(od => od.Price * od.Quantity),
                 Method = paymentMethod.ToString(),
                 PaymentDate = DateTime.UtcNow
             };
@@ -42,21 +54,22 @@ namespace Tagerly.Services.Implementations
             {
                 UserId = userId,
                 OrderDate = DateTime.UtcNow,
-                Status = "Pending",
-                Payment = payment,
-                OrderDetails = cart.CartItems.Select(ci => new OrderDetail
-                {
-                    ProductId = ci.ProductId,
-                    Quantity = ci.Quantity,
-                    Price = ci.Product.Price
-                }).ToList()
+                Status = "Processing",
+                ShippingAddress = shippingAddress,
+                OrderDetails = orderDetails,
+                Payment = payment
             };
 
             await _orderRepo.AddAsync(order);
-            await _orderRepo.SaveChangesAsync(); // حفظ الأوردر والدفع
+            await _orderRepo.SaveChangesAsync();
 
-            await _cartRepo.ClearCartAsync(cart);
-            await _cartRepo.SaveChangesAsync(); // حفظ مسح الكارت
+            // تحديث المخزون
+            foreach (var item in cart.CartItems)
+            {
+                var product = await _productRepo.GetByIdAsync(item.ProductId);
+                product.Quantity -= item.Quantity;
+                //await _productRepo.UpdateAsync(product);
+            }
 
             return order;
         }
