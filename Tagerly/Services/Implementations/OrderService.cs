@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Tagerly.Models.Enums;
 using Tagerly.Services.Interfaces;
+
 namespace Tagerly.Services.Implementations
 {
     public class OrderService : IOrderService
@@ -24,20 +25,40 @@ namespace Tagerly.Services.Implementations
 
         public async Task<Order> PlaceOrder(string userId, PaymentMethod paymentMethod)
         {
+            var cart = await _cartRepo.GetUserCartAsync(userId);
+            if (cart == null || cart.CartItems == null || !cart.CartItems.Any())
+                return null;
+
+            var total = cart.CartItems.Sum(ci => ci.Product.Price * ci.Quantity);
+
             var payment = new Payment
             {
-                Amount = await CalculateCartTotal(userId),
+                Amount = total,
                 Method = paymentMethod.ToString(),
                 PaymentDate = DateTime.UtcNow
             };
 
-            return await _orderRepo.CreateOrderFromCartAsync(userId, payment);
-        }
+            var order = new Order
+            {
+                UserId = userId,
+                OrderDate = DateTime.UtcNow,
+                Status = "Pending",
+                Payment = payment,
+                OrderDetails = cart.CartItems.Select(ci => new OrderDetail
+                {
+                    ProductId = ci.ProductId,
+                    Quantity = ci.Quantity,
+                    Price = ci.Product.Price
+                }).ToList()
+            };
 
-        private async Task<decimal> CalculateCartTotal(string userId)
-        {
-            var cart = await _cartRepo.GetUserCartAsync(userId);
-            return cart.CartItems.Sum(ci => ci.Product.Price * ci.Quantity);
+            await _orderRepo.AddAsync(order);
+            await _orderRepo.SaveChangesAsync(); // حفظ الأوردر والدفع
+
+            await _cartRepo.ClearCartAsync(cart);
+            await _cartRepo.SaveChangesAsync(); // حفظ مسح الكارت
+
+            return order;
         }
     }
 }
