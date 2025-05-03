@@ -12,6 +12,7 @@ namespace Tagerly.Models
         public int ProfileId { get; set; }
         public Profile Profile { get; set; }
         public  Cart Cart { get; set; }
+        public ICollection<Product> Products { get; set; }
         public ICollection<Order> Orders { get; set; }
         public ICollection<Favourite> Favourites { get; set; }
         public ICollection<Payment> Payments { get; set; }

@@ -8,6 +8,8 @@ namespace Tagerly.Repositories.Interfaces
     {
         // يمكن إضافة دوال خاصة بالمنتجات هنا
         Task<List<Product>> GetProductsByCategoryAsync(int categoryId);
-        
+        Task<List<Product>> GetAllBySellerRoleAsync();
+
+
     }
 }

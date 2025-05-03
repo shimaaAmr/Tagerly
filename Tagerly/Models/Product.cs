@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Tagerly.Models.Enums;
 
 namespace Tagerly.Models
 {
+
     public class Product
     {
         [Key]
@@ -13,14 +15,24 @@ namespace Tagerly.Models
         public decimal Price { get; set; }
         public int Quantity { get; set; }
         public string ImageUrl { get; set; }
+        public ProductStatus Status { get; set; }
+
+        public string SellerId { get; set; }
+
+
+        // Navigation Property
+        public ApplicationUser Seller { get; set; }
+
 
         [ForeignKey("Category")]
         public int CategoryId { get; set; }
+
         public Category Category { get; set; }
         public Cart Cart { get; set; }
         public ICollection<OrderDetail> OrderDetails { get; set; }
         public ICollection<Favourite> Favourites { get; set; }
         public ICollection<CartItem> CartItems { get; set; }
+
 
     }
 }

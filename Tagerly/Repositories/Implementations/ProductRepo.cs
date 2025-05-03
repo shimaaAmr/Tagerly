@@ -23,8 +23,22 @@ namespace Tagerly.Repositories.Implementations
             return await _context.Products.ToListAsync();
         }
 
-       
-    
-        
+        public async Task<List<Product>> GetAllBySellerRoleAsync()
+        {
+            var sellerRoleId = await _context.Roles
+                .Where(r => r.Name == "Seller")
+                .Select(r => r.Id)
+                .FirstOrDefaultAsync();
+
+            return await _context.Products
+                .Include(p => p.Seller)
+                .Where(p => _context.UserRoles
+                    .Any(ur => ur.UserId == p.SellerId && ur.RoleId == sellerRoleId))
+                .ToListAsync();
+        }
+
+
+
+
     }
 }

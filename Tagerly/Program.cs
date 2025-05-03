@@ -2,11 +2,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Tagerly.DataAccess;
 using Tagerly.Mapping;
+using Tagerly.Mapping.Admin;
 using Tagerly.Models;
 using Tagerly.Repositories.Implementations;
 using Tagerly.Repositories.Interfaces;
 using Tagerly.Services.Implementations;
+using Tagerly.Services.Implementations.Admin;
 using Tagerly.Services.Interfaces;
+using Tagerly.Services.Interfaces.Admin;
 
 namespace Tagerly
 {
@@ -32,9 +35,14 @@ namespace Tagerly
             // Add Services
            // builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<IAdminProductService, AdminProductService>();
+            builder.Services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
+
+
 
             // AutoMapper
             builder.Services.AddAutoMapper(typeof(ProductProfile));
+            builder.Services.AddAutoMapper(typeof(AdminProductProfile));
 
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 			{
