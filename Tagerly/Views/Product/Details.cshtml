@@ -1,0 +1,83 @@
+﻿@model ProductViewModel
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+<style>
+    body {
+        background-color: #F5F1EB;
+        font-family: Arial, sans-serif;
+    }
+
+    :root {
+        --wood: #8b5e3c;
+        --wood-dark: #5c3d24;
+        --cream: #fffdf5;
+    }
+
+    .page-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .form-container {
+        background-color: var(--cream);
+        padding: 2rem;
+        border-radius: 1rem;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        max-width: 600px;
+    }
+
+    h1 {
+        color: var(--wood-dark);
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-primary {
+        background-color: var(--wood);
+        border-color: var(--wood-dark);
+    }
+
+        .btn-primary:hover {
+            background-color: var(--wood-dark);
+            border-color: var(--wood);
+        }
+</style>
+
+<div class="page-center">
+    <div class="form-container">
+        <h1>Product Details</h1>
+        <dl class="row">
+            <dt class="col-sm-4">Name</dt>
+            <dd class="col-sm-8">@Model.Name</dd>
+
+            <dt class="col-sm-4">Description</dt>
+            <dd class="col-sm-8">@Model.Description</dd>
+
+            <dt class="col-sm-4">Price</dt>
+            <dd class="col-sm-8">@Model.Price</dd>
+
+            <dt class="col-sm-4">Category</dt>
+            <dd class="col-sm-8">@Model.CategoryName</dd>
+
+            <dt class="col-sm-4">Image</dt>
+            <dd class="col-sm-8">
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <img src="@Model.ImageUrl" alt="Product Image" class="img-fluid" style="max-height: 200px;" />
+                }
+                else
+                {
+                    <span>No image available</span>
+                }
+            </dd>
+        </dl>
+
+        <a asp-action="Edit" asp-route-id="@Model.ProductId" class="btn btn-primary">Edit</a>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>

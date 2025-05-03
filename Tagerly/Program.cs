@@ -1,3 +1,4 @@
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Tagerly.DataAccess;
@@ -6,10 +7,12 @@ using Tagerly.Mapping.Admin;
 using Tagerly.Models;
 using Tagerly.Repositories.Implementations;
 using Tagerly.Repositories.Interfaces;
+using Tagerly.Services;
 using Tagerly.Services.Implementations;
 using Tagerly.Services.Implementations.Admin;
 using Tagerly.Services.Interfaces;
 using Tagerly.Services.Interfaces.Admin;
+
 
 namespace Tagerly
 {
@@ -27,24 +30,33 @@ namespace Tagerly
 				//options.UseSqlServer("Data Source=.;Initial Catalog=Organization;Integrated Security=True;Encrypt=False;Trust Server Certificate=True");
 				options.UseSqlServer(builder.Configuration.GetConnectionString("CS"));
 			});
-
-			builder.Services.AddScoped<ICategoryRepo, CategoryRepo>();
+            builder.Services.AddScoped<IOrderRepo, OrderRepo>();
+            builder.Services.AddScoped<ICartRepo, CartRepo>();
+            builder.Services.AddScoped<ICategoryRepo, CategoryRepo>();
 			builder.Services.AddScoped<IOrderRepo, OrderRepo>();
 			builder.Services.AddScoped<IUserRepo, UserRepo>();
 			builder.Services.AddScoped<IProductRepo, ProductRepo>();
             // Add Services
            // builder.Services.AddScoped<IProductService, ProductService>();
+  		 	    builder.Services.AddScoped<IProductService, ProductService>();
+			      builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IAdminProductService, AdminProductService>();
+            builder.Services.AddScoped<ICartService, CartService>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
 
 
 
+            builder.Services.AddControllersWithViews()
+		   .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<SignUpViewModelValidator>());
             // AutoMapper
             builder.Services.AddAutoMapper(typeof(ProductProfile));
             builder.Services.AddAutoMapper(typeof(AdminProductProfile));
 
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+
+			builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 			{
 				options.Password.RequireNonAlphanumeric = false;
 			})
@@ -86,7 +98,7 @@ namespace Tagerly
 			app.UseStaticFiles();
 
 			app.UseRouting();
-
+			app.UseAuthentication();
 			app.UseAuthorization();
 
 			app.MapControllerRoute(

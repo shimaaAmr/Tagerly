@@ -24,9 +24,16 @@ namespace Tagerly.Services.Implementations
 
         public async Task AddToCart(string userId, int productId, int quantity = 1)
         {
-            var cart = await _cartRepo.GetUserCartAsync(userId) ?? new Cart { UserId = userId };
-            var product = await _productRepo.GetByIdAsync(productId);
+            var cart = await _cartRepo.GetUserCartAsync(userId);
 
+            if (cart == null)
+            {
+                cart = new Cart { UserId = userId };
+                await _cartRepo.AddCartAsync(cart); // Add this method if it doesn’t exist
+                await _cartRepo.SaveChangesAsync(); // عشان cart.Id يتولد
+            }
+
+            var product = await _productRepo.GetByIdAsync(productId);
             var existingItem = await _cartRepo.GetCartItemAsync(cart.Id, productId);
 
             if (existingItem != null)
@@ -47,6 +54,7 @@ namespace Tagerly.Services.Implementations
             await _cartRepo.SaveChangesAsync();
         }
 
+
         public async Task UpdateCartItem(string userId, int productId, int quantity)
         {
             var cart = await _cartRepo.GetUserCartAsync(userId);
@@ -60,6 +68,20 @@ namespace Tagerly.Services.Implementations
             }
         }
 
+        public async Task ClearCart(string userId)
+        {
+            var cart = await _cartRepo.GetUserCartAsync(userId);
+
+            if (cart == null || cart.CartItems == null || !cart.CartItems.Any())
+                return;
+
+            foreach (var item in cart.CartItems)
+            {
+                await _cartRepo.RemoveCartItemAsync(item);
+            }
+
+            await _cartRepo.SaveChangesAsync();
+        }
         public async Task RemoveFromCart(string userId, int productId)
         {
             var cart = await _cartRepo.GetUserCartAsync(userId);
@@ -72,14 +94,5 @@ namespace Tagerly.Services.Implementations
             }
         }
 
-        public async Task ClearCart(string userId)
-        {
-            var cart = await _cartRepo.GetUserCartAsync(userId);
-            foreach (var item in cart.CartItems)
-            {
-                await _cartRepo.RemoveCartItemAsync(item);
-            }
-            await _cartRepo.SaveChangesAsync();
-        }
     }
 }

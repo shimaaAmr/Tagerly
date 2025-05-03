@@ -5,9 +5,23 @@ using Tagerly.Models.Enums;
 
 namespace Tagerly.Services.Interfaces
 {
-    public interface IOrderService
+
+        public interface IOrderService
+        {
+        Task<Order> PlaceOrder(
+            string userId,
+            PaymentMethod paymentMethod,
+            string shippingAddress,
+            string email);
+
+     
+        }
+    
+
+
+
+    public interface IEmailService
     {
-        Task<List<Order>> GetUserOrders(string userId);
-        Task<Order> PlaceOrder(string userId, PaymentMethod paymentMethod);
+        Task SendEmailAsync(string toEmail, string subject, string htmlContent);
     }
 }
