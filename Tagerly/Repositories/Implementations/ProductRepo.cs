@@ -59,12 +59,29 @@ namespace Tagerly.Repositories.Implementations
             return (items, totalCount);
         }
 
-        public async Task<IEnumerable<Product>> GetProductsByCategoryAsync(int categoryId)
+        public async Task<List<Product>> GetAllBySellerRoleAsync()
+        {
+            var sellerRoleId = await _context.Roles
+                .Where(r => r.Name == "Seller")
+                .Select(r => r.Id)
+                .FirstOrDefaultAsync();
+
+            return await _context.Products
+                .Include(p => p.Seller)
+                .Where(p => _context.UserRoles
+                    .Any(ur => ur.UserId == p.SellerId && ur.RoleId == sellerRoleId))
+                .ToListAsync();
+        }
+
+
+   public async Task<IEnumerable<Product>> GetProductsByCategoryAsync(int categoryId)
         {
             return await _dbSet
                 .Include(p => p.Category)
                 .Where(p => p.CategoryId == categoryId)
                 .ToListAsync();
         }
+
+
     }
 }

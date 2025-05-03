@@ -5,7 +5,10 @@ namespace Tagerly.Repositories.Interfaces
 {
     public interface IProductRepo : IGenericRepo<Product>
     {
-        Task<Product> GetByIdWithCategoryAsync(int id);
+        // يمكن إضافة دوال خاصة بالمنتجات هنا
+        Task<List<Product>> GetProductsByCategoryAsync(int categoryId);
+        Task<List<Product>> GetAllBySellerRoleAsync();
+   Task<Product> GetByIdWithCategoryAsync(int id);
         Task<IEnumerable<Product>> FindAsync(Expression<Func<Product, bool>> predicate);
         Task<(IEnumerable<Product> Items, int TotalCount)> GetPagedAsync(
             int pageIndex,
@@ -13,5 +16,7 @@ namespace Tagerly.Repositories.Interfaces
             Expression<Func<Product, bool>> filter = null,
             Func<IQueryable<Product>, IOrderedQueryable<Product>> orderBy = null);
         Task<IEnumerable<Product>> GetProductsByCategoryAsync(int categoryId);
+
+
     }
 }
