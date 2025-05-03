@@ -41,5 +41,19 @@ namespace Tagerly.Repositories.Implementations
             _context.CartItems.Remove(item);
             await Task.CompletedTask;
         }
+
+        public async Task AddCartAsync(Cart cart)
+        {
+            await _context.Carts.AddAsync(cart);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task ClearCartAsync(Cart cart)
+        {
+            _context.CartItems.RemoveRange(cart.CartItems);
+            await _context.SaveChangesAsync();
+        }
+
+
     }
 }

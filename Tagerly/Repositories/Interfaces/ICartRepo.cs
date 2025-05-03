@@ -11,5 +11,9 @@ namespace Tagerly.Repositories.Interfaces
         Task AddCartItemAsync(CartItem item);
         Task UpdateCartItemAsync(CartItem item);
         Task RemoveCartItemAsync(CartItem item);
+        Task AddCartAsync(Cart cart);
+        Task ClearCartAsync(Cart cart);
+
+
     }
 }
