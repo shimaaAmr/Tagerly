@@ -1,10 +1,20 @@
 ﻿@model CartViewModel
 
-
 @{
     ViewData["Title"] = "Cart";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+<!-- Custom styles -->
+<style>
+    .cart-summary-bg {
+        background-color: #8f7668 !important;
+    }
+
+    .custom-badge {
+        background-color: #8f7668 !important;
+    }
+</style>
 
 <section class="mt-5 container">
     <h1 class="mb-6 display-5 fw-bold text-center">Your Cart</h1>
@@ -47,7 +57,7 @@
                                         <small class="text-muted">@item.ProductDescription</small>
                                     </td>
                                     <td>
-                                        <span class="badge bg-primary rounded-pill">@item.Quantity</span>
+                                        <span class="badge custom-badge rounded-pill">@item.Quantity</span>
                                     </td>
                                     <td>
                                         @((item.Quantity * item.ProductPrice).ToString("C"))
@@ -82,7 +92,7 @@
 
         <!-- Order Summary -->
         <div class="col-12 col-lg-6 col-xl-5">
-            <div class="bg-dark p-4 p-md-5 text-white rounded-3">
+            <div class="cart-summary-bg p-4 p-md-5 text-white rounded-3">
                 <h3 class="fs-3 fw-bold text-center mb-4">Order Summary</h3>
                 <div class="py-3 border-bottom border-white opacity-25">
                     <div class="d-flex justify-content-between mb-2">
@@ -119,9 +129,8 @@
             <div class="mt-4 text-center">
                 <p class="small text-muted mb-2">We accept</p>
                 <div class="d-flex justify-content-center">
-                    <img src="/images/payment/visa.svg" alt="Visa" class="mx-2" style="height: 24px;">
-                    <img src="/images/payment/mastercard.svg" alt="Mastercard" class="mx-2" style="height: 24px;">
-                    <img src="/images/payment/paypal.svg" alt="PayPal" class="mx-2" style="height: 24px;">
+                    <img src="~/assets/images/payment/visa.png" alt="Visa" class="mx-2" style="height: 24px;">
+                    <img src="~/assets/images/payment/paypal.png" alt="PayPal" class="mx-2" style="height: 24px;">
                 </div>
             </div>
         </div>
