@@ -19,5 +19,6 @@ namespace Tagerly.Models
 
         public ICollection<OrderDetail> OrderDetails { get; set; }
         public Payment Payment { get; set; }
+        public string ShippingAddress { get; internal set; }
     }
 }

@@ -68,18 +68,6 @@ namespace Tagerly.Services.Implementations
             }
         }
 
-        public async Task RemoveFromCart(string userId, int productId)
-        {
-            var cart = await _cartRepo.GetUserCartAsync(userId);
-            var item = await _cartRepo.GetCartItemAsync(cart.Id, productId);
-
-            if (item != null)
-            {
-                await _cartRepo.RemoveCartItemAsync(item);
-                await _cartRepo.SaveChangesAsync();
-            }
-        }
-
         public async Task ClearCart(string userId)
         {
             var cart = await _cartRepo.GetUserCartAsync(userId);
@@ -94,5 +82,17 @@ namespace Tagerly.Services.Implementations
 
             await _cartRepo.SaveChangesAsync();
         }
+        public async Task RemoveFromCart(string userId, int productId)
+        {
+            var cart = await _cartRepo.GetUserCartAsync(userId);
+            var item = await _cartRepo.GetCartItemAsync(cart.Id, productId);
+
+            if (item != null)
+            {
+                await _cartRepo.RemoveCartItemAsync(item);
+                await _cartRepo.SaveChangesAsync();
+            }
+        }
+
     }
 }
