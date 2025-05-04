@@ -49,7 +49,7 @@ namespace Tagerly.Services.Implementations
 
         public async Task<ProductViewModel> GetProductByIdAsync(int id)
         {
-            var product = await _repository.GetByIdWithCategoryAsync(id);  // Use the new method
+            var product = await _repository.GetByIdWithCategoryAsync(id); 
             return product == null ? null : _mapper.Map<ProductViewModel>(product);
         }
 
@@ -62,11 +62,11 @@ namespace Tagerly.Services.Implementations
         {
             var product = _mapper.Map<Product>(productVM);
             product.ImageUrl = await HandleImageUploadAsync(productVM.ImageFile);
+            product.SellerId = productVM.SellerId; // Ensure seller ID is set
 
             await _repository.AddAsync(product);
             await _repository.SaveChangesAsync();
         }
-
         public async Task UpdateProductAsync(ProductViewModel productVM)
         {
             var existingProduct = await _repository.GetByIdAsync(productVM.ProductId)
