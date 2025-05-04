@@ -31,30 +31,30 @@ namespace Tagerly
 				//options.UseSqlServer("Data Source=.;Initial Catalog=Organization;Integrated Security=True;Encrypt=False;Trust Server Certificate=True");
 				options.UseSqlServer(builder.Configuration.GetConnectionString("CS"));
 			});
-            builder.Services.AddScoped<IOrderRepo, OrderRepo>();
-            builder.Services.AddScoped<ICartRepo, CartRepo>();
-            builder.Services.AddScoped<ICategoryRepo, CategoryRepo>();
+			builder.Services.AddScoped<IOrderRepo, OrderRepo>();
+			builder.Services.AddScoped<ICartRepo, CartRepo>();
+			builder.Services.AddScoped<ICategoryRepo, CategoryRepo>();
 			builder.Services.AddScoped<IOrderRepo, OrderRepo>();
 			builder.Services.AddScoped<IUserRepo, UserRepo>();
 			builder.Services.AddScoped<IProductRepo, ProductRepo>();
-            // Add Services
-           // builder.Services.AddScoped<IProductService, ProductService>();
-  		 	    builder.Services.AddScoped<IProductService, ProductService>();
-			      builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<ICategoryService, CategoryService>();
-            builder.Services.AddScoped<IAdminProductService, AdminProductService>();
-            builder.Services.AddScoped<ICartService, CartService>();
-            builder.Services.AddScoped<IOrderService, OrderService>();
-            builder.Services.AddScoped<IEmailService, EmailService>();
-            builder.Services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
+			// Add Services
+			builder.Services.AddScoped<IProductService, ProductService>();
+			//builder.Services.AddScoped<IProductService, ProductService>();
+			builder.Services.AddScoped<IUserService, UserService>();
+			builder.Services.AddScoped<ICategoryService, CategoryService>();
+			builder.Services.AddScoped<IAdminProductService, AdminProductService>();
+			builder.Services.AddScoped<ICartService, CartService>();
+			builder.Services.AddScoped<IOrderService, OrderService>();
+			builder.Services.AddScoped<IEmailService, EmailService>();
+			builder.Services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
 
 
 
-            builder.Services.AddControllersWithViews()
+			builder.Services.AddControllersWithViews()
 		   .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<SignUpViewModelValidator>());
-            // AutoMapper
-            builder.Services.AddAutoMapper(typeof(ProductProfile));
-            builder.Services.AddAutoMapper(typeof(AdminProductProfile));
+			// AutoMapper
+			builder.Services.AddAutoMapper(typeof(ProductProfile));
+			builder.Services.AddAutoMapper(typeof(AdminProductProfile));
 
 
 			builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
