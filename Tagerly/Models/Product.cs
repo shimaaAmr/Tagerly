@@ -30,7 +30,6 @@ namespace Tagerly.Models
         public int CategoryId { get; set; }
 
         public Category Category { get; set; }
-        public Cart Cart { get; set; }
         public ICollection<OrderDetail> OrderDetails { get; set; }
         public ICollection<Favourite> Favourites { get; set; }
         public ICollection<CartItem> CartItems { get; set; }
