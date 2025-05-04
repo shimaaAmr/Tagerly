@@ -11,6 +11,10 @@
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public IFormFile ImageFile { get; set; }
-        public object SellerName { get; internal set; }
+        //public object SellerName { get; internal set; }
+
+        // Seller properties
+        public string SellerId { get; set; }
+        public string SellerName { get; set; }
     }
 }
