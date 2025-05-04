@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Tagerly.Services.Interfaces;
 using Tagerly.ViewModels;
 using AutoMapper;
+using System.Security.Claims;
 
 namespace Tagerly.Controllers
 {
@@ -50,11 +51,39 @@ namespace Tagerly.Controllers
             return View(new ProductViewModel());
         }
 
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create(ProductViewModel productVM)
+        //{
+        //    RemoveUnboundModelFields();
+
+        //    if (!ModelState.IsValid)
+        //    {
+        //        await LoadCategories(productVM.CategoryId);
+        //        return View(productVM);
+        //    }
+
+        //    try
+        //    {
+        //        await _productService.AddProductAsync(productVM);
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ModelState.AddModelError("", ex.Message);
+        //        await LoadCategories(productVM.CategoryId);
+        //        return View(productVM);
+        //    }
+        //}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductViewModel productVM)
         {
             RemoveUnboundModelFields();
+
+            // Set the current user as seller
+            productVM.SellerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            productVM.SellerName = User.Identity.Name;
 
             if (!ModelState.IsValid)
             {
@@ -74,7 +103,6 @@ namespace Tagerly.Controllers
                 return View(productVM);
             }
         }
-
         public async Task<IActionResult> Edit(int id)
         {
             var product = await _productService.GetProductByIdAsync(id);
@@ -148,6 +176,8 @@ namespace Tagerly.Controllers
             // These fields are auto-mapped and not directly bound in form
             ModelState.Remove(nameof(ProductViewModel.ImageUrl));
             ModelState.Remove(nameof(ProductViewModel.CategoryName));
+            ModelState.Remove(nameof(ProductViewModel.SellerId));
+            ModelState.Remove(nameof(ProductViewModel.SellerName));
         } 
         #endregion
     }

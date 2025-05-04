@@ -10,7 +10,9 @@ namespace Tagerly.Mapping
             CreateMap<Product, ProductViewModel>()
                 .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name))
-                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl));
+                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
+                .ForMember(dest => dest.SellerId, opt => opt.MapFrom(src => src.SellerId))
+                .ForMember(dest => dest.SellerName, opt => opt.MapFrom(src => src.Seller.UserName)); ;
 
             CreateMap<ProductViewModel, Product>()
                 .ForMember(dest => dest.Category, opt => opt.Ignore())
