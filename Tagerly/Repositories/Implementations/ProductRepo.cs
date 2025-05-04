@@ -81,7 +81,28 @@ namespace Tagerly.Repositories.Implementations
                 .Where(p => p.CategoryId == categoryId)
                 .ToListAsync();
         }
+        //==================================================================
+        public async Task<bool> SoftDeleteAsync(int id)
+        {
+            var product = await _context.Products.FindAsync(id);
+            if (product == null) return false;
 
+            product.IsDeleted = true;
+            _context.Products.Update(product);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> ApproveProductAsync(int id, bool isApproved)
+        {
+            var product = await _context.Products.FindAsync(id);
+            if (product == null) return false;
+
+            product.IsApproved = isApproved;
+            _context.Products.Update(product);
+            await _context.SaveChangesAsync();
+            return true;
+        }
 
     }
 }

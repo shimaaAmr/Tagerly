@@ -21,22 +21,35 @@ namespace Tagerly.Controllers
             return View(products);
         }
 
-        public async Task<IActionResult> Approve(int id)
-        {
-            await _productService.ApproveProductAsync(id);
-            return RedirectToAction(nameof(Index));
-        }
+      
+      
 
-        public async Task<IActionResult> Reject(int id)
-        {
-            await _productService.RejectProductAsync(id);
-            return RedirectToAction(nameof(Index));
-        }
-
+        //=================================
+        [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
-            await _productService.DeleteProductAsync(id);
-            return RedirectToAction(nameof(Index));
+            var result = await _productService.DeleteProductAsync(id);
+            if (!result) return NotFound();
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Approve(int id)
+        {
+            var result = await _productService.ChangeApprovalStatusAsync(id, true);
+            if (!result) return NotFound();
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Reject(int id)
+        {
+            var result = await _productService.ChangeApprovalStatusAsync(id, false);
+            if (!result) return NotFound();
+
+            return RedirectToAction("Index");
         }
     }
 }

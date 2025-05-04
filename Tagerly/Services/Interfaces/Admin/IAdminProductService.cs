@@ -9,8 +9,8 @@ namespace Tagerly.Services.Interfaces.Admin
         Task<bool> ApproveProductAsync(int id);
         Task<bool> RejectProductAsync(int id);
         Task<bool> DeleteProductAsync(int id);
-  
-        
+
+        Task<bool> ChangeApprovalStatusAsync(int id, bool isApproved);
 
     }
 }

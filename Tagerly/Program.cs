@@ -12,6 +12,7 @@ using Tagerly.Services.Implementations;
 using Tagerly.Services.Implementations.Admin;
 using Tagerly.Services.Interfaces;
 using Tagerly.Services.Interfaces.Admin;
+using Tagerly.ViewModels.Configurations;
 
 
 namespace Tagerly

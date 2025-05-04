@@ -48,6 +48,11 @@ namespace Tagerly.DataAccess.ConfigurationClasses
 
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Property(p => p.IsDeleted)
+                .HasDefaultValue(false);
+            builder.Property(p => p.IsApproved)
+                .HasDefaultValue(null);
+
         }
     }
 }
