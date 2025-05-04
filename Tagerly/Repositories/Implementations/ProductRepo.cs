@@ -67,6 +67,65 @@ namespace Tagerly.Repositories.Implementations
                 .FirstOrDefaultAsync();
 
             return await _context.Products
+
+
+=======
+                .Include(p => p.Category)  // This ensures Category is loaded
+                .FirstOrDefaultAsync(p => p.Id == id);
+        }
+        public async Task<IEnumerable<Product>> FindAsync(Expression<Func<Product, bool>> predicate)
+        {
+            return await _dbSet
+                .Include(p => p.Category)
+                .Where(predicate)
+                .ToListAsync();
+        }
+
+        public async Task<(IEnumerable<Product> Items, int TotalCount)> GetPagedAsync(
+            int pageIndex,
+            int pageSize,
+            Expression<Func<Product, bool>> filter = null,
+            Func<IQueryable<Product>, IOrderedQueryable<Product>> orderBy = null)
+        {
+            IQueryable<Product> query = _dbSet.Include(p => p.Category);
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            var totalCount = await query.CountAsync();
+
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+
+            var items = await query
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (items, totalCount);
+        }
+
+        public async Task UpdateAsync(Product product)
+        {
+            _context.Products.Update(product);
+            await Task.CompletedTask; // ليتوافق مع التوازع async
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Product>> GetProductsByCategoryAsync(int categoryId)
+        {
+            return await _dbSet
+                .Include(p => p.Category)
+
+
                 .Include(p => p.Seller)
                 .Where(p => _context.UserRoles
                     .Any(ur => ur.UserId == p.SellerId && ur.RoleId == sellerRoleId))
@@ -78,6 +137,7 @@ namespace Tagerly.Repositories.Implementations
         {
             return await _dbSet
                 .Include(p => p.Category)
+
                 .Where(p => p.CategoryId == categoryId)
                 .ToListAsync();
         }

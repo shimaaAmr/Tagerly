@@ -1,27 +1,17 @@
 ﻿using Tagerly.Models;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using Tagerly.Models.Enums;
 
 namespace Tagerly.Services.Interfaces
 {
-
-        public interface IOrderService
-        {
+    public interface IOrderService
+    {
+        Task<Order> GetOrderByIdAsync(int orderId);
         Task<Order> PlaceOrder(
             string userId,
             PaymentMethod paymentMethod,
             string shippingAddress,
-            string email);
-
-     
-        }
-    
-
-
-
-    public interface IEmailService
-    {
-        Task SendEmailAsync(string toEmail, string subject, string htmlContent);
+            string billingAddress, // أضف هذا الباراميتر
+            string email,
+            string notes); // أضف هذا الباراميتر
     }
 }

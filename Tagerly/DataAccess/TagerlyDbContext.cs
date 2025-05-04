@@ -45,25 +45,26 @@ namespace Tagerly.DataAccess
             modelBuilder.ApplyConfiguration(new PaymentConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
 
-            //// Configure decimal precision globally
-            //foreach (var property in modelBuilder.Model.GetEntityTypes()
-            //    .SelectMany(t => t.GetProperties())
-            //    .Where(p => p.ClrType == typeof(decimal) || p.ClrType == typeof(decimal?)))
-            //{
-            //    property.SetColumnType("decimal(18,2)");
-            //}
 
-            //// Configure Cart-Product many-to-many relationship
-            //modelBuilder.Entity<Cart>()
-            //    .HasMany(c => c.Products)
-            //    .WithMany(p => p.Cart)
-            //    .UsingEntity<Dictionary<string, object>>(
-            //        "CartProduct",
-            //        j => j.HasOne<Product>().WithMany().HasForeignKey("ProductId"),
-            //        j => j.HasOne<Cart>().WithMany().HasForeignKey("CartId"),
-            //        j => j.ToTable("CartProducts")
-            //    );
-        }
+        //// Configure decimal precision globally
+        //foreach (var property in modelBuilder.Model.GetEntityTypes()
+        //    .SelectMany(t => t.GetProperties())
+        //    .Where(p => p.ClrType == typeof(decimal) || p.ClrType == typeof(decimal?)))
+        //{
+        //    property.SetColumnType("decimal(18,2)");
+        //}
+
+        //// Configure Cart-Product many-to-many relationship
+        //modelBuilder.Entity<Cart>()
+        //    .HasMany(c => c.Products)
+        //    .WithMany(p => p.Cart)
+        //    .UsingEntity<Dictionary<string, object>>(
+        //        "CartProduct",
+        //        j => j.HasOne<Product>().WithMany().HasForeignKey("ProductId"),
+        //        j => j.HasOne<Cart>().WithMany().HasForeignKey("CartId"),
+        //        j => j.ToTable("CartProducts")
+        //    );
+    }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{

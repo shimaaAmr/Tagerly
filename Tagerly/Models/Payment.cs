@@ -19,5 +19,6 @@ namespace Tagerly.Models
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
         public Order Order { get; set; }
+        public string Status { get; internal set; }
     }
 }
