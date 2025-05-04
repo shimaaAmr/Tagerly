@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Reflection.Emit;
 using Tagerly.Models;
 
 namespace Tagerly.DataAccess.ConfigurationClasses
@@ -35,6 +36,23 @@ namespace Tagerly.DataAccess.ConfigurationClasses
                    .WithOne(ci => ci.Product)
                    .HasForeignKey(ci => ci.ProductId)
                    .OnDelete(DeleteBehavior.Restrict);
+
+
+            builder
+
+                .HasOne(p => p.Seller)
+
+                .WithMany(u => u.Products)
+
+                .HasForeignKey(p => p.SellerId)
+
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Property(p => p.IsDeleted)
+                .HasDefaultValue(false);
+            builder.Property(p => p.IsApproved)
+                .HasDefaultValue(null);
+
         }
     }
 }

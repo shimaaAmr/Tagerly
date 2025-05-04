@@ -1,0 +1,122 @@
+﻿@model IEnumerable<ProductApprovingVM>
+
+@{
+    ViewData["Title"] = "Products List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    :root {
+        --wood-dark: #5E3023;
+        --wood-medium: #895737;
+        --wood-light: #B88B4A;
+        --cream: #E3DCCB;
+        --beige: #D8C4A7;
+        --light-bg: #F5F1EB;
+    }
+
+    body {
+        background-color: var(--light-bg);
+    }
+
+    table {
+        width: 100%;
+        background-color: var(--cream);
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        padding: 12px;
+        border: 1px solid var(--wood-light);
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    th {
+        background-color: var(--wood-dark);
+        color: white;
+    }
+
+    tr:nth-child(even) {
+        background-color: var(--beige);
+    }
+
+    .btn {
+        padding: 6px 12px;
+        border-radius: 5px;
+        color: white;
+        text-decoration: none;
+        margin-right: 5px;
+    }
+
+    .btn-approve {
+        background-color: green;
+    }
+
+    .btn-reject {
+        background-color: orange;
+    }
+
+    .btn-delete {
+        background-color: red;
+    }
+
+    .product-img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+</style>
+
+<h2>Products</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Seller</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>
+                    <img src="@product.ImageUrl" alt="Product Image" class="product-img" />
+                </td>
+                <td>@product.Name</td>
+                <td>@product.Description</td>
+                <td>@product.SellerName</td>
+                <td>
+                    @switch (product.Status)
+                    {
+                        case ProductStatus.Pending:
+                            @:Pending
+                            break;
+                        case ProductStatus.Approved:
+                            @:Approved
+                            break;
+                        case ProductStatus.Rejected:
+                            @:Rejected
+                            break;
+                    }
+                </td>
+                <td>
+                    @if (product.Status == ProductStatus.Pending)
+                    {
+                        <a asp-action="Approve" asp-route-id="@product.Id" class="btn btn-approve">Approve</a>
+                        <a asp-action="Reject" asp-route-id="@product.Id" class="btn btn-reject">Reject</a>
+                    }
+                    <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-delete">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

@@ -11,5 +11,6 @@
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public IFormFile ImageFile { get; set; }
+        public object SellerName { get; internal set; }
     }
 }

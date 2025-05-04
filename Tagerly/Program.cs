@@ -3,13 +3,17 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Tagerly.DataAccess;
 using Tagerly.Mapping;
+using Tagerly.Mapping.Admin;
 using Tagerly.Models;
 using Tagerly.Repositories.Implementations;
 using Tagerly.Repositories.Interfaces;
 using Tagerly.Services;
 using Tagerly.Services.Implementations;
+using Tagerly.Services.Implementations.Admin;
 using Tagerly.Services.Interfaces;
+using Tagerly.Services.Interfaces.Admin;
 using Tagerly.ViewModels.Configurations;
+
 
 namespace Tagerly
 {
@@ -33,19 +37,25 @@ namespace Tagerly
 			builder.Services.AddScoped<IOrderRepo, OrderRepo>();
 			builder.Services.AddScoped<IUserRepo, UserRepo>();
 			builder.Services.AddScoped<IProductRepo, ProductRepo>();
-			// Add Services
-			// builder.Services.AddScoped<IProductService, ProductService>();
-			builder.Services.AddScoped<ICategoryService, CategoryService>();
-			builder.Services.AddScoped<IUserService, UserService>();
+            // Add Services
+           // builder.Services.AddScoped<IProductService, ProductService>();
+  		 	    builder.Services.AddScoped<IProductService, ProductService>();
+			      builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<IAdminProductService, AdminProductService>();
             builder.Services.AddScoped<ICartService, CartService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IEmailService, EmailService>();
+            builder.Services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
+
+
 
             builder.Services.AddControllersWithViews()
 		   .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<SignUpViewModelValidator>());
+            // AutoMapper
+            builder.Services.AddAutoMapper(typeof(ProductProfile));
+            builder.Services.AddAutoMapper(typeof(AdminProductProfile));
 
-			// AutoMapper
-			builder.Services.AddAutoMapper(typeof(ProductProfile));
 
 			builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 			{
