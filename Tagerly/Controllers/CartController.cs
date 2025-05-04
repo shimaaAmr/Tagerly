@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Tagerly.Services.Interfaces;
 using System.Threading.Tasks;
-using Tagerly.Models;
 using Tagerly.ViewModels;
 
 namespace Tagerly.Controllers
@@ -26,18 +25,10 @@ namespace Tagerly.Controllers
         public async Task<IActionResult> Index()
         {
             var userId = GetUserId();
-            var cart = await _cartService.GetUserCart(userId);
+            var cartViewModel = await _cartService.GetUserCart(userId);
 
-            if (cart == null)
-            {
-                // لو مفيش كارت، ارجع ViewModel فاضي
-                return View(new CartViewModel { UserId = userId });
-            }
-
-            var viewModel = MapToViewModel(cart);
-            return View(viewModel);
+            return View(cartViewModel ?? new CartViewModel { UserId = userId });
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -51,20 +42,20 @@ namespace Tagerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RemoveFromCart(int productId)
+        public async Task<IActionResult> RemoveFromCart(int cartItemId)
         {
             var userId = GetUserId();
-            await _cartService.RemoveFromCart(userId, productId);
+            await _cartService.RemoveFromCart(userId, cartItemId);
             TempData["Success"] = "Product removed from cart.";
             return RedirectToAction("Index");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateCart(int productId, int quantity)
+        public async Task<IActionResult> UpdateCart(int cartItemId, int quantity)
         {
             var userId = GetUserId();
-            await _cartService.UpdateCartItem(userId, productId, quantity);
+            await _cartService.UpdateCartItem(userId, cartItemId, quantity);
             TempData["Success"] = "Cart updated successfully.";
             return RedirectToAction("Index");
         }
@@ -78,22 +69,5 @@ namespace Tagerly.Controllers
             TempData["Success"] = "Cart cleared.";
             return RedirectToAction("Index");
         }
-        private CartViewModel MapToViewModel(Cart cart)
-        {
-            return new CartViewModel
-            {
-                UserId = cart.UserId,
-                CartItems = cart.CartItems.Select(item => new CartItemViewModel
-                {
-                    ProductId = item.ProductId,
-                    Quantity = item.Quantity,
-                    ProductName = item.Product?.Name, // لو عندك Include للمنتج
-                    ProductPrice = item.Product?.Price ?? 0
-                }).ToList()
-            };
-        }
-
     }
-
 }
-

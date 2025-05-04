@@ -14,7 +14,7 @@ namespace Tagerly.Models
         public int OrderId { get; set; }
         [ForeignKey("Product")]
         public int ProductId { get; set; }
-       
+
         //Navigation Property
         public Order Order { get; set; }
         public Product Product { get; set; }

@@ -5,12 +5,24 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using Tagerly.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Tagerly.Repositories.Implementations
 {
-    public class OrderRepo : GenericRepo<Order>, IOrderRepo
-    {
-        public OrderRepo(TagerlyDbContext context) : base(context) { }
+
+        public class OrderRepo : GenericRepo<Order>, IOrderRepo
+        {
+            private readonly TagerlyDbContext _context;
+
+            public OrderRepo(TagerlyDbContext context) : base(context)
+            {
+                _context = context;
+            }
+
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
+        {
+            return await _context.Database.BeginTransactionAsync();
+        }
 
         public async Task<List<Order>> GetUserOrdersAsync(string userId)
         {
@@ -19,6 +31,20 @@ namespace Tagerly.Repositories.Implementations
                 .Include(o => o.OrderDetails)
                 .ThenInclude(od => od.Product)
                 .ToListAsync();
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<Order> GetOrderByIdWithDetails(int orderId)
+        {
+            return await _context.Orders
+                .Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Product)
+                .Include(o => o.Payment)
+                .FirstOrDefaultAsync(o => o.Id == orderId);
         }
 
         public async Task<Order> CreateOrderFromCartAsync(string userId, Payment payment)

@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Security.Claims;
 using Tagerly.Services.Interfaces;
-using Tagerly.ViewModels;
-using Tagerly.Models;
 using Tagerly.Models.Enums;
-using Microsoft.Extensions.Logging;
+using Tagerly.ViewModels;
 
 namespace Tagerly.Controllers
 {
@@ -29,40 +28,39 @@ namespace Tagerly.Controllers
             _logger = logger;
         }
 
+        private string GetUserId() => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        private string GetUserEmail() => User.FindFirstValue(ClaimTypes.Email);
+
+
+
         [HttpGet]
         public async Task<IActionResult> PlaceOrder()
         {
-            try
+            var cart = await _cartService.GetUserCart(GetUserId());
+            if (cart == null || !cart.CartItems.Any())
             {
-                var cart = await _cartService.GetUserCart(GetUserId());
-
-                if (cart?.CartItems == null || !cart.CartItems.Any())
-                {
-                    TempData["Warning"] = "Your cart is empty";
-                    return RedirectToAction("Index", "Cart");
-                }
-
-                ViewBag.Cart = MapToViewModel(cart);
-                return View(new CreateOrderViewModel
-                {
-                    Email = User.FindFirstValue(ClaimTypes.Email)
-                });
+                TempData["Warning"] = "Your cart is empty";
+                return RedirectToAction("Index", "Cart");
             }
-            catch (Exception ex)
+
+            // تمرير بيانات السلة إلى العرض
+            ViewBag.Cart = cart;
+
+            return View(new OrderViewModel
             {
-                _logger.LogError(ex, "Error loading order page");
-                TempData["Error"] = "Error loading order page";
-                return RedirectToAction("Index", "Home");
-            }
+                Email = GetUserEmail()
+            });
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> PlaceOrder(CreateOrderViewModel model)
+        public async Task<IActionResult> PlaceOrder(OrderViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                TempData["Error"] = "Please correct the errors";
+                var cart = await _cartService.GetUserCart(GetUserId());
+                ViewBag.Cart = cart;
                 return View(model);
             }
 
@@ -72,55 +70,56 @@ namespace Tagerly.Controllers
                     GetUserId(),
                     model.PaymentMethod,
                     model.ShippingAddress,
-                    model.Email);
+                    model.BillingAddress,
+                    model.Email,
+                    model.Notes
+                );
 
-                await _cartService.ClearCart(GetUserId());
 
                 await _emailService.SendEmailAsync(
                     model.Email,
-                    $"Order Confirmation #{order.Id}",
-                    GenerateEmailContent(order));
+                    "Order Confirmation",
+                    $"Your order #{order.Id} has been placed."
+                );
 
                 return RedirectToAction("Confirmation", new { orderId = order.Id });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Order processing failed");
-                TempData["Error"] = ex.Message;
-                return RedirectToAction("PlaceOrder");
+                _logger.LogError(ex, "Order placement failed");
+                ModelState.AddModelError("", "Failed to place order. Please try again.");
+
+                var cart = await _cartService.GetUserCart(GetUserId());
+                ViewBag.Cart = cart;
+
+                return View(model);
             }
         }
-
-        [HttpGet]
-        public IActionResult Confirmation(int orderId)
+        public async Task<IActionResult> Confirmation(int orderId)
         {
-            ViewBag.OrderId = orderId;
-            return View();
-        }
+            var order = await _orderService.GetOrderByIdAsync(orderId);
 
-        private string GetUserId() => User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (order == null || order.UserId != GetUserId())
+                return NotFound();
 
-        private CartViewModel MapToViewModel(Cart cart)
-        {
-            return new CartViewModel
+            // التحقق من وجود Payment أو استخدام قيم افتراضية
+            var viewModel = new OrderConfirmationViewModel
             {
-                CartItems = cart.CartItems.Select(ci => new CartItemViewModel
+                OrderId = order.Id,
+                OrderDate = order.OrderDate,
+                TotalAmount = order.TotalAmount, // استخدم القيمة المباشرة بدلاً من order.Payment.Amount
+                ShippingAddress = order.ShippingAddress,
+                PaymentMethod = order.PaymentMethod, // استخدم القيمة المباشرة
+                Items = order.OrderDetails.Select(od => new OrderItemViewModel
                 {
-                    ProductId = ci.ProductId,
-                    ProductName = ci.Product?.Name ?? "Unknown",
-                    ProductPrice = ci.Product?.Price ?? 0,
-                    Quantity = ci.Quantity,
-                    ImageUrl = ci.Product?.ImageUrl ?? "/images/default-product.png"
+                    ProductId = od.ProductId,
+                    ProductName = od.Product?.Name,
+                    Quantity = od.Quantity,
+                    Price = od.Price
                 }).ToList()
             };
-        }
 
-        private string GenerateEmailContent(Order order)
-        {
-            return $@"<h1>Thank you for your order!</h1>
-                     <p>Order Number: #{order.Id}</p>
-                     <p>Date: {order.OrderDate:yyyy-MM-dd}</p>
-                     <p>Total: {order.Payment.Amount:C}</p>";
+            return View(viewModel);
         }
     }
 }

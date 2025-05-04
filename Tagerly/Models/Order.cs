@@ -18,7 +18,13 @@ namespace Tagerly.Models
         public ApplicationUser User { get; set; }
 
         public ICollection<OrderDetail> OrderDetails { get; set; }
-        public Payment Payment { get; set; }
+        public Payment Payment { get; set; } =new Payment();
         public string ShippingAddress { get; internal set; }
+
+        public string BillingAddress { get; set; }
+        public string PaymentMethod { get; set; }
+        public string Notes { get; set; }
+        public string Email { get; set; }
+        public decimal TotalAmount { get; set; }
     }
 }

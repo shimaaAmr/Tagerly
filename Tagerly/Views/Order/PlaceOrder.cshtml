@@ -1,68 +1,84 @@
-﻿@model Tagerly.ViewModels.CreateOrderViewModel
-@using Tagerly.ViewModels
+﻿@model Tagerly.ViewModels.OrderViewModel
+@using Tagerly.Models.Enums
+
+@{
+    ViewData["Title"] = "Checkout";
+}
 
 <section class="mt-5 container">
     <h1 class="mb-4 display-5 fw-bold text-center">Checkout Securely</h1>
+    <p class="text-center mx-auto">Please fill in the details below to complete your order.</p>
 
-    <form asp-action="PlaceOrder" method="post" class="row g-md-8 mt-4">
+    <form asp-controller="Order"
+          asp-action="PlaceOrder"
+          method="post"
+          class="row g-md-8 mt-4">
         @Html.AntiForgeryToken()
 
-        <!-- Checkout Left Panel -->
+        <!-- Left panel: جمع بيانات الطلب -->
         <div class="col-12 col-lg-6 col-xl-7">
-            <div class="checkout-panel mb-4">
-                <h5 class="title-checkout">Contact Information</h5>
-                <div class="mb-3">
-                    <label asp-for="Email" class="form-label"></label>
-                    <input asp-for="Email" class="form-control" placeholder="you@example.com" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
-                </div>
+            <!-- Email -->
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
-            <div class="checkout-panel mb-4">
-                <h5 class="title-checkout">Shipping Address</h5>
-                <div class="mb-3">
-                    <label asp-for="ShippingAddress" class="form-label"></label>
-                    <textarea asp-for="ShippingAddress" class="form-control" rows="3"></textarea>
-                    <span asp-validation-for="ShippingAddress" class="text-danger"></span>
-                </div>
+            <!-- Shipping Address -->
+            <div class="mb-3">
+                <label asp-for="ShippingAddress" class="form-label"></label>
+                <textarea asp-for="ShippingAddress" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="ShippingAddress" class="text-danger"></span>
             </div>
 
-            <div class="checkout-panel mb-4">
-                <h5 class="title-checkout">Payment Method</h5>
-                <div class="mb-3">
-                    <label asp-for="PaymentMethod" class="form-label"></label>
-                    <select asp-for="PaymentMethod" class="form-select" asp-items="Html.GetEnumSelectList<PaymentMethod>()">
-                        <option value="">-- Select --</option>
-                    </select>
-                    <span asp-validation-for="PaymentMethod" class="text-danger"></span>
-                </div>
+            <!-- Billing Address -->
+            <div class="mb-3">
+                <label asp-for="BillingAddress" class="form-label"></label>
+                <textarea asp-for="BillingAddress" class="form-control" rows="2"></textarea>
+                <span asp-validation-for="BillingAddress" class="text-danger"></span>
+            </div>
+
+            <!-- Payment Method -->
+            <div class="mb-3">
+                <label asp-for="PaymentMethod" class="form-label"></label>
+                <select asp-for="PaymentMethod"
+                        asp-items="Html.GetEnumSelectList<PaymentMethod>()"
+                        class="form-select">
+                    <option value="">-- Select --</option>
+                </select>
+                <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+            </div>
+
+            <!-- أي حقل إضافي مثل Notes -->
+            <div class="mb-3">
+                <label asp-for="Notes" class="form-label">Notes (optional)</label>
+                <textarea asp-for="Notes" class="form-control" rows="2"></textarea>
             </div>
         </div>
 
-        <!-- Checkout Summary -->
+        <!-- Right panel: ملخص الطلب وزرار الإرسال -->
         <div class="col-12 col-lg-6 col-xl-5">
             <div class="bg-light p-4 sticky-md-top top-5">
                 <h5 class="title-checkout mb-3">Order Summary</h5>
 
-                @if (ViewBag.Cart is CartViewModel cart && cart.CartItems.Any())
+                @if (ViewBag.Cart is Tagerly.ViewModels.CartViewModel cart && cart.CartItems.Any())
                 {
                     @foreach (var item in cart.CartItems)
                     {
                         <div class="d-flex justify-content-between mb-2">
                             <div>
                                 <strong>@item.ProductName</strong><br />
-                                <small>@item.Quantity x @item.ProductPrice.ToString("C")</small>
+                                <small>@item.Quantity × @item.ProductPrice.ToString("C")</small>
                             </div>
                             <div>
                                 <strong>@(item.Quantity * item.ProductPrice).ToString("C")</strong>
                             </div>
                         </div>
                     }
-
                     <hr />
-                    <div class="d-flex justify-content-between mb-2">
-                        <span class="fw-bold">Total</span>
-                        <span class="fw-bold">@cart.CartItems.Sum(i => i.Quantity * i.ProductPrice).ToString("C")</span>
+                    <div class="d-flex justify-content-between fw-bold">
+                        <span>Total</span>
+                        <span>@cart.Total.ToString("C")</span>
                     </div>
                 }
                 else
@@ -70,11 +86,10 @@
                     <p class="text-muted">Your cart is empty.</p>
                 }
 
-                <div class="form-check mt-4">
-                    <input type="checkbox" class="form-check-input" id="acceptTerms" checked required />
-                    <label class="form-check-label" for="acceptTerms">
-                        I agree to <a href="#">terms & conditions</a>
-                    </label>
+                <div class="form-check my-4">
+                    <input asp-for="Agreement" class="form-check-input" />
+                    <label asp-for="Agreement" class="form-check-label">I agree to terms & conditions</label>
+                    <span asp-validation-for="Agreement" class="text-danger"></span>
                 </div>
 
                 <div class="d-grid mt-4">
