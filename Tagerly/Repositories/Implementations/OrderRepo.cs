@@ -46,6 +46,12 @@ namespace Tagerly.Repositories.Implementations
                 .Include(o => o.Payment)
                 .FirstOrDefaultAsync(o => o.Id == orderId);
         }
+        public async Task UpdateAsync(Order order)
+        {
+            _context.Orders.Update(order);
+            await Task.CompletedTask; // عشان الدالة async
+        }
+
 
         public async Task<Order> CreateOrderFromCartAsync(string userId, Payment payment)
         {
