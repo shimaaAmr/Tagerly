@@ -52,15 +52,33 @@ namespace Tagerly.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Reject(int id)
+        {
+            var product = await _productService.GetProductByIdAsync(id);
+            if (product == null) return NotFound();
 
+            return View(product); // يعرض View اسمه Reject.cshtml
+        }
 
         [HttpPost]
-        public async Task<IActionResult> Reject(int id)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RejectConfirmation(int id)
         {
             var result = await _productService.ChangeApprovalStatusAsync(id, false);
             if (!result) return NotFound();
 
             return RedirectToAction("Index");
         }
+
+
+        //[HttpPost]
+        //public async Task<IActionResult> Reject(int id)
+        //{
+        //    var result = await _productService.ChangeApprovalStatusAsync(id, false);
+        //    if (!result) return NotFound();
+
+        //    return RedirectToAction("Index");
+        //}
     }
 }
