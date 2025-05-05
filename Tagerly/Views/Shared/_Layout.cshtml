@@ -1,223 +1,235 @@
-﻿@using System.Security.Claims
+@using System.Security.Claims
 <!doctype html>
 <html lang="en" dir="ltr">
 
 <head>
-	<!-- Meta Tags -->
-	<meta charset="utf-8">
-	<meta http-equiv="x-ua-compatible" content="ie=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="Tagerly Store for Unique Handmade Products">
-	<meta name="author" content="Tagerly">
-	<meta name="keywords" content="Handmade Products, Gifts, Home Decor">
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tagerly Store for Unique Handmade Products">
+    <meta name="author" content="Tagerly">
+    <meta name="keywords" content="Handmade Products, Gifts, Home Decor">
 
-	<!-- Favicon -->
-	<link rel="apple-touch-icon" sizes="180x180" href="~/assets/favicon/apple-touch-icon.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="~/assets/favicon/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="~/assets/favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="~/assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="~/assets/favicon/favicon-16x16.png">
 
-	<!-- Vendor CSS -->
-	<link rel="stylesheet" href="~/assets/css/libs.bundle.css" />
+    <link rel="stylesheet" href="~/assets/css/libs.bundle.css" />
 
-	<!-- Main CSS -->
-	<link rel="stylesheet" href="~/assets/css/theme.bundle.css" />
+    <link rel="stylesheet" href="~/assets/css/theme.bundle.css" />
 
-	<!-- Google Fonts -->
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/notifications.css" asp-append-version="true" />
 
-	<title>Tagerly | Unique Handmade Products</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
 
-	<style>
-		body {
-			font-family: 'Tajawal', sans-serif;
-		}
+    <title>Tagerly | Unique Handmade Products</title>
 
-		.navbar-brand {
-			font-weight: 700;
-		}
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+        }
 
-		.dropdown-megamenu {
-			right: 0 !important;
-			left: auto !important;
-		}
+        .navbar-brand {
+            font-weight: 700;
+        }
 
-		.rtl-dropdown {
-			text-align: right;
-			direction: rtl;
-		}
+        .dropdown-megamenu {
+            right: 0 !important;
+            left: auto !important;
+        }
 
-		.bg-primary {
-			background-color: #8f7668 !important;
-		}
+        .rtl-dropdown {
+            text-align: right;
+            direction: rtl;
+        }
 
-		.text-primary {
-			color: #8f7668 !important;
-		}
+        .bg-primary {
+            background-color: #8f7668 !important;
+        }
 
-		.footer-bg {
-			background-color: #8f7668 !important;
-		}
+        .text-primary {
+            color: #8f7668 !important;
+        }
 
-	</style>
+        .footer-bg {
+            background-color: #8f7668 !important;
+        }
+    </style>
 </head>
 
 <body>
-	<!-- Navbar -->
-	<nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
-		<div class="container">
-			<!-- Logo -->
-			<a class="navbar-brand" href="/">
-				<img src="~/assets/images/logo.png" alt="Tagerly" height="40">
-			</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <img src="~/assets/images/logo.png" alt="Tagerly" height="40">
+            </a>
 
-			<!-- Mobile Toggler -->
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
-				<span class="navbar-toggler-icon"></span>
-			</button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-			<!-- Navbar Content -->
-			<div class="collapse navbar-collapse" id="navbarContent">
-				<!-- Main Navigation -->
-				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="productsDropdown" data-bs-toggle="dropdown">
-							Products
-						</a>
-						<div class="dropdown-menu rtl-dropdown" aria-labelledby="productsDropdown">
-							<div class="container">
-								<div class="row">
-									<div class="col-md-4">
-										<h6 class="dropdown-header">Handmade Products</h6>
-										<a class="dropdown-item" href="#">Personal Care</a>
-										<a class="dropdown-item" href="#">Home Decor</a>
-										<a class="dropdown-item" href="#">Gifts</a>
-									</div>
-									<div class="col-md-4">
-										<h6 class="dropdown-header">Categories</h6>
-										<a class="dropdown-item" href="#">Best Sellers</a>
-										<a class="dropdown-item" href="#">Special Offers</a>
-										<a class="dropdown-item" href="#">New Arrivals</a>
-									</div>
-									<div class="col-md-4 d-none d-md-block">
-										<img src="~/assets/images/menu-banner.jpg" class="img-fluid rounded" alt="Tagerly Products">
-									</div>
-								</div>
-							</div>
-						</div>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#">About Us</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#">Blog</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#">Contact</a>
-					</li>
-				</ul>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="productsDropdown" data-bs-toggle="dropdown">
+                            Products
+                        </a>
+                        <div class="dropdown-menu rtl-dropdown" aria-labelledby="productsDropdown">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h6 class="dropdown-header">Handmade Products</h6>
+                                        <a class="dropdown-item" href="#">Personal Care</a>
+                                        <a class="dropdown-item" href="#">Home Decor</a>
+                                        <a class="dropdown-item" href="#">Gifts</a>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h6 class="dropdown-header">Categories</h6>
+                                        <a class="dropdown-item" href="#">Best Sellers</a>
+                                        <a class="dropdown-item" href="#">Special Offers</a>
+                                        <a class="dropdown-item" href="#">New Arrivals</a>
+                                    </div>
+                                    <div class="col-md-4 d-none d-md-block">
+                                        <img src="~/assets/images/menu-banner.jpg" class="img-fluid rounded" alt="Tagerly Products">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                </ul>
 
-				<!-- Icons -->
-				@if (User.Identity.IsAuthenticated)
-				{
-					<li class="nav-item me-lg-4">
-						<a class="nav-link fw-bolder py-lg-4">
-							Welcome @(User.FindFirst(ClaimTypes.GivenName)?.Value ?? User.Identity.Name)
-						</a>
-					</li>
-					@* <a aasp-controller="User" asp-action="UpdateProfile" asp-route="" class="mx-2 text-dark position-relative">
-						<i class="ri-user-line ri-lg"></i>
-					</a> *@
-					<a asp-controller="User" asp-action="UpdateProfile" asp-route-id="@ViewData["UserId"]" class="mx-2 text-dark position-relative">
-						<i class="ri-user-line ri-lg"></i>
-					</a>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li class="nav-item me-lg-4">
+                        <a class="nav-link fw-bolder py-lg-4">
+                            Welcome @(User.FindFirst(ClaimTypes.GivenName)?.Value ?? User.Identity.Name)
+                        </a>
+                    </li>
+                    @* Optional: Keep or remove this commented line
+                    <a aasp-controller="User" asp-action="UpdateProfile" asp-route="" class="mx-2 text-dark position-relative">
+                        <i class="ri-user-line ri-lg"></i>
+                    </a> *@
+                    <a asp-controller="User" asp-action="UpdateProfile" asp-route-id="@ViewData["UserId"]" class="mx-2 text-dark position-relative">
+                        <i class="ri-user-line ri-lg"></i>
+                    </a>
 
-					<a asp-controller="Account" asp-action="Logout" class="mx-2 text-dark">
-						Logout
-					</a>
-				}
-				else
-				{
-					<a asp-controller="Account" asp-action="Login" class="mx-2 text-dark">
-						Login
-					</a>
-					<a asp-controller="Account" asp-action="SignUp" class="mx-2 text-dark">
-						Sign Up
-					</a>
-				}
+                    <a asp-controller="Account" asp-action="Logout" class="mx-2 text-dark">
+                        Logout
+                    </a>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login" class="mx-2 text-dark">
+                        Login
+                    </a>
+                    <a asp-controller="Account" asp-action="SignUp" class="mx-2 text-dark">
+                        Sign Up
+                    </a>
+                }
 
-				<a asp-controller="Cart" asp-action="Index" class="mx-2 text-dark position-relative">
-					<i class="ri-shopping-cart-2-line ri-lg"></i>
-					<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
-						0
-					</span>
-				</a>
-			</div>
-		</div>
-		</div>
-	</nav>
+                <a asp-controller="Cart" asp-action="Index" class="mx-2 text-dark position-relative">
+                    <i class="ri-shopping-cart-2-line ri-lg"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                        0 </span>
+                </a>
+            </div> </div> </nav>
 
-	<!-- Main Content -->
-	<main>
-		@RenderBody()
-	</main>
+    <main>
+        @RenderBody()
+    </main>
 
-	<!-- Footer -->
-	<footer class="footer-bg text-white pt-5 pb-3">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-4 mb-4">
-					<h5 class="mb-4">Tagerly</h5>
-					<p>A store specializing in unique handmade products made with love and care.</p>
-					<div class="social-icons mt-4">
-						<a href="#" class="text-white me-3"><i class="ri-facebook-fill ri-lg"></i></a>
-						<a href="#" class="text-white me-3"><i class="ri-instagram-line ri-lg"></i></a>
-						<a href="#" class="text-white me-3"><i class="ri-twitter-fill ri-lg"></i></a>
-					</div>
-				</div>
-				<div class="col-md-2 mb-4">
-					<h5 class="mb-4">Quick Links</h5>
-					<ul class="list-unstyled">
-						<li class="mb-2"><a href="#" class="text-white-50">Home</a></li>
-						<li class="mb-2"><a href="#" class="text-white-50">About Us</a></li>
-						<li class="mb-2"><a href="#" class="text-white-50">Products</a></li>
-						<li class="mb-2"><a href="#" class="text-white-50">Blog</a></li>
-					</ul>
-				</div>
-				<div class="col-md-3 mb-4">
-					<h5 class="mb-4">Customer Service</h5>
-					<ul class="list-unstyled">
-						<li class="mb-2"><a href="#" class="text-white-50">Contact</a></li>
-						<li class="mb-2"><a href="#" class="text-white-50">FAQs</a></li>
-						<li class="mb-2"><a href="#" class="text-white-50">Return Policy</a></li>
-						<li class="mb-2"><a href="#" class="text-white-50">Privacy Policy</a></li>
-					</ul>
-				</div>
-				<div class="col-md-3 mb-4">
-					<h5 class="mb-4">Newsletter</h5>
-					<p>Subscribe to get updates on our latest offers and products.</p>
-					<form class="mt-3">
-						<div class="input-group">
-							<input type="email" class="form-control" placeholder="Your email">
-							<button class="btn btn-primary" type="submit">Subscribe</button>
-						</div>
-					</form>
-				</div>
-			</div>
-			<hr class="my-4 bg-secondary">
-			<div class="row">
-				<div class="col-md-6 text-center text-md-start">
-					<p class="mb-0">© 2023 Tagerly. All rights reserved.</p>
-				</div>
-				<div class="col-md-6 text-center text-md-end">
-					<img src="~/assets/images/payment/paypal.png" alt="Payment Methods" height="30">
-				</div>
-			</div>
-		</div>
-	</footer>
-	<script src="~/assets/js/theme.bundle.js"></script>
-	@await RenderSectionAsync("Scripts", required: false)
+    <partial name="_NotificationPartial" />
+
+    <footer class="footer-bg text-white pt-5 pb-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5 class="mb-4">Tagerly</h5>
+                    <p>A store specializing in unique handmade products made with love and care.</p>
+                    <div class="social-icons mt-4">
+                        <a href="#" class="text-white me-3"><i class="ri-facebook-fill ri-lg"></i></a>
+                        <a href="#" class="text-white me-3"><i class="ri-instagram-line ri-lg"></i></a>
+                        <a href="#" class="text-white me-3"><i class="ri-twitter-fill ri-lg"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5 class="mb-4">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-white-50">Home</a></li>
+                        <li class="mb-2"><a href="#" class="text-white-50">About Us</a></li>
+                        <li class="mb-2"><a href="#" class="text-white-50">Products</a></li>
+                        <li class="mb-2"><a href="#" class="text-white-50">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5 class="mb-4">Customer Service</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-white-50">Contact</a></li>
+                        <li class="mb-2"><a href="#" class="text-white-50">FAQs</a></li>
+                        <li class="mb-2"><a href="#" class="text-white-50">Return Policy</a></li>
+                        <li class="mb-2"><a href="#" class="text-white-50">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5 class="mb-4">Newsletter</h5>
+                    <p>Subscribe to get updates on our latest offers and products.</p>
+                    <form class="mt-3">
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="Your email">
+                            <button class="btn btn-primary" type="submit">Subscribe</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <hr class="my-4 bg-secondary">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0">© 2023 Tagerly. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <img src="~/assets/images/payment/paypal.png" alt="Payment Methods" height="30">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/assets/js/theme.bundle.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const notifications = document.querySelectorAll('.alert-notification');
+
+            notifications.forEach(notification => {
+                // Start fade out after 60 seconds (60000ms)
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    notification.style.transform = 'translateY(-30px)';
+
+                    // Remove from DOM after fade out completes (1s)
+                    setTimeout(() => notification.remove(), 1000);
+                }, 60000); // Changed from 3500ms to 60000ms (1 minute)
+
+                // Manual dismissal still works
+                notification.addEventListener('click', () => {
+                    notification.style.opacity = '0';
+                    notification.style.transform = 'translateY(-30px)';
+                    setTimeout(() => notification.remove(), 500);
+                });
+            });
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
-
 </html>

@@ -20,3 +20,12 @@ html {
 body {
   margin-bottom: 60px;
 }
+/* Modal Backdrop Fix */
+.modal-backdrop.show {
+    opacity: 0.8 !important;
+}
+
+/* Danger Modal Header */
+.modal-header.bg-danger {
+    background-color: #dc3545 !important;
+}

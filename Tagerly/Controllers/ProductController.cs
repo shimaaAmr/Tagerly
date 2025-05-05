@@ -39,51 +39,31 @@ namespace Tagerly.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var product = await _productService.GetProductByIdAsync(id);
-            if (product == null) return NotFound();
+            if (product == null)
+            {
+                TempData["ErrorMessage"] = "Product not found!";
+                return RedirectToAction(nameof(Index));
+            }
 
-            var productVM = _mapper.Map<ProductViewModel>(product);
-            return View(productVM);
+            if (TempData["FromEdit"] != null)
+            {
+                TempData["InfoMessage"] = "Product was updated successfully!";
+            }
+
+            return View(_mapper.Map<ProductViewModel>(product));
         }
-
         public async Task<IActionResult> Create()
         {
             await LoadCategories();
             return View(new ProductViewModel());
         }
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create(ProductViewModel productVM)
-        //{
-        //    RemoveUnboundModelFields();
-
-        //    if (!ModelState.IsValid)
-        //    {
-        //        await LoadCategories(productVM.CategoryId);
-        //        return View(productVM);
-        //    }
-
-        //    try
-        //    {
-        //        await _productService.AddProductAsync(productVM);
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ModelState.AddModelError("", ex.Message);
-        //        await LoadCategories(productVM.CategoryId);
-        //        return View(productVM);
-        //    }
-        //}
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductViewModel productVM)
         {
             RemoveUnboundModelFields();
-
-            // Set the current user as seller
             productVM.SellerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            productVM.SellerName = User.Identity.Name;
 
             if (!ModelState.IsValid)
             {
@@ -94,11 +74,12 @@ namespace Tagerly.Controllers
             try
             {
                 await _productService.AddProductAsync(productVM);
+                TempData["SuccessMessage"] = $"Product '{productVM.Name}' has been added successfully!";
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex.Message);
+                TempData["ErrorMessage"] = $"Failed to add product: {ex.Message}";
                 await LoadCategories(productVM.CategoryId);
                 return View(productVM);
             }
@@ -118,9 +99,12 @@ namespace Tagerly.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, ProductViewModel productVM)
         {
+            RemoveUnboundModelFields();
+            productVM.SellerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             if (id != productVM.ProductId) return NotFound();
 
-            RemoveUnboundModelFields(); 
+            RemoveUnboundModelFields();
 
             if (!ModelState.IsValid)
             {
@@ -131,6 +115,7 @@ namespace Tagerly.Controllers
             try
             {
                 await _productService.UpdateProductAsync(productVM);
+                TempData["SuccessMessage"] = $"Product '{productVM.Name}' has been updated successfully!";
                 return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateConcurrencyException)
@@ -141,11 +126,12 @@ namespace Tagerly.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex.Message);
+                TempData["ErrorMessage"] = $"Failed to update product: {ex.Message}";
                 await LoadCategories(productVM.CategoryId);
                 return View(productVM);
             }
         }
+
 
         public async Task<IActionResult> Delete(int id)
         {
@@ -160,7 +146,19 @@ namespace Tagerly.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _productService.DeleteProductAsync(id);
+            try
+            {
+                var product = await _productService.GetProductByIdAsync(id);
+                if (product == null) return NotFound();
+
+                await _productService.DeleteProductAsync(id);
+                TempData["SuccessMessage"] = $"Product '{product.Name}' has been deleted successfully!";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Failed to delete product: {ex.Message}";
+            }
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -175,6 +173,7 @@ namespace Tagerly.Controllers
         {
             // These fields are auto-mapped and not directly bound in form
             ModelState.Remove(nameof(ProductViewModel.ImageUrl));
+            ModelState.Remove(nameof(ProductViewModel.ImageFile));
             ModelState.Remove(nameof(ProductViewModel.CategoryName));
             ModelState.Remove(nameof(ProductViewModel.SellerId));
             ModelState.Remove(nameof(ProductViewModel.SellerName));
