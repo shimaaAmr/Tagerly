@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Tagerly.DataAccess;
+using Tagerly.DataAccess.DbContexts;
 using Tagerly.Models;
 using Tagerly.Services.Interfaces;
 using Tagerly.ViewModels;

@@ -1,4 +1,4 @@
-﻿using Tagerly.DataAccess;
+﻿using Tagerly.DataAccess.DbContexts;
 using Tagerly.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;

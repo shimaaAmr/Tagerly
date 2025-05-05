@@ -1,7 +1,7 @@
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Tagerly.DataAccess;
+using Tagerly.DataAccess.DbContexts;
 using Tagerly.Mapping;
 using Tagerly.Mapping.Admin;
 using Tagerly.Models;

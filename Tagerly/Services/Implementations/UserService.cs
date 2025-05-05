@@ -26,7 +26,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
 using System.Threading.Tasks;
-using Tagerly.DataAccess;
+using Tagerly.DataAccess.DbContexts;
 using Tagerly.Models;
 using Tagerly.Services.Interfaces;
 

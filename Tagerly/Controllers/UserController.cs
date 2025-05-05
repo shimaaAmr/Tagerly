@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Tagerly.Models;
 using System.IO;
 using System.Threading.Tasks;
-using Tagerly.DataAccess;
+using Tagerly.DataAccess.DbContexts;
 using Tagerly.Services.Interfaces;
 
 namespace Tagerly.Controllers
