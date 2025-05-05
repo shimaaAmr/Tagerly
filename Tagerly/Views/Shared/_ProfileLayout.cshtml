@@ -1,51 +1,319 @@
-﻿
-<!DOCTYPE html>
-<html lang="en">
+﻿@using System.Security.Claims
+<!doctype html>
+<html lang="en" dir="ltr">
+
 <head>
-	<meta charset="UTF-8">
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>@ViewData["Title"] - Tagerly</title>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
-	<link rel="stylesheet" href="~/css/UpdateProfile.css">
+	<meta name="description" content="Tagerly Store for Unique Handmade Products">
+	<meta name="author" content="Tagerly">
+	<meta name="keywords" content="Handmade Products, Gifts, Home Decor">
+
+	<link rel="apple-touch-icon" sizes="180x180" href="~/assets/favicon/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="~/assets/favicon/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="~/assets/favicon/favicon-16x16.png">
+
+	<link rel="stylesheet" href="~/assets/css/libs.bundle.css" />
+
+	<link rel="stylesheet" href="~/assets/css/theme.bundle.css" />
+
+	<link rel="stylesheet" href="~/css/notifications.css" asp-append-version="true" />
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+	<title>Tagerly | Unique Handmade Products</title>
+
+	<style>
+		body {
+			font-family: 'Tajawal', sans-serif;
+		}
+
+		.navbar-brand {
+			font-weight: 700;
+		}
+
+		.dropdown-megamenu {
+			right: 0 !important;
+			left: auto !important;
+		}
+
+		.rtl-dropdown {
+			text-align: right;
+			direction: rtl;
+		}
+
+		.bg-primary {
+			background-color: #8f7668 !important;
+		}
+
+		.text-primary {
+			color: #8f7668 !important;
+		}
+
+		.footer-bg {
+			background-color: #8f7668 !important;
+		}
+
+		/* Logout Modal Styles */
+		.logout-modal {
+			display: none; /* مخفي افتراضيًا */
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.5); /* خلفية شبه شفافة */
+			z-index: 1050; /* فوق كل العناصر */
+			justify-content: center;
+			align-items: center;
+		}
+
+			.logout-modal.show {
+				display: flex; /* يظهر لما يتفعل */
+			}
+
+		.logout-confirmation {
+			background: #FFFFFF;
+			padding: 20px;
+			border-radius: 10px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			text-align: center;
+			width: 300px;
+		}
+
+			.logout-confirmation h4 {
+				margin-bottom: 20px;
+				color: #5C4033;
+			}
+
+		.button-group {
+			display: flex;
+			justify-content: center;
+			gap: 12px;
+		}
+
+		.btn-handmade {
+			background: #D4A373;
+			color: #FFF;
+			border: none;
+			padding: 10px 20px;
+			border-radius: 8px;
+			font-family: Arial, sans-serif;
+			font-size: 1rem;
+			transition: all 0.3s ease;
+		}
+
+			.btn-handmade:hover {
+				background: #A68A64;
+			}
+
+		.btn-secondary {
+			background: #A0A0A0;
+			color: #FFF;
+			border: none;
+			padding: 10px 20px;
+			border-radius: 8px;
+			font-family: Arial, sans-serif;
+			font-size: 1rem;
+			transition: all 0.3s ease;
+		}
+
+			.btn-secondary:hover {
+				background: #808080;
+			}
+	</style>
 </head>
+
 <body>
-	<div class="container rounded bg-paper mt-5">
-		<div class="row">
-			<div class="col-md-4 border-right">
-				<div class="d-flex flex-column align-items-center text-center p-3 py-5">
-					@if (!string.IsNullOrEmpty(ViewData["ProfilePicturePath"]?.ToString()))
-					{
-						<img class="rounded-circle mt-5 profile-picture" src="@ViewData["ProfilePicturePath"]" width="90" alt="User Avatar">
-					}
-					else
-					{
-						<div class="rounded-circle mt-5 profile-picture placeholder-picture"></div>
-					}
-					<span class="font-weight-bold user-info">@(ViewData["UserName"] ?? "John Doe")</span>
-					<span class="text-muted user-info">@(ViewData["Email"] ?? "john_doe12@bbb.com")</span>
-					<span class="user-info">@(ViewData["Country"] ?? "United States")</span>
-				</div>
-			</div>
-			<div class="col-md-8">
-				<div class="p-3 py-5">
-					<div class="d-flex justify-content-between align-items-center mb-3">
-						<div class="d-flex flex-row align-items-center back">
-							<i class="fas fa-long-arrow-alt-left mr-1 mb-1"></i>
-							<a href="/"><h6>Back to home</h6></a>
+	<nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
+		<div class="container">
+			<a class="navbar-brand" href="/">
+				<img src="~/assets/images/logo.png" alt="Tagerly" height="40">
+			</a>
+
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="navbarContent">
+				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="productsDropdown" data-bs-toggle="dropdown">
+							Products
+						</a>
+						<div class="dropdown-menu rtl-dropdown" aria-labelledby="productsDropdown">
+							<div class="container">
+								<div class="row">
+									<div class="col-md-4">
+										<h6 class="dropdown-header">Handmade Products</h6>
+										<a class="dropdown-item" href="#">Personal Care</a>
+										<a class="dropdown-item" href="#">Home Decor</a>
+										<a class="dropdown-item" href="#">Gifts</a>
+									</div>
+									<div class="col-md-4">
+										<h6 class="dropdown-header">Categories</h6>
+										<a class="dropdown-item" href="#">Best Sellers</a>
+										<a class="dropdown-item" href="#">Special Offers</a>
+										<a class="dropdown-item" href="#">New Arrivals</a>
+									</div>
+									<div class="col-md-4 d-none d-md-block">
+										<img src="~/assets/images/menu-banner.jpg" class="img-fluid rounded" alt="Tagerly Products">
+									</div>
+								</div>
+							</div>
 						</div>
-						<h6 class="text-right">Edit Profile</h6>
-					</div>
-					@RenderBody()
-				</div>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">About Us</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Blog</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Contact</a>
+					</li>
+				</ul>
+
+				@if (User.Identity.IsAuthenticated)
+				{
+					<li class="nav-item me-lg-4">
+						<a class="nav-link fw-bolder py-lg-4">
+							Welcome @(User.FindFirst(ClaimTypes.GivenName)?.Value ?? User.Identity.Name)
+						</a>
+					</li>
+					<a asp-controller="User" asp-action="UpdateProfile" asp-route-id="@ViewData["UserId"]" class="mx-2 text-dark position-relative">
+						<i class="ri-user-line ri-lg"></i>
+					</a>
+
+					<!-- زر الـ Logout هيفتح الـ Modal -->
+					<a href="#" class="mx-2 text-dark" onclick="showLogoutModal()">Logout</a>
+				}
+				else
+				{
+					<a asp-controller="Account" asp-action="Login" class="mx-2 text-dark">
+						Login
+					</a>
+					<a asp-controller="Account" asp-action="SignUp" class="mx-2 text-dark">
+						Sign Up
+					</a>
+				}
+
+				<a asp-controller="Cart" asp-action="Index" class="mx-2 text-dark position-relative">
+					<i class="ri-shopping-cart-2-line ri-lg"></i>
+					<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+						0
+					</span>
+				</a>
+			</div>
+		</div>
+	</nav>
+
+	<main>
+		@RenderBody()
+	</main>
+
+	<!-- Logout Confirmation Modal -->
+	<div class="logout-modal" id="logoutModal">
+		<div class="logout-confirmation">
+			<h4>Are you sure want to logout?</h4>
+			<div class="button-group">
+				<a href="#" class="btn-secondary" onclick="hideLogoutModal()">Cancel</a>
+				<form asp-action="ConfirmLogout" asp-controller="Account" method="post" style="display: inline;">
+					<button type="submit" class="btn-handmade">Logout</button>
+				</form>
 			</div>
 		</div>
 	</div>
-	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
-	@RenderSection("Scripts", required: false)
+
+	<partial name="_NotificationPartial" />
+
+	<footer class="footer-bg text-white pt-5 pb-3">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-4 mb-4">
+					<h5 class="mb-4">Tagerly</h5>
+					<p>A store specializing in unique handmade products made with love and care.</p>
+					<div class="social-icons mt-4">
+						<a href="#" class="text-white me-3"><i class="ri-facebook-fill ri-lg"></i></a>
+						<a href="#" class="text-white me-3"><i class="ri-instagram-line ri-lg"></i></a>
+						<a href="#" class="text-white me-3"><i class="ri-twitter-fill ri-lg"></i></a>
+					</div>
+				</div>
+				<div class="col-md-2 mb-4">
+					<h5 class="mb-4">Quick Links</h5>
+					<ul class="list-unstyled">
+						<li class="mb-2"><a href="#" class="text-white-50">Home</a></li>
+						<li class="mb-2"><a href="#" class="text-white-50">About Us</a></li>
+						<li class="mb-2"><a href="#" class="text-white-50">Products</a></li>
+						<li class="mb-2"><a href="#" class="text-white-50">Blog</a></li>
+					</ul>
+				</div>
+				<div class="col-md-3 mb-4">
+					<h5 class="mb-4">Customer Service</h5>
+					<ul class="list-unstyled">
+						<li class="mb-2"><a href="#" class="text-white-50">Contact</a></li>
+						<li class="mb-2"><a href="#" class="text-white-50">FAQs</a></li>
+						<li class="mb-2"><a href="#" class="text-white-50">Return Policy</a></li>
+						<li class="mb-2"><a href="#" class="text-white-50">Privacy Policy</a></li>
+					</ul>
+				</div>
+				<div class="col-md-3 mb-4">
+					<h5 class="mb-4">Newsletter</h5>
+					<p>Subscribe to get updates on our latest offers and products.</p>
+					<form class="mt-3">
+						<div class="input-group">
+							<input type="email" class="form-control" placeholder="Your email">
+							<button class="btn btn-primary" type="submit">Subscribe</button>
+						</div>
+					</form>
+				</div>
+			</div>
+			<hr class="my-4 bg-secondary">
+			<div class="row">
+				<div class="col-md-6 text-center text-md-start">
+					<p class="mb-0">© 2023 Tagerly. All rights reserved.</p>
+				</div>
+				<div class="col-md-6 text-center text-md-end">
+					<img src="~/assets/images/payment/paypal.png" alt="Payment Methods" height="30">
+				</div>
+			</div>
+		</div>
+	</footer>
+
+	<script src="~/assets/js/theme.bundle.js"></script>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			const notifications = document.querySelectorAll('.alert-notification');
+
+			notifications.forEach(notification => {
+				setTimeout(() => {
+					notification.style.opacity = '0';
+					notification.style.transform = 'translateY(-30px)';
+					setTimeout(() => notification.remove(), 1000);
+				}, 60000);
+
+				notification.addEventListener('click', () => {
+					notification.style.opacity = '0';
+					notification.style.transform = 'translateY(-30px)';
+					setTimeout(() => notification.remove(), 500);
+				});
+			});
+		});
+
+		// وظائف للتحكم في الـ Modal
+		function showLogoutModal() {
+			document.getElementById('logoutModal').classList.add('show');
+		}
+
+		function hideLogoutModal() {
+			document.getElementById('logoutModal').classList.remove('show');
+		}
+	</script>
+
+	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

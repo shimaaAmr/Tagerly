@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Confirm Logout - Tagerly</title>
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			background: #FFFFFF;
+			font-family: Arial, sans-serif;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+		}
+
+		.logout-confirmation {
+			background: #FFFFFF;
+			padding: 20px;
+			border-radius: 10px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			text-align: center;
+			width: 300px;
+			z-index: 1000;
+		}
+
+			.logout-confirmation h4 {
+				margin-bottom: 20px;
+				color: #5C4033;
+			}
+
+		.button-group {
+			display: flex;
+			justify-content: center;
+			gap: 12px; /* مسافة ثابتة بين الأزرار */
+		}
+
+		.btn-handmade {
+			background: #D4A373;
+			color: #FFF;
+			border: none;
+			padding: 10px 20px;
+			border-radius: 8px;
+			font-family: Arial, sans-serif;
+			font-size: 1rem;
+			transition: all 0.3s ease;
+		}
+
+			.btn-handmade:hover {
+				background: #A68A64;
+			}
+
+		.btn-secondary {
+			background: #A0A0A0;
+			color: #FFF;
+			border: none;
+			padding: 10px 20px;
+			border-radius: 8px;
+			font-family: Arial, sans-serif;
+			font-size: 1rem;
+			transition: all 0.3s ease;
+		}
+
+			.btn-secondary:hover {
+				background: #808080;
+			}
+	</style>
+</head>
+<body>
+	<div class="logout-confirmation">
+		<h4>Are you sure want to logout?</h4>
+		<div class="button-group">
+			<a asp-action="Index" asp-controller="Home" class="btn-secondary">Cancel</a>
+			<form asp-action="ConfirmLogout" method="post" style="display: inline;">
+				<button type="submit" class="btn-handmade">Logout</button>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
