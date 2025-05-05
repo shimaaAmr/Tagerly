@@ -1,0 +1,148 @@
+﻿
+body {
+    background: #F5E8C7;
+    font-family: Arial, sans-serif;
+    color: #5C4033;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+}
+
+.bg-paper {
+    background: #FDF6E3 url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+    border: 2px solid #D4A373;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.border-right {
+    border-right: 1px dashed #D4A373 !important;
+}
+
+@media (max-width: 767px) {
+    .border-right {
+        border-right: none !important;
+        border-bottom: 1px dashed #D4A373 !important;
+    }
+}
+
+.profile-picture {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border: 3px solid #A68A64;
+    background: #FFF;
+}
+
+.placeholder-picture {
+    width: 90px;
+    height: 90px;
+    background: #EDE4D5;
+    border: 3px dashed #A68A64;
+}
+
+.user-info {
+    font-size: 1rem;
+    margin-top: 5px;
+    color: #5C4033;
+}
+
+.back a {
+    color: #8A5522;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.back:hover a {
+    color: #A68A64;
+}
+
+.text-right {
+    color: #8A5522;
+    font-size: 1rem;
+}
+
+.form-wrapper {
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+}
+
+.handmade-form {
+    background: #FDF6E3;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+    .input-group i {
+        position: absolute;
+        top: 50%;
+        left: 10px;
+        transform: translateY(-50%);
+        color: #8A5522;
+        font-size: 1.2rem;
+    }
+
+    .input-group .form-control {
+        padding-left: 40px;
+        background: #FFF;
+        border: 2px solid #D4A373;
+        border-radius: 8px;
+        font-family: Arial, sans-serif;
+        font-size: 1rem;
+        color: #5C4033;
+    }
+
+.form-control:focus {
+    box-shadow: 0 0 5px rgba(212, 163, 115, 0.5);
+    border-color: #A68A64;
+}
+
+.form-label {
+    font-weight: bold;
+    color: #5C4033;
+}
+
+.text-danger {
+    font-size: 0.875rem;
+    font-family: Arial, sans-serif;
+}
+
+.file-name {
+    font-size: 0.9rem;
+}
+
+.file-link {
+    color: #8A5522;
+    text-decoration: none;
+}
+
+    .file-link:hover {
+        color: #A68A64;
+        text-decoration: underline;
+    }
+
+.btn-handmade {
+    background: #D4A373;
+    color: #FFF;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+    font-size: 1rem;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+    .btn-handmade:hover {
+        background: #A68A64;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+    }

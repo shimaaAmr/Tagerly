@@ -1,0 +1,63 @@
+﻿@model Tagerly.Models.UpdateProfileViewModel
+@{
+	ViewData["Title"] = "Update Profile";
+	Layout = "_ProfileLayout";
+}
+
+<div class="form-wrapper align-items-center">
+	<form asp-controller="User" asp-action="UpdateProfile" method="post" class="form handmade-form" enctype="multipart/form-data">
+		<input type="hidden" asp-for="Id" />
+		<input type="hidden" asp-for="ProfilePicturePath" />
+
+		@* <div asp-validation-summary="" class="text-danger"></div>
+ *@
+		<div class="input-group">
+			<i class='bx bxs-user'></i>
+			<input asp-for="UserName" class="form-control" placeholder="Username" />
+			<span asp-validation-for="UserName" class="text-danger"></span>
+		</div>
+
+		<div class="input-group">
+			<i class='bx bx-mail-send'></i>
+			<input asp-for="Email" class="form-control" placeholder="Email" />
+			<span asp-validation-for="Email" class="text-danger"></span>
+		</div>
+
+		<div class="input-group">
+			<i class='bx bxs-lock-alt'></i>
+			<input asp-for="Address" class="form-control" placeholder="Address" />
+			<span asp-validation-for="Address" class="text-danger"></span>
+		</div>
+
+		<div class="input-group">
+			<i class='bx bxs-lock-alt'></i>
+			<input asp-for="PhoneNumber" class="form-control" placeholder="Phone" />
+			<span asp-validation-for="PhoneNumber" class="text-danger"></span>
+		</div>
+
+		<div class="input-group">
+			<input asp-for="ProfilePicture" class="form-control" type="file" accept="image/*" onchange="updateFileName(this)" />
+			<span asp-validation-for="ProfilePicture" class="text-danger"></span>
+			<div class="file-name mt-2"></div>
+		</div>
+
+		<button type="submit" class="btn btn-handmade">Update Profile</button>
+	</form>
+</div>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+	<script>
+		function updateFileName(input) {
+			const fileNameDiv = input.parentElement.querySelector('.file-name');
+			if (input.files.length > 0) {
+				const fileName = input.files[0].name;
+				fileNameDiv.innerHTML = `<a href="#" class="file-link">${fileName}</a>`;
+			} else {
+				fileNameDiv.innerHTML = '';
+			}
+		}
+	</script>
+}

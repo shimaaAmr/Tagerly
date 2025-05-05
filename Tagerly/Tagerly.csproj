@@ -17,5 +17,11 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
   </ItemGroup>
+	<ItemGroup>
+		<Folder Include="DataAccess/ConfigurationClasses" />
+		<Folder Include="Mapping" />
+		<Folder Include="Services/Interfaces" />
+		<Folder Include="Services/Implementations" />
+	</ItemGroup>
 
 </Project>

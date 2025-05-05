@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Tagerly.Models;
 using Tagerly.DataAccess.ConfigurationClasses;
 
-namespace Tagerly.DataAccess
+namespace Tagerly.DataAccess.DbContexts
 {
     public class TagerlyDbContext : IdentityDbContext<ApplicationUser>
     {

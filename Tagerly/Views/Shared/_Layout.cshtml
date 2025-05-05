@@ -126,7 +126,10 @@
 							Welcome @(User.FindFirst(ClaimTypes.GivenName)?.Value ?? User.Identity.Name)
 						</a>
 					</li>
-					<a href="#" class="mx-2 text-dark position-relative">
+					@* <a aasp-controller="User" asp-action="UpdateProfile" asp-route="" class="mx-2 text-dark position-relative">
+						<i class="ri-user-line ri-lg"></i>
+					</a> *@
+					<a asp-controller="User" asp-action="UpdateProfile" asp-route-id="@ViewData["UserId"]" class="mx-2 text-dark position-relative">
 						<i class="ri-user-line ri-lg"></i>
 					</a>
 
