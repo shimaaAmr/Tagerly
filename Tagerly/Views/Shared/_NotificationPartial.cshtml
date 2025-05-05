@@ -1,0 +1,31 @@
+﻿@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert-notification alert-success">
+        <i class="ri-checkbox-circle-fill me-2"></i>
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert-notification alert-danger">
+        <i class="ri-error-warning-fill me-2"></i>
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (TempData["InfoMessage"] != null)
+{
+    <div class="alert-notification alert-info">
+        <i class="ri-information-fill me-2"></i>
+        @TempData["InfoMessage"]
+    </div>
+}
+
+@if (TempData["WarningMessage"] != null)
+{
+    <div class="alert-notification alert-warning">
+        <i class="ri-alert-fill me-2"></i>
+        @TempData["WarningMessage"]
+    </div>
+}
