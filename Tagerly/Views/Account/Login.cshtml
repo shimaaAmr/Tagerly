@@ -1,4 +1,4 @@
-﻿ @model Tagerly.ViewModels.LoginViewModel
+﻿@model Tagerly.ViewModels.LoginViewModel
 @{
 	Layout = "_RegisterationLayout";
 }
@@ -16,6 +16,11 @@
 			<input asp-for="Password" class="form-control" placeholder="Password" />
 			<span asp-validation-for="Password" class="text-danger"></span>
 		</div>
+		<div class="input-group remember-me-group">
+			<label>
+				<input type="checkbox" asp-for="RemmemberMe" /> Remember me
+			</label>
+		</div>
 		<button type="submit">Sign in</button>
 		<p>
 			<b>Forgot password?</b>
@@ -23,7 +28,6 @@
 		<p>
 			<span>Don't have an account?</span>
 			<b onclick="toggle()" class="pointer" asp-action="SignUp">Sign up here</b>
-			@* <a asp-controller="Account" asp-action="SignUp">Sign up here</a> *@
 		</p>
 	</form>
 </div>
