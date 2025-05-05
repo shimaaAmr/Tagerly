@@ -1,0 +1,97 @@
+﻿@model IEnumerable<ProductApprovingVM>
+
+@{
+    ViewData["Title"] = "Reject";
+}
+
+<h1>Reject</h1>
+
+<style>
+    :root {
+        --wood-dark: #5E3023;
+        --wood-medium: #895737;
+        --wood-light: #B88B4A;
+        --cream: #E3DCCB;
+        --beige: #D8C4A7;
+        --light-bg: #F5F1EB;
+    }
+
+    body {
+        background-color: var(--light-bg);
+        color: var(--wood-dark);
+        font-family: Arial, sans-serif;
+    }
+
+    h1 {
+        color: var(--wood-medium);
+        margin-bottom: 20px;
+    }
+
+    table.table {
+        background-color: var(--cream);
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+        table.table th,
+        table.table td {
+            border: 1px solid var(--beige);
+            padding: 12px;
+            text-align: left;
+        }
+
+        table.table th {
+            background-color: var(--wood-light);
+            color: white;
+        }
+
+        table.table tbody tr:nth-child(even) {
+            background-color: var(--beige);
+        }
+
+    .btn-danger {
+        background-color: var(--wood-dark);
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        .btn-danger:hover {
+            background-color: #4a261c;
+        }
+</style>
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.Id</td>
+                <td>@product.Name</td>
+                <td>@product.Description</td>
+                <td>@(product.IsApproved == true ? "Approved" : "Pending")</td>
+                <td>
+                    @if (product.IsApproved == false)
+                    {
+                        <form method="post" action="@Url.Action("Reject", "Products", new { id = product.Id })" onsubmit="return confirm('Are you sure you want to reject this product?');">
+                            <button type="submit" class="btn btn-danger">Reject</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

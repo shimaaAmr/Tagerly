@@ -1,36 +1,65 @@
-﻿@model IEnumerable<ProductApprovingVM>
+﻿@model Tagerly.ViewModels.AdminViewModel.ProductApprovingVM
 
 @{
-    ViewData["Title"] = "Approve Products";
+    ViewData["Title"] = "Approve Product";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Approve Products</h2>
+<style>
+    :root {
+        --wood-dark: #5E3023;
+        --wood-medium: #895737;
+        --wood-light: #B88B4A;
+        --cream: #E3DCCB;
+        --beige: #D8C4A7;
+        --light-bg: #F5F1EB;
+    }
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Approved</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var product in Model)
-        {
-            <tr>
-                <td>@product.Name</td>
-                <td>@(product.IsApproved.GetValueOrDefault() ? "Yes" : "No")</td>
-                <td>
-                    @if (!product.IsApproved.GetValueOrDefault())
-                    {
-                        <form asp-action="Approve" asp-route-id="@product.Id" method="post">
-                            <button type="submit" class="btn btn-success" onclick="return confirm('Are you sure you want to approve this product?');">
-                                Approve
-                            </button>
-                        </form>
-                    }
-                </td>
-            </tr>
+    body {
+        background-color: var(--light-bg);
+    }
+
+    .card {
+        background-color: var(--cream);
+        border: 1px solid var(--wood-medium);
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 600px;
+        margin: auto;
+        margin-top: 40px;
+    }
+
+        .card h3 {
+            color: var(--wood-dark);
         }
-    </tbody>
-</table>
+
+    .btn-approve {
+        background-color: green;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
+    .product-img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+</style>
+
+<div class="card">
+    <h3>Approve Product</h3>
+
+    <img src="@Model.ImageUrl" alt="Product Image" class="product-img" />
+
+    <p><strong>Name:</strong> @Model.Name</p>
+    <p><strong>Description:</strong> @Model.Description</p>
+    <p><strong>Seller:</strong> @Model.SellerName</p>
+    <p><strong>Status:</strong> @Model.Status</p>
+
+    <form asp-action="ApproveConfirmation" asp-route-id="@Model.Id" method="post" onsubmit="return confirm('Are you sure you want to approve this product?');">
+        <button type="submit" class="btn-approve">Approve</button>
+    </form>
+</div>

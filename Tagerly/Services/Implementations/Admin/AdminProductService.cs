@@ -69,5 +69,13 @@ namespace Tagerly.Services.Implementations.Admin
         {
             return await _productRepo.ApproveProductAsync(id, isApproved);
         }
+        public async Task<ProductApprovingVM> GetProductByIdAsync(int id)
+        {
+            var product = await _productRepo.GetByIdAsync(id);
+            if (product == null) return null;
+
+            return _mapper.Map<ProductApprovingVM>(product);
+        }
+
     }
 }
