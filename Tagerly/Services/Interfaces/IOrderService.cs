@@ -1,5 +1,6 @@
 ﻿using Tagerly.Models;
 using Tagerly.Models.Enums;
+using Tagerly.ViewModels.AdminViewModel;
 
 namespace Tagerly.Services.Interfaces
 {
@@ -13,5 +14,8 @@ namespace Tagerly.Services.Interfaces
             string billingAddress, // أضف هذا الباراميتر
             string email,
             string notes); // أضف هذا الباراميتر
+
+
+       
     }
 }
