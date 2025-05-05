@@ -57,6 +57,7 @@ namespace Tagerly.Services.Implementations
                 // 2. Validate products and calculate total
                 decimal totalAmount = 0;
                 var orderDetails = new List<OrderDetail>();
+                var productUpdates = new Dictionary<int, int>(); // ProductId -> Quantity to decrease
 
                 foreach (var cartItem in cart.CartItems)
                 {
@@ -79,6 +80,9 @@ namespace Tagerly.Services.Implementations
                     });
 
                     totalAmount += product.Price * cartItem.Quantity;
+
+                    // Store quantity updates for later processing
+                    productUpdates[cartItem.ProductId] = cartItem.Quantity;
                 }
 
                 // 3. Create and save order
@@ -99,23 +103,62 @@ namespace Tagerly.Services.Implementations
                         Amount = totalAmount,
                         Method = paymentMethod.ToString(),
                         PaymentDate = DateTime.UtcNow,
-                      
+                        TransactionId = Guid.NewGuid().ToString(), // Generate a proper transaction ID
+                        UserId = userId,
+                        Status = "pending"
                     }
                 };
-
-            
 
                 await _orderRepo.AddAsync(order);
                 await _orderRepo.SaveChangesAsync();
 
-                // 4. Update product quantities
-                foreach (var detail in orderDetails)
+                // 4. Update product quantities with retry logic
+                foreach (var entry in productUpdates)
                 {
-                    var product = await _productRepo.GetByIdAsync(detail.ProductId);
-                    product.Quantity -= detail.Quantity;
-                    await _productRepo.UpdateAsync(product);
+                    int productId = entry.Key;
+                    int quantityToDecrease = entry.Value;
+                    bool updateSuccessful = false;
+                    int retryCount = 0;
+                    const int maxRetries = 3;
+
+                    while (!updateSuccessful && retryCount < maxRetries)
+                    {
+                        try
+                        {
+                            // Get fresh product data
+                            var freshProduct = await _productRepo.GetByIdAsync(productId);
+
+                            if (freshProduct == null)
+                            {
+                                throw new InvalidOperationException($"Product {productId} not found during quantity update");
+                            }
+
+                            if (freshProduct.Quantity < quantityToDecrease)
+                            {
+                                throw new InvalidOperationException($"Not enough stock for product {productId}");
+                            }
+
+                            // Update quantity
+                            freshProduct.Quantity -= quantityToDecrease;
+                            await _productRepo.UpdateAsync(freshProduct);
+                            await _productRepo.SaveChangesAsync();
+
+                            updateSuccessful = true;
+                        }
+                        catch (Exception ex) when (IsOptimisticConcurrencyException(ex))
+                        {
+                            retryCount++;
+                            if (retryCount >= maxRetries)
+                            {
+                                _logger.LogError(ex, $"Failed to update product {productId} quantity after {maxRetries} attempts");
+                                throw;
+                            }
+
+                            _logger.LogWarning($"Concurrency conflict updating product {productId}, retry {retryCount}");
+                            await Task.Delay(100 * retryCount); // Exponential backoff
+                        }
+                    }
                 }
-                await _productRepo.SaveChangesAsync();
 
                 // 5. Clear cart
                 await _cartService.ClearCart(userId);
@@ -134,7 +177,14 @@ namespace Tagerly.Services.Implementations
             }
         }
 
-        // Additional helper methods would go here...
+        private bool IsOptimisticConcurrencyException(Exception ex)
+        {
+            // This is a simplified check. You might need to adjust it based on
+            // the specific exceptions thrown by your ORM
+            return ex.Message.Contains("concurrency") ||
+                   ex.Message.Contains("affected 0 row(s)") ||
+                   ex.InnerException != null && IsOptimisticConcurrencyException(ex.InnerException);
+        }
     }
 
     public class OrderProcessingException : Exception
