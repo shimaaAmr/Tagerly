@@ -215,13 +215,14 @@
 using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using Tagerly.DataAccess.DbContexts;
+using System.Linq;
+using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
+using Tagerly.DataAccess;
 using Tagerly.Models;
 using Tagerly.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq.Expressions;
+using Tagerly.DataAccess.DbContexts;
+
 
 namespace Tagerly.Repositories.Implementations
 {
