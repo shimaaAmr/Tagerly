@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Tagerly.DataAccess;
+using Tagerly.DataAccess.DbContexts;
 using Tagerly.Repositories.Interfaces;
 
 namespace Tagerly.Repositories.Implementations

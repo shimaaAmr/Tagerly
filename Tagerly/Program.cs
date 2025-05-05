@@ -1,7 +1,7 @@
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Tagerly.DataAccess;
+using Tagerly.DataAccess.DbContexts;
 using Tagerly.Mapping;
 using Tagerly.Mapping.Admin;
 using Tagerly.Models;
@@ -46,7 +46,9 @@ namespace Tagerly
 			builder.Services.AddScoped<ICartService, CartService>();
 			builder.Services.AddScoped<IOrderService, OrderService>();
 			builder.Services.AddScoped<IEmailService, EmailService>();
-			builder.Services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
+            builder.Services.AddScoped<IAdminOrderService, AdminOrderService>();
+
+            builder.Services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
 
 
 
