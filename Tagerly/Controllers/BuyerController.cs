@@ -9,60 +9,60 @@ using System.Collections.Generic;
 namespace Tagerly.Controllers
 {
 
-    public class BuyerController : Controller
-    {
-        private readonly IProductService _productService;
-        private readonly ICategoryService _categoryService;
-        private readonly IMapper _mapper;
+	public class BuyerController : Controller
+	{
+		private readonly IProductService _productService;
+		private readonly ICategoryService _categoryService;
+		private readonly IMapper _mapper;
 
-        public BuyerController(
-            IProductService productService,
-            ICategoryService categoryService,
-            IMapper mapper)
-        {
-            _productService = productService;
-            _categoryService = categoryService;
-            _mapper = mapper;
-        }
+		public BuyerController(
+			IProductService productService,
+			ICategoryService categoryService,
+			IMapper mapper)
+		{
+			_productService = productService;
+			_categoryService = categoryService;
+			_mapper = mapper;
+		}
 
-        public async Task<IActionResult> Index(ProductFilterViewModel productFilterVM)
-        {
-            // Only show approved products for buyers
-            productFilterVM.IsApproved = true;
-            productFilterVM.PageSize = 12; // Set default page size
+		public async Task<IActionResult> Index(ProductFilterViewModel productFilterVM)
+		{
+			// Only show approved products for buyers
+			//productFilterVM.IsApproved = true;
+			productFilterVM.PageSize = 12; // Set default page size
 
-            await LoadCategories(productFilterVM.CategoryId);
-            var result = await _productService.GetFilteredProductsAsync(productFilterVM);
+			await LoadCategories(productFilterVM.CategoryId);
+			var result = await _productService.GetFilteredProductsAsync(productFilterVM);
 
-            // Pass pagination data to view
-            ViewBag.FilterModel = productFilterVM;
-            ViewBag.CurrentPage = productFilterVM.PageIndex;
-            ViewBag.TotalPages = result.TotalPages;
+			// Pass pagination data to view
+			ViewBag.FilterModel = productFilterVM;
+			ViewBag.CurrentPage = productFilterVM.PageIndex;
+			ViewBag.TotalPages = result.TotalPages;
 
-            return View(_mapper.Map<IEnumerable<ProductViewModel>>(result.Products));
-        }
+			return View(_mapper.Map<IEnumerable<ProductViewModel>>(result.Products));
+		}
 
-        public async Task<IActionResult> Details(int id)
-        {
-            var product = await _productService.GetProductByIdAsync(id);
+		public async Task<IActionResult> Details(int id)
+		{
+			var product = await _productService.GetProductByIdAsync(id);
 
-            //Only show approved products to buyers
-            if (product == null || product.IsApproved != true)
-            {
-                return NotFound();
-            }
+			//Only show approved products to buyers
+			//if (product == null || product.IsApproved != true)
+			//{
+			//    return NotFound();
+			//}
 
-            //if (product == null)
-            //{
-            //    return NotFound();
-            //}
-            return View(_mapper.Map<ProductViewModel>(product));
-        }
+			//if (product == null)
+			//{
+			//    return NotFound();
+			//}
+			return View(_mapper.Map<ProductViewModel>(product));
+		}
 
-        private async Task LoadCategories(int? selectedId = null)
-        {
-            var categories = await _categoryService.GetAllCategoriesAsync();
-            ViewBag.Categories = new SelectList(categories, "Id", "Name", selectedId);
-        }
-    }
+		private async Task LoadCategories(int? selectedId = null)
+		{
+			var categories = await _categoryService.GetAllCategoriesAsync();
+			ViewBag.Categories = new SelectList(categories, "Id", "Name", selectedId);
+		}
+	}
 }
