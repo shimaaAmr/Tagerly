@@ -21,18 +21,27 @@ namespace Tagerly.Controllers
             return View(products);
         }
 
-      
-      
+
+
 
         //=================================
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> Delete(int id)
+        {
+            var product = await _productService.GetProductByIdAsync(id);
+            if (product == null) return NotFound();
+
+            return View(product); // يرجع View اسمه Delete.cshtml
+        }
+        [HttpPost]
+        public async Task<IActionResult> ConfirmDelete(int id)
         {
             var result = await _productService.DeleteProductAsync(id);
             if (!result) return NotFound();
 
             return RedirectToAction("Index");
         }
+
 
         [HttpGet]
         public async Task<IActionResult> Approve(int id)
@@ -60,6 +69,7 @@ namespace Tagerly.Controllers
 
             return View(product); // يعرض View اسمه Reject.cshtml
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
