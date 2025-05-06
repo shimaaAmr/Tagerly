@@ -29,3 +29,27 @@ body {
 .modal-header.bg-danger {
     background-color: #dc3545 !important;
 }
+
+/* Pagination Styles */
+.pagination .page-item.active .page-link {
+    background-color: #8b5e3c;
+    border-color: #5c3d24;
+}
+
+.pagination .page-link {
+    color: #5c3d24;
+}
+
+    .pagination .page-link:hover {
+        color: #8b5e3c;
+    }
+
+/* Card Hover Effect */
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }

@@ -49,7 +49,8 @@ namespace Tagerly.Services.Implementations
 
         public async Task<ProductViewModel> GetProductByIdAsync(int id)
         {
-            var product = await _repository.GetByIdWithCategoryAsync(id); 
+            // Make sure to include Seller in your query
+            var product = await _repository.GetByIdWithDetailsAsync(id);
             return product == null ? null : _mapper.Map<ProductViewModel>(product);
         }
 

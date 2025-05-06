@@ -105,7 +105,17 @@ namespace Tagerly
 			app.UseAuthentication();
 			app.UseAuthorization();
 
-			app.MapControllerRoute(
+            app.MapControllerRoute(
+				name: "sellerProducts",
+				pattern: "Seller/Products/{action=Index}/{id?}",
+				defaults: new { controller = "Product" });
+
+            app.MapControllerRoute(
+                name: "buyerProducts",
+                pattern: "Products/{action=Index}/{id?}",
+                defaults: new { controller = "Buyer" });
+
+            app.MapControllerRoute(
 				name: "default",
 				pattern: "{controller=Home}/{action=Index}/{id?}");
 

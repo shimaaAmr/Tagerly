@@ -5,9 +5,11 @@ using Tagerly.Services.Interfaces;
 using Tagerly.ViewModels;
 using AutoMapper;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Tagerly.Controllers
 {
+    [Authorize(Roles = "Seller")]
     public class ProductController : Controller
     {
         private readonly IProductService _productService;
@@ -24,18 +26,19 @@ namespace Tagerly.Controllers
             _mapper = mapper;
         }
 
-        public async Task<IActionResult> Index(ProductFilterViewModel filterModel)
+        public async Task<IActionResult> Index(ProductFilterViewModel productFilterVM)
         {
-            await LoadCategories(filterModel.CategoryId);
+            var sellerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            productFilterVM.SellerId = sellerId; // Add this filter
 
-            var result = await _productService.GetFilteredProductsAsync(filterModel);
-            ViewBag.FilterModel = filterModel;
+            await LoadCategories(productFilterVM.CategoryId);
+            var result = await _productService.GetFilteredProductsAsync(productFilterVM);
+
+            ViewBag.FilterModel = productFilterVM;
             ViewBag.TotalPages = result.TotalPages;
 
-            var productVMs = _mapper.Map<IEnumerable<ProductViewModel>>(result.Products);
-            return View(productVMs);
+            return View(_mapper.Map<IEnumerable<ProductViewModel>>(result.Products));
         }
-
         public async Task<IActionResult> Details(int id)
         {
             var product = await _productService.GetProductByIdAsync(id);
