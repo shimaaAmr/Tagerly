@@ -45,8 +45,9 @@ namespace Tagerly
 			builder.Services.AddScoped<IOrderService, OrderService>();
 			builder.Services.AddScoped<IEmailService, EmailService>();
 			builder.Services.AddScoped<IAdminOrderService, AdminOrderService>();
+            builder.Services.AddScoped<IDashboardService, DashboardService>();
 
-			builder.Services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
+            builder.Services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
 
 			builder.Services.AddControllersWithViews()
 				.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<SignUpViewModelValidator>());
@@ -124,7 +125,17 @@ namespace Tagerly
 			app.UseAuthentication();
 			app.UseAuthorization();
 
-			app.MapControllerRoute(
+            app.MapControllerRoute(
+				name: "sellerProducts",
+				pattern: "Seller/Products/{action=Index}/{id?}",
+				defaults: new { controller = "Product" });
+
+            app.MapControllerRoute(
+                name: "buyerProducts",
+                pattern: "Products/{action=Index}/{id?}",
+                defaults: new { controller = "Buyer" });
+
+            app.MapControllerRoute(
 				name: "default",
 				pattern: "{controller=Home}/{action=Index}/{id?}");
 

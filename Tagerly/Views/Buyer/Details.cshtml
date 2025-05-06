@@ -1,0 +1,189 @@
+﻿@model ProductViewModel
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+<div class="container py-4" style="background-color: #F5F1EB;">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <img src="@Model.ImageUrl" class="card-img-top p-4" alt="@Model.Name"
+                     style="max-height: 500px; object-fit: contain; background-color: white;">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100" style="border-color: #c4a484;">
+                <div class="card-body">
+                    <h2 class="card-title" style="color: #5c3d24;">@Model.Name</h2>
+                    <p class="text-muted">Category: @Model.CategoryName</p>
+                    <p class="text-muted">Sold by: @Model.SellerName</p>
+
+                    <h4 style="color: #8b5e3c;">@Model.Price.ToString("C")</h4>
+
+                    @if (Model.Quantity > 0)
+                    {
+                        <span class="badge" style="background-color: #c4a484; color: #5c3d24;">In Stock (@Model.Quantity available)</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Out of Stock</span>
+                    }
+
+                    <hr />
+
+                    <!-- Quantity Selector -->
+                    <div class="mb-4">
+                        <div class="d-flex align-items-center">
+                            <label class="me-2 fw-bold">Quantity:</label>
+                            <div class="position-relative" style="width: 80px;">
+                                <select id="quantity-selector" class="form-select" @(Model.Quantity <= 0 ? "disabled" : "")>
+                                    @{
+                                        var maxQuantity = Math.Min(10, Model.Quantity);
+                                        for (int i = 1; i <= maxQuantity; i++)
+                                        {
+                                            <option value="@i">@i</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h5>Description</h5>
+                    <p class="card-text">@Model.Description</p>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-favorite flex-grow-0" data-product-id="@Model.ProductId">
+                            <i class="ri-heart-line"></i> Favorite
+                        </button>
+                        <button class="btn btn-add-to-cart flex-grow-1"
+                                data-product-id="@Model.ProductId"
+                        @(Model.Quantity <= 0 ? "disabled" : "")>
+                            <i class="ri-shopping-cart-line"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mt-4">
+        <a asp-action="Index" class="btn" style="background-color: #8b5e3c; color: white;">
+            <i class="ri-arrow-left-line"></i> Back to Products
+        </a>
+    </div>
+</div>
+
+
+<style>
+    .btn-favorite {
+        background-color: white;
+        color: #5c3d24;
+        border: 1px solid #5c3d24;
+        transition: all 0.3s ease;
+    }
+
+        .btn-favorite:hover {
+            background-color: #f5f1eb;
+        }
+
+        .btn-favorite.active {
+            background-color: #ff6b6b;
+            color: white;
+            border-color: #ff6b6b;
+        }
+
+    .btn-add-to-cart {
+        background-color: #5c3d24;
+        color: white;
+        transition: all 0.3s ease;
+    }
+
+        .btn-add-to-cart:hover {
+            background-color: #8b5e3c;
+        }
+
+        .btn-add-to-cart:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+    /* Add this to your style section */
+    #quantity-selector {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        padding-right: 1.5rem;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%235c3d24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 0.5rem center;
+        background-size: 16px 12px;
+        z-index: 1;
+    }
+
+        /* Remove default arrow in IE */
+        #quantity-selector::-ms-expand {
+            display: none;
+        }
+
+    /* Ensure dropdown appears above other elements */
+    .form-select {
+        z-index: 2;
+    }
+
+    /* Fix for dropdown menu */
+    .dropdown-menu {
+        z-index: 1000;
+    }
+</style>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Favorite button handler
+            $('.btn-favorite').click(function() {
+                const productId = $(this).data('product-id');
+                $(this).toggleClass('active');
+
+                const icon = $(this).find('i');
+                if ($(this).hasClass('active')) {
+                    icon.removeClass('ri-heart-line').addClass('ri-heart-fill');
+                    // AJAX call to add favorite
+                } else {
+                    icon.removeClass('ri-heart-fill').addClass('ri-heart-line');
+                    // AJAX call to remove favorite
+                }
+            });
+
+            // Add to cart handler with quantity and anti-forgery token
+            $('.btn-add-to-cart').click(function() {
+                const productId = $(this).data('product-id');
+                const quantity = $('#quantity-selector').val();
+                const button = $(this);
+                const token = $('input[name="__RequestVerificationToken"]').val();
+
+                button.html('<span class="spinner-border spinner-border-sm"></span> Adding...');
+                button.prop('disabled', true);
+
+                $.ajax({
+                    url: '/Buyer/AddToCart',
+                    type: 'POST',
+                    data: {
+                        productId: productId,
+                        quantity: quantity,
+                        __RequestVerificationToken: token
+                    },
+                    success: function(response) {
+                        // Handle redirect or show success message
+                        window.location.href = '/Buyer'; // Redirect to index
+                    },
+                    error: function(xhr, status, error) {
+                        button.html('<i class="ri-shopping-cart-line"></i> Add to Cart');
+                        button.prop('disabled', false);
+                        alert('Failed to add item to cart: ' + error);
+                    }
+                });
+            });
+        });
+    </script>
+}

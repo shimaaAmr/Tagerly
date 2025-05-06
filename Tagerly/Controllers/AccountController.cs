@@ -156,8 +156,10 @@ namespace Tagerly.Controllers
 
 		}
 
+
 		#region Sign Up
 		[HttpGet]
+
 		public IActionResult SignUp()
 		{
 			return View();
@@ -226,11 +228,13 @@ namespace Tagerly.Controllers
 
 			return View(userViewModel);
 		}
+
 		#endregion
 
 
 		#region Log In
 		[HttpGet]
+
 		public IActionResult Login()
 		{
 			return View();
