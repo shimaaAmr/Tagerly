@@ -7,7 +7,7 @@ namespace Tagerly.ViewModels
 		public string Email { get; set; }
 		[DataType(DataType.Password)]
 		public string Password { get; set; }
-		[Display(Name = "Remember Me")]
+		[Display(Name = "Remember")]
 		public bool RemmemberMe { get; set; }
 	}
 }
