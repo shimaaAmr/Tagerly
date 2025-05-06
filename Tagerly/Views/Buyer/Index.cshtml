@@ -1,0 +1,360 @@
+﻿@model IEnumerable<ProductViewModel>
+@{
+    ViewData["Title"] = "Our Products";
+    var filterModel = ViewBag.FilterModel as ProductFilterViewModel ?? new ProductFilterViewModel();
+    int currentPage = ViewBag.CurrentPage ?? 1;
+    int totalPages = ViewBag.TotalPages ?? 1;
+}
+
+<style>
+    /* Product Card with Rounded Corners */
+    .product-card {
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        border-radius: 12px !important; /* Rounded corners for the card */
+        border: 1px solid #e0d6cc !important;
+    }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(139, 94, 60, 0.2);
+        }
+
+    .card-img-container {
+        position: relative;
+        overflow: hidden;
+        border-top-left-radius: 10px !important;
+        border-top-right-radius: 10px !important;
+    }
+
+    .card-img-top {
+        transition: transform 0.5s ease;
+        border-top-left-radius: 10px !important;
+        border-top-right-radius: 10px !important;
+    }
+
+    .product-card:hover .card-img-top {
+        transform: scale(1.03);
+    }
+
+    /* Favorite Button */
+    .btn-favorite {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.8);
+        color: #8b5e3c;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        z-index: 2;
+    }
+
+        .btn-favorite:hover {
+            background-color: #ff6b6b;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .btn-favorite.active {
+            background-color: #ff6b6b;
+            color: white;
+        }
+
+    /* Action Buttons */
+    .card-actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn-add-to-cart {
+        flex: 1;
+        background-color: #5c3d24;
+        color: white;
+        transition: all 0.3s ease;
+        border-radius: 8px !important; /* Rounded corners for buttons */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 8px 12px;
+    }
+
+        .btn-add-to-cart:hover {
+            background-color: #8b5e3c;
+            transform: translateY(-2px);
+        }
+
+    .btn-view-details {
+        flex: 1;
+        background-color: white;
+        color: #5c3d24;
+        border: 1px solid #5c3d24;
+        transition: all 0.3s ease;
+        border-radius: 8px !important; /* Rounded corners for buttons */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 8px 12px;
+    }
+
+        .btn-view-details:hover {
+            background-color: #f5f1eb;
+            transform: translateY(-2px);
+        }
+
+    /* Stock Badge */
+    .stock-badge {
+        transition: all 0.3s ease;
+        border-radius: 12px !important; /* Rounded corners for badge */
+        padding: 5px 10px;
+    }
+
+    .product-card:hover .stock-badge {
+        transform: scale(1.05);
+    }
+
+    /* Card body rounded bottom corners */
+    .card-body {
+        border-bottom-left-radius: 10px !important;
+        border-bottom-right-radius: 10px !important;
+    }
+    /* For Option 2 (4 medium products) */
+    .row-cols-md-4 .product-card {
+        border-radius: 12px;
+    }
+
+    .row-cols-md-4 .card-img-top {
+        height: 180px;
+    }
+
+    .row-cols-md-4 .btn-view-details,
+    .row-cols-md-4 .btn-add-to-cart {
+        padding: 8px;
+        font-size: 0.9rem;
+    }
+
+    .row-cols-md-4 .card-title {
+        font-size: 1rem;
+    }
+
+    .row-cols-md-4 .card-text {
+        display: none; /* Hide description to save space */
+    }
+</style>
+
+<div class="container py-4" style="background-color: #F5F1EB;">
+    <h1 class="text-center mb-4" style="color: #8b5e3c;">Discover Our Products</h1>
+
+    <!-- Filter Section -->
+    <div class="card mb-4" style="border-color: #c4a484;">
+        <div class="card-body">
+            <form asp-action="Index" method="get" class="row g-3">
+                <div class="col-md-4">
+                    <input name="searchString" value="@filterModel.SearchString"
+                           class="form-control" placeholder="Search products..."
+                           style="border-color: #8b5e3c;" />
+                </div>
+                <div class="col-md-3">
+                    <select name="categoryId" class="form-control" asp-items="ViewBag.Categories"
+                            style="border-color: #8b5e3c;">
+                        <option value="">All Categories</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select name="sortOrder" class="form-control" style="border-color: #8b5e3c;">
+                        <option value="">Default Sorting</option>
+                        <option value="price" selected="@(filterModel.SortOrder == "price")">Price: Low to High</option>
+                        <option value="price_desc" selected="@(filterModel.SortOrder == "price_desc")">Price: High to Low</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn w-100" style="background-color: #8b5e3c; color: white;">
+                        Filter
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        @foreach (var product in Model)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm product-card">
+                    <!-- Favorite Button -->
+                    <button class="btn-favorite" data-product-id="@product.ProductId">
+                        <i class="ri-heart-line"></i>
+                    </button>
+
+                    <!-- Product Image -->
+                    <div class="card-img-container">
+                        <img src="@product.ImageUrl" class="card-img-top p-2" alt="@product.Name"
+                             style="height: 180px; object-fit: contain; background-color: white;">
+                    </div>
+
+                    <div class="card-body">
+                        <h5 class="card-title" style="color: #5c3d24;">@product.Name</h5>
+                        <p class="text-muted">@product.CategoryName</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 style="color: #8b5e3c;">@product.Price.ToString("C")</h5>
+                            @if (product.Quantity > 0)
+                            {
+                                <span class="badge stock-badge" style="background-color: #c4a484; color: #5c3d24;">In Stock</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary stock-badge">Out of Stock</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent p-2">
+                        <div class="d-grid gap-1">
+                            <a asp-controller="Buyer" asp-action="Details" asp-route-id="@product.ProductId"
+                               class="btn btn-view-details btn-sm">
+                                <i class="ri-eye-line"></i> View Details
+                            </a>
+                            <button class="btn btn-add-to-cart btn-sm" data-product-id="@product.ProductId">
+                                <i class="ri-shopping-cart-line"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Pagination -->
+    @if (totalPages > 1)
+    {
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-all-route-data="@Context.Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString())"
+                       asp-route-pageIndex="@(currentPage - 1)"
+                       style="color: #5c3d24;">
+                        &laquo; Previous
+                    </a>
+                </li>
+
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    <li class="page-item @(i == currentPage ? "active" : "")">
+                        <a class="page-link"
+                           asp-action="Index"
+                           asp-all-route-data="@Context.Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString())"
+                           asp-route-pageIndex="@i"
+                           style="@(i == currentPage ? "background-color: #8b5e3c; color: white; border-color: #5c3d24;" : "color: #5c3d24;")">
+                            @i
+                        </a>
+                    </li>
+                }
+
+                <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-all-route-data="@Context.Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString())"
+                       asp-route-pageIndex="@(currentPage + 1)"
+                       style="color: #5c3d24;">
+                        Next &raquo;
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Favorite button click handler
+            $('.btn-favorite').click(function(e) {
+                e.preventDefault();
+                const productId = $(this).data('product-id');
+                $(this).toggleClass('active');
+
+                // Toggle heart icon
+                const icon = $(this).find('i');
+                if ($(this).hasClass('active')) {
+                    icon.removeClass('ri-heart-line').addClass('ri-heart-fill');
+                    // AJAX call to add favorite
+                    $.post('/Favorites/Add', { productId: productId }, function(response) {
+                        if (!response.success) {
+                            $(this).toggleClass('active');
+                            icon.removeClass('ri-heart-fill').addClass('ri-heart-line');
+                        }
+                    });
+                } else {
+                    icon.removeClass('ri-heart-fill').addClass('ri-heart-line');
+                    // AJAX call to remove favorite
+                    $.ajax({
+                        url: '/Favorites/Remove',
+                        type: 'DELETE',
+                        data: { productId: productId },
+                        success: function(response) {
+                            if (!response.success) {
+                                $(this).toggleClass('active');
+                                icon.removeClass('ri-heart-line').addClass('ri-heart-fill');
+                            }
+                        }
+                    });
+                }
+            });
+
+            // Add to cart button click handler
+            $('.btn-add-to-cart').click(function(e) {
+                e.preventDefault();
+                const productId = $(this).data('product-id');
+                const button = $(this);
+
+                // Add loading state
+                button.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Adding...');
+                button.prop('disabled', true);
+
+                // AJAX call to add to cart
+                $.post('/Cart/AddItem', { productId: productId }, function(response) {
+                    if (response.success) {
+                        button.html('Added to Cart!');
+                        // Update cart count in navbar if you have one
+                        updateCartCount();
+                    } else {
+                        button.html('Error');
+                        showToast(response.message || 'Failed to add item to cart');
+                    }
+                    setTimeout(function() {
+                        button.html('Add to Cart');
+                        button.prop('disabled', false);
+                    }, 1500);
+                }).fail(function() {
+                    button.html('Error');
+                    showToast('Failed to add item to cart');
+                    setTimeout(function() {
+                        button.html('Add to Cart');
+                        button.prop('disabled', false);
+                    }, 1500);
+                });
+            });
+
+            function updateCartCount() {
+                $.get('/Cart/GetItemCount', function(count) {
+                    $('.cart-count').text(count);
+                });
+            }
+
+            function showToast(message) {
+                // Implement toast notification or use alert
+                alert(message);
+            }
+        });
+    </script>
+}
