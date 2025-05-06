@@ -42,7 +42,7 @@ namespace Tagerly.Controllers
             return RedirectToAction("Index");
         }
 
-
+        //=================================================
         [HttpGet]
         public async Task<IActionResult> Approve(int id)
         {
@@ -60,7 +60,7 @@ namespace Tagerly.Controllers
 
             return RedirectToAction("Index");
         }
-
+        //==============================
         [HttpGet]
         public async Task<IActionResult> Reject(int id)
         {
