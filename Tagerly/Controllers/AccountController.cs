@@ -123,7 +123,14 @@ namespace Tagerly.Controllers
 
         #region Sign Out
         [HttpGet]
-        public async Task<IActionResult> Logout()
+        public IActionResult Logout()
+        {
+            return View("ConfirmLogout");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConfirmLogout()
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction(nameof(Login));
