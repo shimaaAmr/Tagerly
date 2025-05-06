@@ -60,67 +60,107 @@
             background-color: rgb(165, 97, 42) !important;
         }
 
-        /* Additional styles to be added to your stylesheet */
-
-        /* Navbar styles */
-        .navbar {
-            padding-top: 0.75rem;
-            padding-bottom: 0.75rem;
+        /* Notification Styles - Improved Version */
+        .notification-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 1100;
+            width: 350px;
         }
 
-        .navbar-brand {
-            font-weight: 700;
-            padding: 0;
-        }
-
-        /* Dropdown styling */
-        .dropdown-megamenu {
-            width: 100%;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-            border: none;
-            margin-top: 0.5rem;
-        }
-
-        /* Icon styling */
-        .ri-lg {
-            font-size: 1.25rem;
-            vertical-align: middle;
-        }
-
-        /* Badge positioning */
-        .nav-link .badge {
-            font-size: 0.65rem;
-            transform: translate(-50%, -50%);
-        }
-
-        /* User dropdown */
-        #userDropdown {
+        .alert-notification {
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             display: flex;
             align-items: center;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeIn 0.3s ease forwards;
         }
 
-        /* Media queries for responsive design */
-        media (max-width: 991.98px) {
-            .navbar-collapse
+            .alert-notification.show {
+                opacity: 1;
+                transform: translateY(0);
+            }
 
-        {
-            padding: 1rem 0;
+            .alert-notification .icon {
+                font-size: 1.5rem;
+                margin-right: 1rem;
+            }
+
+        .alert-success {
+            background-color: #f6ffed;
+            color: #52c41a;
+            border-left-color: #52c41a;
         }
 
-        .navbar .d-flex {
-            margin-top: 0.5rem;
-            width: 100%;
-            justify-content: space-between;
+        .alert-danger {
+            background-color: #fff2f0;
+            color: #ff4d4f;
+            border-left-color: #ff4d4f;
         }
 
-        .dropdown-megamenu {
-            width: 100%;
-            margin-left: 0;
+        .alert-info {
+            background-color: #e6f7ff;
+            color: #1890ff;
+            border-left-color: #1890ff;
         }
 
+        .alert-warning {
+            background-color: #fffbe6;
+            color: #faad14;
+            border-left-color: #faad14;
         }
+
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive adjustments */
+        @@media (max-width: 768px) {
+            .notification-container {
+                width: 90%;
+                left: 5%;
+                right: 5%;
+                top: 70px;
+            }
+        }
+
+        /* Delete Modal Specific Styles */
+        .modal-danger .modal-header {
+            background-color: #dc3545;
+            color: white;
+            border-bottom: none;
+        }
+
+        .modal-danger .alert {
+            border-left: 4px solid #dc3545;
+            background-color: rgba(248, 215, 218, 0.2);
+        }
+
+        .modal-danger .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            transition: all 0.3s;
+        }
+
+            .modal-danger .btn-danger:hover {
+                background-color: #bb2d3b;
+                border-color: #b02a37;
+            }
 
         /* Theme color overrides */
         .bg-primary {
@@ -137,8 +177,8 @@
         }
 
             .btn-primary:hover {
-                background-color: rgb(165, 97, 42);
-                border-color: rgb(165, 97, 42);
+                background-color: rgb(145, 85, 37);
+                border-color: rgb(145, 85, 37);
             }
 
         /* Badge color */
@@ -155,6 +195,56 @@
 </head>
 
 <body>
+    <div class="notification-container">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert-notification alert-success show">
+                <i class="ri-checkbox-circle-fill icon"></i>
+                <div>
+                    <h6 class="mb-1">Success</h6>
+                    <p class="mb-0 small">@TempData["SuccessMessage"]</p>
+                </div>
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert-notification alert-danger show">
+                <i class="ri-error-warning-fill icon"></i>
+                <div>
+                    <h6 class="mb-1">Error</h6>
+                    <p class="mb-0 small">@TempData["ErrorMessage"]</p>
+                </div>
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        @if (TempData["InfoMessage"] != null)
+        {
+            <div class="alert-notification alert-info show">
+                <i class="ri-information-fill icon"></i>
+                <div>
+                    <h6 class="mb-1">Info</h6>
+                    <p class="mb-0 small">@TempData["InfoMessage"]</p>
+                </div>
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        @if (TempData["WarningMessage"] != null)
+        {
+            <div class="alert-notification alert-warning show">
+                <i class="ri-alert-fill icon"></i>
+                <div>
+                    <h6 class="mb-1">Warning</h6>
+                    <p class="mb-0 small">@TempData["WarningMessage"]</p>
+                </div>
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+    </div>
+
     <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
         <div class="container">
             <!-- Logo -->
@@ -183,7 +273,6 @@
                                         <a class="dropdown-item" href="#">Home Decor</a>
                                         <a class="dropdown-item" href="#">Gifts</a>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -210,6 +299,10 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <li><a class="dropdown-item" asp-controller="User" asp-action="UpdateProfile" asp-route-id="@ViewData["UserId"]">My Profile</a></li>
+                                @if (User.IsInRole("Seller"))
+                                {
+                                    <li><a class="dropdown-item" asp-controller="Product" asp-action="Index">My Products</a></li>
+                                }
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout">Logout</a></li>
                             </ul>
@@ -232,6 +325,9 @@
                     <!-- Cart Icon - Always visible -->
                     <a asp-controller="Cart" asp-action="Index" class="nav-link position-relative">
                         <i class="ri-shopping-cart-2-line ri-lg"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                            0
+                        </span>
                     </a>
 
                     <!-- Search Icon -->
@@ -322,6 +418,48 @@
         </div>
     </footer>
     <script src="~/assets/js/theme.bundle.js"></script>
+
+    <script>
+        // Auto-dismiss notifications after 5 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            const notifications = document.querySelectorAll('.alert-notification');
+
+            notifications.forEach(notification => {
+                // Start dismiss timeout
+                const dismissTimer = setTimeout(() => {
+                    notification.classList.remove('show');
+                    notification.addEventListener('transitionend', () => {
+                        notification.remove();
+                    }, { once: true });
+                }, 5000);
+
+                // Pause on hover
+                notification.addEventListener('mouseenter', () => {
+                    clearTimeout(dismissTimer);
+                });
+
+                // Resume on mouse leave
+                notification.addEventListener('mouseleave', () => {
+                    setTimeout(() => {
+                        notification.classList.remove('show');
+                        notification.addEventListener('transitionend', () => {
+                            notification.remove();
+                        }, { once: true });
+                    }, 2000);
+                });
+
+                // Manual close
+                notification.querySelector('.btn-close').addEventListener('click', () => {
+                    clearTimeout(dismissTimer);
+                    notification.classList.remove('show');
+                    notification.addEventListener('transitionend', () => {
+                        notification.remove();
+                    }, { once: true });
+                });
+            });
+        });
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 
