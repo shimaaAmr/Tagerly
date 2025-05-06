@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
@@ -31,26 +32,24 @@
 		<!-- END FORM SECTION -->
 		<!-- CONTENT SECTION -->
 		<div class="row content-row">
-			@if (ViewContext.RouteData.Values["action"].ToString().ToLower() == "login")
-			{
-				<!-- SIGN IN CONTENT -->
-				<div class="col align-items-center flex-col">
-					<div class="text sign-in">
-						<h2>Welcome</h2>
-					</div>
+			<!-- SIGN IN CONTENT -->
+			<div class="col align-items-center flex-col">
+				<div class="text sign-in">
+					<h2>Welcome</h2>
 				</div>
-			}
-			else if (ViewContext.RouteData.Values["action"].ToString().ToLower() == "signup")
-			{
-				<!-- SIGN UP CONTENT -->
-				<div class="col align-items-center flex-col">
-					<div class="text sign-up">
-						<h2>Join with us</h2>
-					</div>
+				<div class="img sign-in"></div>
+			</div>
+			<!-- END SIGN IN CONTENT -->
+			<!-- SIGN UP CONTENT -->
+			<div class="col align-items-center flex-col">
+				<div class="img sign-up"></div>
+				<div class="text sign-up">
+					<h2>Join with us</h2>
 				</div>
-			}
-			<!-- END CONTENT SECTION -->
+			</div>
+			<!-- END SIGN UP CONTENT -->
 		</div>
+		<!-- END CONTENT SECTION -->
 	</div>
 	<script src="~/js/Register.js"></script>
 	@await RenderSectionAsync("Scripts", required: false)

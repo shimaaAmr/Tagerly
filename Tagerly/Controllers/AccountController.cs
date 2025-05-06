@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Tagerly.Models;
 using Tagerly.ViewModels;
 using System.Threading.Tasks;
+using Tagerly.Services.Implementations;
 
 namespace Tagerly.Controllers
 {
@@ -12,75 +13,77 @@ namespace Tagerly.Controllers
 	{
 		readonly UserManager<ApplicationUser> _userManager;
 		readonly SignInManager<ApplicationUser> _signInManager;
+		readonly CartService _cartService;
 
 		public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
 		{
 			_userManager = userManager;
 			_signInManager = signInManager;
+
 		}
 
-        #region Sign Up
-        [HttpGet]
-        public IActionResult SignUp()
-        {
-            return View();
-        }
+		#region Sign Up
+		[HttpGet]
+		public IActionResult SignUp()
+		{
+			return View();
+		}
 
-        [HttpPost]
-        public async Task<IActionResult> SignUp(SignUpViewModel userViewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                ApplicationUser user = new ApplicationUser
-                {
-                    UserName = userViewModel.UserName,
-                    Email = userViewModel.Email,
-                    PhoneNumber = userViewModel.Phone,
-                    Address = userViewModel.Address,
-                };
+		[HttpPost]
+		public async Task<IActionResult> SignUp(SignUpViewModel userViewModel)
+		{
+			if (ModelState.IsValid)
+			{
+				ApplicationUser user = new ApplicationUser
+				{
+					UserName = userViewModel.UserName,
+					Email = userViewModel.Email,
+					PhoneNumber = userViewModel.Phone,
+					Address = userViewModel.Address,
+				};
 
-                IdentityResult result = await _userManager.CreateAsync(user, userViewModel.Password);
-                if (result.Succeeded)
-                {
-                    IdentityResult resultRole = await _userManager.AddToRoleAsync(user, userViewModel.Role);
-                    if (resultRole.Succeeded)
-                    {
-                        // Create a cart for the new user
-                        try
-                        {
-                            await _cartService.CreateNewCartForUser(user.Id);
-                        }
-                        catch (System.Exception ex)
-                        {
-                            // Log the error but don't prevent the user from registering
-                            // Consider adding proper logging here
-                            ModelState.AddModelError("", "Account created but there was an issue setting up your cart.");
-                        }
+				IdentityResult result = await _userManager.CreateAsync(user, userViewModel.Password);
+				if (result.Succeeded)
+				{
+					IdentityResult resultRole = await _userManager.AddToRoleAsync(user, userViewModel.Role);
+					if (resultRole.Succeeded)
+					{
+						// Create a cart for the new user
+						try
+						{
+							await _cartService.CreateNewCartForUser(user.Id);
+						}
+						catch (System.Exception ex)
+						{
+							// Log the error but don't prevent the user from registering
+							// Consider adding proper logging here
+							ModelState.AddModelError("", "Account created but there was an issue setting up your cart.");
+						}
 
-                        // Sign in the user directly after successful registration
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return RedirectToAction("Index", "Home"); // Redirect to Index after successful sign-up
-                    }
+						// Sign in the user directly after successful registration
+						await _signInManager.SignInAsync(user, isPersistent: false);
+						return RedirectToAction("Index", "Home"); // Redirect to Index after successful sign-up
+					}
 
-                    foreach (var error in resultRole.Errors)
-                    {
-                        ModelState.AddModelError("", error.Description);
-                    }
-                }
+					foreach (var error in resultRole.Errors)
+					{
+						ModelState.AddModelError("", error.Description);
+					}
+				}
 
-                // If error when creating user
-                foreach (var item in result.Errors)
-                {
-                    ModelState.AddModelError("", item.Description);
-                }
-            }
+				// If error when creating user
+				foreach (var item in result.Errors)
+				{
+					ModelState.AddModelError("", item.Description);
+				}
+			}
 
-            return View(userViewModel);
-        }
-        #endregion
+			return View(userViewModel);
+		}
+		#endregion
 
-        #region Log In
-        [HttpGet]
+		#region Log In
+		[HttpGet]
 		public IActionResult Login()
 		{
 			return View();
