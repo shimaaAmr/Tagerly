@@ -24,7 +24,6 @@ namespace Tagerly.Controllers
 
 
 
-		#region Sign Up
 		[HttpGet]
 		public IActionResult SignUp()
 		{
@@ -82,7 +81,6 @@ namespace Tagerly.Controllers
 
 			return View(userViewModel);
 		}
-		#endreg
 		#region Log In
 		[HttpGet]
 		public IActionResult Login()
