@@ -3,12 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Tagerly.DataAccess;
+using Tagerly.DataAccess.DbContexts;
 using Tagerly.Models;
 using Tagerly.Services.Interfaces;
 using Tagerly.ViewModels;
 using Microsoft.Extensions.Logging;
-using Tagerly.DataAccess.DbContexts;
 
 namespace Tagerly.Services.Implementations
 {
@@ -35,7 +34,7 @@ namespace Tagerly.Services.Implementations
                     .FirstOrDefaultAsync(u => u.Id == userId);
 
                 // If user has no cart, create one
-                if (user?.Cart == null)
+                if (user.Cart == null)
                 {
                     await CreateNewCartForUser(userId);
 
@@ -56,13 +55,10 @@ namespace Tagerly.Services.Implementations
                         Id = ci.Id,
                         ProductId = ci.ProductId,
                         ProductName = ci.Product?.Name ?? "Unknown Product",
-                        ProductDescription = ci.Product?.Description,
-                        ImageUrl = ci.Product?.ImageUrl,
                         ProductPrice = ci.Product?.Price ?? 0,
                         Quantity = ci.Quantity
                     }).ToList() ?? new List<CartItemViewModel>()
                 };
-                // No need to set SubTotal, Total, or TotalItems as they're calculated properties
             }
             catch (Exception ex)
             {
@@ -86,7 +82,7 @@ namespace Tagerly.Services.Implementations
                     .FirstOrDefaultAsync(u => u.Id == userId);
 
                 // Create cart if it doesn't exist
-                if (user?.Cart == null)
+                if (user.Cart == null)
                 {
                     await CreateNewCartForUser(userId);
 
@@ -145,10 +141,6 @@ namespace Tagerly.Services.Implementations
                     _context.CartItems.Remove(itemToRemove);
                     await _context.SaveChangesAsync();
                 }
-                else
-                {
-                    _logger.LogWarning($"Cart item with ID {cartItemId} not found for user {userId}");
-                }
             }
             catch (Exception ex)
             {
@@ -180,10 +172,6 @@ namespace Tagerly.Services.Implementations
                 {
                     itemToUpdate.Quantity = newQuantity;
                     await _context.SaveChangesAsync();
-                }
-                else
-                {
-                    _logger.LogWarning($"Cart item with ID {cartItemId} not found for user {userId}");
                 }
             }
             catch (Exception ex)
