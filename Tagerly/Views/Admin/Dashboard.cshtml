@@ -1,0 +1,77 @@
+﻿@model DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<style>
+    :root {
+        --wood-dark: #5E3023;
+        --wood-medium: #895737;
+        --wood-light: #B88B4A;
+        --cream: #E3DCCB;
+        --beige: #D8C4A7;
+        --light-bg: #F5F1EB;
+    }
+
+    .dashboard-container {
+        background-color: var(--light-bg);
+        padding: 2rem;
+        border-radius: 1rem;
+    }
+
+    .stat-card {
+        background-color: white;
+        border-left: 6px solid var(--wood-medium);
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        color: var(--wood-dark);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s ease;
+    }
+
+    .stat-card:hover {
+        transform: scale(1.03);
+    }
+
+    .stat-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+
+    .stat-value {
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--wood-dark);
+    }
+</style>
+
+<div class="dashboard-container">
+    <h2 class="mb-4" style="color: var(--wood-dark);">Admin Dashboard</h2>
+
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="stat-card text-center">
+                <div class="stat-title">👥 Users</div>
+                <div class="stat-value">@Model.TotalUsers</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card text-center">
+                <div class="stat-title">📦 Products</div>
+                <div class="stat-value">@Model.TotalProducts</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card text-center">
+                <div class="stat-title">🧾 Orders</div>
+                <div class="stat-value">@Model.TotalOrders</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card text-center">
+                <div class="stat-title">💰 Revenue</div>
+                <div class="stat-value">@Model.TotalRevenue EGP</div>
+            </div>
+        </div>
+    </div>
+</div>
