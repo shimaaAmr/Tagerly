@@ -48,8 +48,9 @@ namespace Tagerly
 			builder.Services.AddScoped<IOrderService, OrderService>();
 			builder.Services.AddScoped<IEmailService, EmailService>();
 			builder.Services.AddScoped<IAdminOrderService, AdminOrderService>();
+            builder.Services.AddScoped<IDashboardService, DashboardService>();
 
-			builder.Services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
+            builder.Services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
 
 
 
