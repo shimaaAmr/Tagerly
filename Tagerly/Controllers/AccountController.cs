@@ -8,85 +8,88 @@ using Tagerly.Services.Implementations;
 
 namespace Tagerly.Controllers
 {
-    public class AccountController : Controller
-    {
-        readonly UserManager<ApplicationUser> _userManager;
-        readonly SignInManager<ApplicationUser> _signInManager;
-        readonly CartService _cartService;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
-        {
-            _userManager = userManager;
-            _signInManager = signInManager;
+	public class AccountController : Controller
+	{
+		readonly UserManager<ApplicationUser> _userManager;
+		readonly SignInManager<ApplicationUser> _signInManager;
+		readonly CartService _cartService;
 
-        }
+		public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+		{
+			_userManager = userManager;
+			_signInManager = signInManager;
 
-        #region Sign Up
-        [HttpGet]
-        public IActionResult SignUp()
-        {
-            return View();
-        }
+		}
 
-        [HttpPost]
-        public async Task<IActionResult> SignUp(SignUpViewModel userViewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                ApplicationUser user = new ApplicationUser
-                {
-                    UserName = userViewModel.UserName,
-                    Email = userViewModel.Email,
-                    PhoneNumber = userViewModel.Phone,
-                    Address = userViewModel.Address,
-                };
 
-                IdentityResult result = await _userManager.CreateAsync(user, userViewModel.Password);
-                if (result.Succeeded)
-                {
-                    IdentityResult resultRole = await _userManager.AddToRoleAsync(user, userViewModel.Role);
-                    if (resultRole.Succeeded)
-                    {
-                        // Create a cart for the new user
-                        try
-                        {
-                            await _cartService.CreateNewCartForUser(user.Id);
-                        }
-                        catch (System.Exception ex)
-                        {
-                            // Log the error but don't prevent the user from registering
-                            // Consider adding proper logging here
-                            ModelState.AddModelError("", "Account created but there was an issue setting up your cart.");
-                        }
 
-                        // Sign in the user directly after successful registration
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return RedirectToAction("Index", "Home"); // Redirect to Index after successful sign-up
-                    }
+		#region Sign Up
+		[HttpGet]
+		public IActionResult SignUp()
+		{
+			return View();
+		}
 
-                    foreach (var error in resultRole.Errors)
-                    {
-                        ModelState.AddModelError("", error.Description);
-                    }
-                }
+		[HttpPost]
+		public async Task<IActionResult> SignUp(SignUpViewModel userViewModel)
+		{
+			if (ModelState.IsValid)
+			{
+				ApplicationUser user = new ApplicationUser
+				{
+					UserName = userViewModel.UserName,
+					Email = userViewModel.Email,
+					PhoneNumber = userViewModel.Phone,
+					Address = userViewModel.Address,
+				};
 
-                // If error when creating user
-                foreach (var item in result.Errors)
-                {
-                    ModelState.AddModelError("", item.Description);
-                }
-            }
+				IdentityResult result = await _userManager.CreateAsync(user, userViewModel.Password);
+				if (result.Succeeded)
+				{
+					IdentityResult resultRole = await _userManager.AddToRoleAsync(user, userViewModel.Role);
+					if (resultRole.Succeeded)
+					{
+						// Create a cart for the new user
+						try
+						{
+							await _cartService.CreateNewCartForUser(user.Id);
+						}
+						catch (System.Exception ex)
+						{
+							// Log the error but don't prevent the user from registering
+							// Consider adding proper logging here
+							ModelState.AddModelError("", "Account created but there was an issue setting up your cart.");
+						}
 
-            return View(userViewModel);
-        }
-        #endregion
+						// Sign in the user directly after successful registration
+						await _signInManager.SignInAsync(user, isPersistent: false);
+						return RedirectToAction("Index", "Home"); // Redirect to Index after successful sign-up
+					}
 
-        #region Log In
-        [HttpGet]
-        public IActionResult Login()
-        {
-            return View();
-        }
+					foreach (var error in resultRole.Errors)
+					{
+						ModelState.AddModelError("", error.Description);
+					}
+				}
+
+				// If error when creating user
+				foreach (var item in result.Errors)
+				{
+					ModelState.AddModelError("", item.Description);
+				}
+			}
+
+			return View(userViewModel);
+		}
+		#endreg
+		#region Log In
+		[HttpGet]
+		public IActionResult Login()
+		{
+			return View();
+		}
+
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel loginViewModel)
