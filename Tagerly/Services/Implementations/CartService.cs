@@ -26,33 +26,42 @@ namespace Tagerly.Services.Implementations
         {
             try
             {
-                var cart = await _context.Carts
-                    .Include(c => c.CartItems)
+                // Look up the user first to get the CartId
+                var user = await _context.Users
+                    .Include(u => u.Cart)
+                    .ThenInclude(c => c.CartItems)
                     .ThenInclude(ci => ci.Product)
-                    .FirstOrDefaultAsync(c => c.UserId == userId);
+                    .FirstOrDefaultAsync(u => u.Id == userId);
 
-                if (cart == null)
+                // If user has no cart, create one
+                if (user?.Cart == null)
                 {
-                    return new CartViewModel
-                    {
-                        UserId = userId,
-                        CartItems = new List<CartItemViewModel>()
-                    };
+                    await CreateNewCartForUser(userId);
+
+                    // Refresh user with the new cart
+                    user = await _context.Users
+                        .Include(u => u.Cart)
+                        .ThenInclude(c => c.CartItems)
+                        .ThenInclude(ci => ci.Product)
+                        .FirstOrDefaultAsync(u => u.Id == userId);
                 }
 
                 return new CartViewModel
                 {
-                    CartId = cart.Id,
-                    UserId = cart.UserId,
-                    CartItems = cart.CartItems.Select(ci => new CartItemViewModel
+                    CartId = user.Cart.Id,
+                    UserId = userId,
+                    CartItems = user.Cart.CartItems?.Select(ci => new CartItemViewModel
                     {
                         Id = ci.Id,
                         ProductId = ci.ProductId,
                         ProductName = ci.Product?.Name ?? "Unknown Product",
+                        ProductDescription = ci.Product?.Description,
+                        ImageUrl = ci.Product?.ImageUrl,
                         ProductPrice = ci.Product?.Price ?? 0,
                         Quantity = ci.Quantity
-                    }).ToList()
+                    }).ToList() ?? new List<CartItemViewModel>()
                 };
+                // No need to set SubTotal, Total, or TotalItems as they're calculated properties
             }
             catch (Exception ex)
             {
@@ -69,11 +78,25 @@ namespace Tagerly.Services.Implementations
         {
             try
             {
-                var cart = await _context.Carts
-                    .Include(c => c.CartItems)
-                    .FirstOrDefaultAsync(c => c.UserId == userId) ?? await CreateNewCart(userId);
+                // Get user with cart
+                var user = await _context.Users
+                    .Include(u => u.Cart)
+                    .ThenInclude(c => c.CartItems)
+                    .FirstOrDefaultAsync(u => u.Id == userId);
 
-                var existingItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == productId);
+                // Create cart if it doesn't exist
+                if (user?.Cart == null)
+                {
+                    await CreateNewCartForUser(userId);
+
+                    // Refresh user with the new cart
+                    user = await _context.Users
+                        .Include(u => u.Cart)
+                        .ThenInclude(c => c.CartItems)
+                        .FirstOrDefaultAsync(u => u.Id == userId);
+                }
+
+                var existingItem = user.Cart.CartItems?.FirstOrDefault(ci => ci.ProductId == productId);
 
                 if (existingItem != null)
                 {
@@ -81,10 +104,16 @@ namespace Tagerly.Services.Implementations
                 }
                 else
                 {
-                    cart.CartItems.Add(new CartItem
+                    if (user.Cart.CartItems == null)
+                    {
+                        user.Cart.CartItems = new List<CartItem>();
+                    }
+
+                    user.Cart.CartItems.Add(new CartItem
                     {
                         ProductId = productId,
-                        Quantity = quantity
+                        Quantity = quantity,
+                        CartId = user.Cart.Id
                     });
                 }
 
@@ -101,17 +130,23 @@ namespace Tagerly.Services.Implementations
         {
             try
             {
-                var cart = await _context.Carts
-                    .Include(c => c.CartItems)
-                    .FirstOrDefaultAsync(c => c.UserId == userId);
+                // Get user with cart
+                var user = await _context.Users
+                    .Include(u => u.Cart)
+                    .ThenInclude(c => c.CartItems)
+                    .FirstOrDefaultAsync(u => u.Id == userId);
 
-                if (cart == null) return;
+                if (user?.Cart == null) return;
 
-                var itemToRemove = cart.CartItems.FirstOrDefault(ci => ci.Id == cartItemId);
+                var itemToRemove = user.Cart.CartItems.FirstOrDefault(ci => ci.Id == cartItemId);
                 if (itemToRemove != null)
                 {
                     _context.CartItems.Remove(itemToRemove);
                     await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    _logger.LogWarning($"Cart item with ID {cartItemId} not found for user {userId}");
                 }
             }
             catch (Exception ex)
@@ -131,17 +166,23 @@ namespace Tagerly.Services.Implementations
                     return;
                 }
 
-                var cart = await _context.Carts
-                    .Include(c => c.CartItems)
-                    .FirstOrDefaultAsync(c => c.UserId == userId);
+                // Get user with cart
+                var user = await _context.Users
+                    .Include(u => u.Cart)
+                    .ThenInclude(c => c.CartItems)
+                    .FirstOrDefaultAsync(u => u.Id == userId);
 
-                if (cart == null) return;
+                if (user?.Cart == null) return;
 
-                var itemToUpdate = cart.CartItems.FirstOrDefault(ci => ci.Id == cartItemId);
+                var itemToUpdate = user.Cart.CartItems.FirstOrDefault(ci => ci.Id == cartItemId);
                 if (itemToUpdate != null)
                 {
                     itemToUpdate.Quantity = newQuantity;
                     await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    _logger.LogWarning($"Cart item with ID {cartItemId} not found for user {userId}");
                 }
             }
             catch (Exception ex)
@@ -155,13 +196,15 @@ namespace Tagerly.Services.Implementations
         {
             try
             {
-                var cart = await _context.Carts
-                    .Include(c => c.CartItems)
-                    .FirstOrDefaultAsync(c => c.UserId == userId);
+                // Get user with cart
+                var user = await _context.Users
+                    .Include(u => u.Cart)
+                    .ThenInclude(c => c.CartItems)
+                    .FirstOrDefaultAsync(u => u.Id == userId);
 
-                if (cart == null) return;
+                if (user?.Cart == null) return;
 
-                _context.CartItems.RemoveRange(cart.CartItems);
+                _context.CartItems.RemoveRange(user.Cart.CartItems);
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -175,11 +218,13 @@ namespace Tagerly.Services.Implementations
         {
             try
             {
-                var cart = await _context.Carts
-                    .Include(c => c.CartItems)
-                    .FirstOrDefaultAsync(c => c.UserId == userId);
+                // Get user with cart
+                var user = await _context.Users
+                    .Include(u => u.Cart)
+                    .ThenInclude(c => c.CartItems)
+                    .FirstOrDefaultAsync(u => u.Id == userId);
 
-                return cart?.CartItems.Sum(ci => ci.Quantity) ?? 0;
+                return user?.Cart?.CartItems?.Sum(ci => ci.Quantity) ?? 0;
             }
             catch (Exception ex)
             {
@@ -188,18 +233,55 @@ namespace Tagerly.Services.Implementations
             }
         }
 
-        private async Task<Cart> CreateNewCart(string userId)
+        public async Task<Cart> CreateNewCartForUser(string userId)
         {
-            var newCart = new Cart
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
             {
-                UserId = userId,
-                CartItems = new List<CartItem>()
-            };
+                // Check if the user already has a cart
+                var user = await _context.Users
+                    .Include(u => u.Cart)
+                    .FirstOrDefaultAsync(u => u.Id == userId);
 
-            await _context.Carts.AddAsync(newCart);
-            await _context.SaveChangesAsync();
+                if (user == null)
+                {
+                    throw new InvalidOperationException($"User with ID {userId} not found");
+                }
 
-            return newCart;
+                // If user already has a cart, return it
+                if (user.Cart != null)
+                {
+                    return user.Cart;
+                }
+
+                // Create a new cart
+                var newCart = new Cart
+                {
+                    UserId = userId,
+                    CartItems = new List<CartItem>()
+                };
+
+                // Save cart first to get its ID
+                await _context.Carts.AddAsync(newCart);
+                await _context.SaveChangesAsync();
+
+                // Update user with CartId
+                user.CartId = newCart.Id;
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+
+                _logger.LogInformation($"Created new cart (ID: {newCart.Id}) for user {userId}");
+                return newCart;
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                _logger.LogError(ex, $"Error creating new cart for user {userId}");
+                throw;
+            }
         }
     }
 }

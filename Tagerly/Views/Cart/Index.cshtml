@@ -7,12 +7,25 @@
 
 <!-- Custom styles -->
 <style>
+
     .cart-summary-bg {
-        background-color: #8f7668 !important;
+        background-color: #BF9264 !important;
     }
 
     .custom-badge {
-        background-color: #8f7668 !important;
+        background-color: rgb(165, 97, 42) !important;
+    }
+
+    /* Improved text clarity for summary section */
+    .order-summary-text {
+        font-weight: 600;
+        font-size: 1.05rem;
+    }
+
+    /* Enhanced payment images */
+    .payment-method-img {
+        height: 32px;
+        margin: 0 8px;
     }
 </style>
 
@@ -57,14 +70,14 @@
                                         <small class="text-muted">@item.ProductDescription</small>
                                     </td>
                                     <td>
-                                        <span class="badge custom-badge rounded-pill">@item.Quantity</span>
+                                        <span class="badge custom-badge rounded-pill" >@item.Quantity</span>
                                     </td>
                                     <td>
                                         @((item.Quantity * item.ProductPrice).ToString("C"))
                                     </td>
                                     <td>
                                         <form asp-action="RemoveFromCart" method="post">
-                                            <input type="hidden" name="productId" value="@item.ProductId" />
+                                            <input type="hidden" name="cartItemId" value="@item.Id" />
                                             <button type="submit" class="btn btn-link p-0 text-danger">
                                                 <i class="ri-close-circle-line ri-lg"></i>
                                             </button>
@@ -96,43 +109,45 @@
                 <h3 class="fs-3 fw-bold text-center mb-4">Order Summary</h3>
                 <div class="py-3 border-bottom border-white opacity-25">
                     <div class="d-flex justify-content-between mb-2">
-                        <span>Subtotal (@(Model?.CartItems?.Sum(i => i.Quantity) ?? 0) items)</span>
-                        <span>@Model?.SubTotal.ToString("C")</span>
+                        <span class="order-summary-text">Subtotal (@(Model?.CartItems?.Sum(i => i.Quantity) ?? 0) items)</span>
+                        <span class="order-summary-text">@Model?.SubTotal.ToString("C")</span>
                     </div>
                     <div class="d-flex justify-content-between">
-                        <span>Shipping</span>
-                        <span class="text-white-50 small">Free</span>
+                        <span class="order-summary-text">Shipping</span>
+                        <span class="text-white order-summary-text">Free</span>
                     </div>
                 </div>
 
                 <div class="py-3 border-bottom border-white opacity-25 mb-3">
-                    <div class="d-flex justify-content-between fw-bold fs-5">
+                    <div class="d-flex justify-content-between fw-bold fs-4">
                         <span>Total</span>
                         <span>@Model?.Total.ToString("C")</span>
                     </div>
                 </div>
 
-                <a asp-controller="Checkout" asp-action="Index" class="btn btn-white w-100 mt-3 @(Model?.CartItems?.Any() != true ? "disabled" : "")">
-                    <i class="ri-secure-payment-line align-bottom"></i> Proceed to Checkout
-                </a>
-
-                <div class="text-center mt-3">
-                    <small class="text-white-50">or</small>
-                </div>
-
-                <a href="#" class="btn btn-outline-light w-100 mt-2 @(Model?.CartItems?.Any() != true ? "disabled" : "")">
-                    <i class="ri-paypal-fill align-bottom"></i> Checkout with PayPal
-                </a>
+                @if (Model?.CartItems?.Any() == true)
+                {
+                    <a asp-controller="Order" asp-action="PlaceOrder" class="btn btn-white w-100 mt-4 py-2 fs-5">
+                        <i class="ri-secure-payment-line align-bottom"></i> Proceed to Checkout
+                    </a>
+                }
+                else
+                {
+                    <button class="btn btn-white w-100 mt-4 py-2 fs-5 disabled">
+                        <i class="ri-secure-payment-line align-bottom"></i> Proceed to Checkout
+                    </button>
+                }
             </div>
 
             <!-- Payment Methods -->
             <div class="mt-4 text-center">
-                <p class="small text-muted mb-2">We accept</p>
+                <p class="fw-medium mb-3">We accept</p>
                 <div class="d-flex justify-content-center">
-                    <img src="~/assets/images/payment/visa.png" alt="Visa" class="mx-2" style="height: 24px;">
-                    <img src="~/assets/images/payment/paypal.png" alt="PayPal" class="mx-2" style="height: 24px;">
+                    <img src="~/assets/images/payment/visa.png" alt="Visa" class="payment-method-img">
+                    <img src="~/assets/images/payment/paypal.png" alt="PayPal" class="payment-method-img">
                 </div>
             </div>
         </div>
     </div>
 </section>
+<script src="./assets/js/vendor.bundle.js"></script>
