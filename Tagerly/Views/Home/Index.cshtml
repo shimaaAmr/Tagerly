@@ -1,8 +1,397 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@using System.Security.Claims
+<!doctype html>
+<html lang="en">
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<head>
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tagerly Store for Unique Handmade Products">
+    <meta name="author" content="Tagerly">
+    <meta name="keywords" content="Handmade Products, Gifts, Home Decor, Artisan, Crafts">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="~/assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="~/assets/favicon/favicon-16x16.png">
+
+    <!-- Vendor CSS -->
+    <link rel="stylesheet" href="~/assets/css/libs.bundle.css" />
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="~/assets/css/theme.bundle.css" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="~/css/custom.css" asp-append-version="true" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <title>Tagerly | Unique Handmade Products</title>
+
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn-primary {
+            background-color: rgb(165, 97, 42);
+            border-color: rgb(165, 97, 42);
+            transition: all 0.3s ease;
+        }
+
+            .btn-primary:hover {
+                background-color: #7d665a;
+                border-color: #7d665a;
+                transform: translateY(-3px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+        .category-card {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+            .category-card .card-content {
+                flex-grow: 1;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .category-card .btn-container {
+                margin-top: auto;
+            }
+
+            .category-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            }
+
+
+        .testimonial-card {
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #8f7668;
+        }
+
+        .section-heading {
+            position: relative;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+
+            .section-heading:after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                height: 3px;
+                width: 70px;
+                background-color: #8f7668;
+            }
+
+        .bg-overlay-dark {
+            position: relative;
+        }
+
+            .bg-overlay-dark:before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6));
+                z-index: 2;
+            }
+
+        .z-index-10 {
+            z-index: 10;
+        }
+
+        .about-section {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .about-image {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .banner-text {
+            background-color: rgba(0,0,0,0.7);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Include your improved navbar here -->
+
+
+    <main>
+        <!-- Hero Section -->
+        <section class="vh-100 position-relative bg-overlay-dark">
+            <div class="container d-flex h-100 justify-content-center align-items-center position-relative z-index-10">
+                <div class="text-white text-center">
+                    <h1 class="hero-title px-2 px-md-5 mx-auto col-lg-9" data-aos="fade-up" data-aos-delay="500">
+                        Make your style stand out with products made with love!
+                    </h1>
+                    <p class="lead col-lg-8 mx-auto mt-3" data-aos="fade-up" data-aos-delay="800">
+                        Discover unique handcrafted items that add warmth and character to your life
+                    </p>
+                    <div data-aos="fade-in" data-aos-delay="1100">
+                        <div class="d-flex flex-column flex-md-row justify-content-center gap-3 mt-4 mb-3 my-md-5">
+                            <a href="#featured" class="btn btn-lg btn-primary text-white px-4 py-2">
+                                <span>Shop Now <i class="ri-arrow-right-line align-middle"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Background Slider -->
+            <div class="position-absolute z-index-1 top-0 bottom-0 start-0 end-0">
+                <div class="swiper-container overflow-hidden w-100 h-100" data-swiper data-options='{
+                    "slidesPerView": 1,
+                    "speed": 1500,
+                    "loop": true,
+                    "effect": "fade",
+                    "autoplay": { "delay": 5000 }
+                }'>
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <div class="w-100 h-100 bg-img-cover animation-move bg-pos-center-center"
+                                 style="background-image: url(./assets/images/slideshows/slideshow0.jpg);"></div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="w-100 h-100 bg-img-cover animation-move bg-pos-center-center"
+                                 style="background-image: url(./assets/images/slideshows/slideshow4.jpg);"></div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="w-100 h-100 bg-img-cover animation-move bg-pos-center-center"
+                                 style="background-image: url(./assets/images/slideshows/slideshow5.jpg);"></div>
+                        </div>
+                    </div>
+                    <!-- Add navigation -->
+                    <div class="swiper-pagination bg-white"></div>
+                </div>
+            </div>
+        </section>
+        <!-- /Hero Section -->
+        <!-- Categories Section -->
+        <section class="py-7 bg-light">
+            <div class="container">
+                <h2 class="section-heading text-center display-5 mb-5">Shop by Category</h2>
+                <div class="row g-4">
+                    <!-- Category 1 -->
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="category-card shadow-sm h-100">
+                            <div class="position-relative">
+                                <img src="~/assets/images/categories/personal-care.jpg" alt="Personal Care" class="img-fluid w-100">
+                                <div class="position-absolute bottom-0 start-0 w-100 p-3 bg-dark bg-opacity-50">
+                                    <h3 class="h4 mb-0 text-white">Personal Care</h3>
+                                </div>
+                            </div>
+                            <div class="p-3">
+                                <p class="mb-3">Handcrafted soaps, natural skincare, and self-care essentials</p>
+                                <a href="#" class="btn btn-sm btn-outline-primary">View Products</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category 2 -->
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="category-card shadow-sm h-100">
+                            <div class="position-relative">
+                                <img src="~/assets/images/categories/home-decor.jpg" alt="Home Decor" class="img-fluid w-100">
+                                <div class="position-absolute bottom-0 start-0 w-100 p-3 bg-dark bg-opacity-50">
+                                    <h3 class="h4 mb-0 text-white">Home Decor</h3>
+                                </div>
+                            </div>
+                            <div class="p-3">
+                                <p class="mb-3">Beautiful ceramics, textiles and decorative items for your home</p>
+                                <a href="#" class="btn btn-sm btn-outline-primary">View Products</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category 3 -->
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="category-card shadow-sm h-100">
+                            <div class="position-relative">
+                                <img src="~/assets/images/categories/gifts.jpg" alt="Gifts" class="img-fluid w-100">
+                                <div class="position-absolute bottom-0 start-0 w-100 p-3 bg-dark bg-opacity-50">
+                                    <h3 class="h4 mb-0 text-white">Unique Gifts</h3>
+                                </div>
+                            </div>
+                            <div class="p-3">
+                                <p class="mb-3">Special handcrafted gifts for all occasions and celebrations</p>
+                                <a href="#" class="btn btn-sm btn-outline-primary">View Products</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- /Categories Section -->
+        <!-- Featured Products -->
+        <!-- About Us -->
+        <section id="about" class="py-7 bg-light" data-aos="fade-up">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 mb-4 mb-lg-0">
+                        <div class="about-image shadow">
+                            <img src="~/assets/images/slideshows/slideshow-7.jpg" alt="Our Workshop" class="img-fluid">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <h2 class="section-heading display-5 mb-4">About Tagerly</h2>
+                        <p class="lead mb-4">
+                            At Tagerly, we believe in the beauty of handcrafted products that tell a story.
+                        </p>
+                        <p class="mb-4">
+                            We strive to provide the best online shopping experience with high-quality products and excellent service.
+                            Our goal is to connect skilled artisans with customers who appreciate the value of handmade items.
+                        </p>
+                        <p class="mb-4">
+                            Each product in our store is carefully selected to ensure authenticity, quality, and sustainability.
+                            When you shop with us, you're not just buying a product – you're supporting traditional craftsmanship
+                            and sustainable practices.
+                        </p>
+                        <a href="#" class="btn btn-primary px-4 py-2 mt-3">Our Products</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- /About Us -->
+        <!-- Testimonials -->
+        <section class="py-7">
+            <div class="container">
+                <h2 class="section-heading text-center display-5 mb-5">What Our Customers Say</h2>
+                <div class="row g-4">
+                    <!-- Testimonial 1 -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="testimonial-card p-4 h-100">
+                            <div class="mb-3">
+                                <i class="ri-double-quotes-l fs-1 text-primary"></i>
+                            </div>
+                            <p class="mb-4">
+                                The ceramic vase I purchased is absolutely stunning. The craftsmanship is excellent,
+                                and it has become a focal point in my living room. Will definitely shop here again!
+                            </p>
+                            <div class="d-flex align-items-center">
+                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
+                                     style="width: 50px; height: 50px;">
+                                    <span class="fw-bold">SA</span>
+                                </div>
+                                <div class="ms-3">
+                                    <h5 class="mb-0">Sarah A.</h5>
+                                    <small class="text-muted">Verified Buyer</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial 2 -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="testimonial-card p-4 h-100">
+                            <div class="mb-3">
+                                <i class="ri-double-quotes-l fs-1 text-primary"></i>
+                            </div>
+                            <p class="mb-4">
+                                I ordered several soaps as gifts, and they were beautifully packaged. The scents are natural
+                                and long-lasting. My friends loved them! Great customer service too.
+                            </p>
+                            <div class="d-flex align-items-center">
+                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
+                                     style="width: 50px; height: 50px;">
+                                    <span class="fw-bold">MR</span>
+                                </div>
+                                <div class="ms-3">
+                                    <h5 class="mb-0">Mohammed R.</h5>
+                                    <small class="text-muted">Verified Buyer</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial 3 -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="testimonial-card p-4 h-100">
+                            <div class="mb-3">
+                                <i class="ri-double-quotes-l fs-1 text-primary"></i>
+                            </div>
+                            <p class="mb-4">
+                                I appreciate how every item feels unique and special. The quality is exceptional,
+                                and I can tell everything is made with care. Fast shipping and secure packaging too!
+                            </p>
+                            <div class="d-flex align-items-center">
+                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
+                                     style="width: 50px; height: 50px;">
+                                    <span class="fw-bold">LN</span>
+                                </div>
+                                <div class="ms-3">
+                                    <h5 class="mb-0">Layla N.</h5>
+                                    <small class="text-muted">Verified Buyer</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- /Testimonials -->
+    </main>
+
+
+
+    <!-- Scripts -->
+    <script src="./assets/js/vendor.bundle.js"></script>
+
+    @section Scripts {
+        <script>
+            // Initialize AOS (Animate on Scroll)
+            AOS.init({
+                duration: 800,
+                easing: 'ease-in-out',
+                once: true
+            });
+
+            // Initialize Swiper with options
+            document.addEventListener('DOMContentLoaded', function () {
+                const swiperEl = document.querySelector('.swiper-container');
+                if (swiperEl) {
+                    const swiperOptions = {
+                        slidesPerView: 1,
+                        speed: 1500,
+                        loop: true,
+                        effect: 'fade',
+                        autoplay: {
+                            delay: 5000
+                        },
+                        pagination: {
+                            el: '.swiper-pagination',
+                            clickable: true
+                        }
+                    };
+
+                    new Swiper(swiperEl, swiperOptions);
+                }
+            });
+        </script>
+    }
+</body>
+
+</html>

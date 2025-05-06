@@ -3,6 +3,7 @@
 <html lang="en" dir="ltr">
 
 <head>
+    <!-- Meta Tags -->
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,16 +11,18 @@
     <meta name="author" content="Tagerly">
     <meta name="keywords" content="Handmade Products, Gifts, Home Decor">
 
+    <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="~/assets/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="~/assets/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="~/assets/favicon/favicon-16x16.png">
 
+    <!-- Vendor CSS -->
     <link rel="stylesheet" href="~/assets/css/libs.bundle.css" />
 
+    <!-- Main CSS -->
     <link rel="stylesheet" href="~/assets/css/theme.bundle.css" />
 
-    <link rel="stylesheet" href="~/css/notifications.css" asp-append-version="true" />
-
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -54,7 +57,99 @@
         }
 
         .footer-bg {
+            background-color: rgb(165, 97, 42) !important;
+        }
+
+        /* Additional styles to be added to your stylesheet */
+
+        /* Navbar styles */
+        .navbar {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            padding: 0;
+        }
+
+        /* Dropdown styling */
+        .dropdown-megamenu {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            border: none;
+            margin-top: 0.5rem;
+        }
+
+        /* Icon styling */
+        .ri-lg {
+            font-size: 1.25rem;
+            vertical-align: middle;
+        }
+
+        /* Badge positioning */
+        .nav-link .badge {
+            font-size: 0.65rem;
+            transform: translate(-50%, -50%);
+        }
+
+        /* User dropdown */
+        #userDropdown {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Media queries for responsive design */
+        media (max-width: 991.98px) {
+            .navbar-collapse
+
+        {
+            padding: 1rem 0;
+        }
+
+        .navbar .d-flex {
+            margin-top: 0.5rem;
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .dropdown-megamenu {
+            width: 100%;
+            margin-left: 0;
+        }
+
+        }
+
+        /* Theme color overrides */
+        .bg-primary {
+            background-color: rgb(165, 97, 42) !important;
+        }
+
+        .text-primary {
+            color: rgb(165, 97, 42) !important;
+        }
+
+        .btn-primary {
+            background-color: rgb(165, 97, 42);
+            border-color: rgb(165, 97, 42);
+        }
+
+            .btn-primary:hover {
+                background-color: rgb(165, 97, 42);
+                border-color: rgb(165, 97, 42);
+            }
+
+        /* Badge color */
+        .badge.bg-primary {
             background-color: #8f7668 !important;
+        }
+
+        /* Fix for RTL dropdown */
+        .rtl-dropdown {
+            text-align: left;
+            direction: ltr;
         }
     </style>
 </head>
@@ -62,21 +157,24 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
         <div class="container">
+            <!-- Logo -->
             <a class="navbar-brand" href="/">
                 <img src="~/assets/images/logo.png" alt="Tagerly" height="40">
             </a>
 
+            <!-- Mobile Toggle Button -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
+            <!-- Main Navigation -->
             <div class="collapse navbar-collapse" id="navbarContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="productsDropdown" data-bs-toggle="dropdown">
                             Products
                         </a>
-                        <div class="dropdown-menu rtl-dropdown" aria-labelledby="productsDropdown">
+                        <div class="dropdown-menu dropdown-megamenu" aria-labelledby="productsDropdown">
                             <div class="container">
                                 <div class="row">
                                     <div class="col-md-4">
@@ -85,15 +183,7 @@
                                         <a class="dropdown-item" href="#">Home Decor</a>
                                         <a class="dropdown-item" href="#">Gifts</a>
                                     </div>
-                                    <div class="col-md-4">
-                                        <h6 class="dropdown-header">Categories</h6>
-                                        <a class="dropdown-item" href="#">Best Sellers</a>
-                                        <a class="dropdown-item" href="#">Special Offers</a>
-                                        <a class="dropdown-item" href="#">New Arrivals</a>
-                                    </div>
-                                    <div class="col-md-4 d-none d-md-block">
-                                        <img src="~/assets/images/menu-banner.jpg" class="img-fluid rounded" alt="Tagerly Products">
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -109,48 +199,76 @@
                     </li>
                 </ul>
 
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <li class="nav-item me-lg-4">
-                        <a class="nav-link fw-bolder py-lg-4">
-                            Welcome @(User.FindFirst(ClaimTypes.GivenName)?.Value ?? User.Identity.Name)
-                        </a>
-                    </li>
-                    @* Optional: Keep or remove this commented line
-                    <a aasp-controller="User" asp-action="UpdateProfile" asp-route="" class="mx-2 text-dark position-relative">
-                        <i class="ri-user-line ri-lg"></i>
-                    </a> *@
-                    <a asp-controller="User" asp-action="UpdateProfile" asp-route-id="@ViewData["UserId"]" class="mx-2 text-dark position-relative">
-                        <i class="ri-user-line ri-lg"></i>
+                <!-- User Actions -->
+                <div class="d-flex align-items-center">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="dropdown me-3">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="ri-user-line ri-lg me-1"></i>
+                                <span class="d-none d-lg-inline">@(User.FindFirst(ClaimTypes.GivenName)?.Value ?? User.Identity.Name)</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" asp-controller="User" asp-action="UpdateProfile" asp-route-id="@ViewData["UserId"]">My Profile</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout">Logout</a></li>
+                            </ul>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="d-flex">
+                            <a asp-controller="Account" asp-action="Login" class="nav-link me-3">
+                                <i class="ri-login-box-line ri-lg me-1"></i>
+                                <span class="d-none d-lg-inline">Login</span>
+                            </a>
+                            <a asp-controller="Account" asp-action="SignUp" class="nav-link me-3">
+                                <i class="ri-user-add-line ri-lg me-1"></i>
+                                <span class="d-none d-lg-inline">Sign Up</span>
+                            </a>
+                        </div>
+                    }
+
+                    <!-- Cart Icon - Always visible -->
+                    <a asp-controller="Cart" asp-action="Index" class="nav-link position-relative">
+                        <i class="ri-shopping-cart-2-line ri-lg"></i>
                     </a>
 
-                    <a asp-controller="Account" asp-action="Logout" class="mx-2 text-dark">
-                        Logout
+                    <!-- Search Icon -->
+                    <a href="#" class="nav-link ms-3" data-bs-toggle="modal" data-bs-target="#searchModal">
+                        <i class="ri-search-line ri-lg"></i>
                     </a>
-                }
-                else
-                {
-                    <a asp-controller="Account" asp-action="Login" class="mx-2 text-dark">
-                        Login
-                    </a>
-                    <a asp-controller="Account" asp-action="SignUp" class="mx-2 text-dark">
-                        Sign Up
-                    </a>
-                }
+                </div>
+            </div>
+        </div>
+    </nav>
 
-                <a asp-controller="Cart" asp-action="Index" class="mx-2 text-dark position-relative">
-                    <i class="ri-shopping-cart-2-line ri-lg"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
-                        0 </span>
-                </a>
-            </div> </div> </nav>
+    <!-- Search Modal -->
+    <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close" style="color: #b87d35"></button>
+                    <h5 class="modal-title mb-3" id="searchModalLabel">Search Products</h5>
+                    <form action="#" method="get">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search for products...">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="ri-search-line"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Main Content -->
     <main>
         @RenderBody()
     </main>
 
-    <partial name="_NotificationPartial" />
-
+    <!-- Footer -->
     <footer class="footer-bg text-white pt-5 pb-3">
         <div class="container">
             <div class="row">
@@ -203,33 +321,8 @@
             </div>
         </div>
     </footer>
-
     <script src="~/assets/js/theme.bundle.js"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const notifications = document.querySelectorAll('.alert-notification');
-
-            notifications.forEach(notification => {
-                // Start fade out after 60 seconds (60000ms)
-                setTimeout(() => {
-                    notification.style.opacity = '0';
-                    notification.style.transform = 'translateY(-30px)';
-
-                    // Remove from DOM after fade out completes (1s)
-                    setTimeout(() => notification.remove(), 1000);
-                }, 60000); // Changed from 3500ms to 60000ms (1 minute)
-
-                // Manual dismissal still works
-                notification.addEventListener('click', () => {
-                    notification.style.opacity = '0';
-                    notification.style.transform = 'translateY(-30px)';
-                    setTimeout(() => notification.remove(), 500);
-                });
-            });
-        });
-    </script>
-
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>
