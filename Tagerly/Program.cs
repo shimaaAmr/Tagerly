@@ -39,15 +39,14 @@ namespace Tagerly
 			builder.Services.AddScoped<IProductService, ProductService>();
 			builder.Services.AddScoped<IUserService, UserService>();
 			builder.Services.AddScoped<ICategoryService, CategoryService>();
-
 			builder.Services.AddScoped<IAdminProductService, AdminProductService>();
 			builder.Services.AddScoped<ICartService, CartService>();
 			builder.Services.AddScoped<IOrderService, OrderService>();
 			builder.Services.AddScoped<IEmailService, EmailService>();
 			builder.Services.AddScoped<IAdminOrderService, AdminOrderService>();
-            builder.Services.AddScoped<IDashboardService, DashboardService>();
+			builder.Services.AddScoped<IDashboardService, DashboardService>();
 
-            builder.Services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
+			builder.Services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
 
 			builder.Services.AddControllersWithViews()
 				.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<SignUpViewModelValidator>());
@@ -58,8 +57,11 @@ namespace Tagerly
 			builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 			{
 				options.Password.RequireNonAlphanumeric = false;
+				options.User.RequireUniqueEmail = true;
+
 			})
-				.AddEntityFrameworkStores<TagerlyDbContext>();
+				.AddEntityFrameworkStores<TagerlyDbContext>().
+				AddDefaultTokenProviders();
 
 			async Task SeedRolesAsync(IServiceProvider serviceProvider)
 			{
@@ -101,6 +103,11 @@ namespace Tagerly
 					}
 				}
 			}
+			builder.Services.AddLogging(logging =>
+			{
+				logging.AddConsole();
+				logging.SetMinimumLevel(LogLevel.Debug);
+			});
 
 			var app = builder.Build();
 			// Call the seeding methods
@@ -125,17 +132,17 @@ namespace Tagerly
 			app.UseAuthentication();
 			app.UseAuthorization();
 
-            app.MapControllerRoute(
+			app.MapControllerRoute(
 				name: "sellerProducts",
 				pattern: "Seller/Products/{action=Index}/{id?}",
 				defaults: new { controller = "Product" });
 
-            app.MapControllerRoute(
-                name: "buyerProducts",
-                pattern: "Products/{action=Index}/{id?}",
-                defaults: new { controller = "Buyer" });
+			app.MapControllerRoute(
+				name: "buyerProducts",
+				pattern: "Products/{action=Index}/{id?}",
+				defaults: new { controller = "Buyer" });
 
-            app.MapControllerRoute(
+			app.MapControllerRoute(
 				name: "default",
 				pattern: "{controller=Home}/{action=Index}/{id?}");
 
