@@ -28,7 +28,7 @@ namespace Tagerly.Controllers
 		public async Task<IActionResult> Index(ProductFilterViewModel productFilterVM)
 		{
 			// Only show approved products for buyers
-			//productFilterVM.IsApproved = true;
+			productFilterVM.IsApproved = true;
 			productFilterVM.PageSize = 12; // Set default page size
 
 			await LoadCategories(productFilterVM.CategoryId);
@@ -47,15 +47,15 @@ namespace Tagerly.Controllers
 			var product = await _productService.GetProductByIdAsync(id);
 
 			//Only show approved products to buyers
-			//if (product == null || product.IsApproved != true)
-			//{
-			//    return NotFound();
-			//}
+			if (product == null || product.IsApproved != true)
+			{
+				return NotFound();
+			}
 
-			//if (product == null)
-			//{
-			//    return NotFound();
-			//}
+			if (product == null)
+			{
+				return NotFound();
+			}
 			return View(_mapper.Map<ProductViewModel>(product));
 		}
 
