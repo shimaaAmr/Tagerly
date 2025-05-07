@@ -44,5 +44,13 @@ namespace Tagerly.Services.Implementations
                 <a href='{confirmationLink}' style='background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Confirm Account</a>
                 <p>If you did not sign up, please ignore this email.</p>";
 		}
+		public string GetPasswordResetTemplate(string userName, string resetLink)
+		{
+			return $@"
+                <h1>Hello {userName}!</h1>
+                <p>To reset your password, click the button below:</p>
+                <a href='{resetLink}' style='background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Reset Password</a>
+                <p>If you did not request this, please ignore this email.</p>";
+		}
 	}
 }
