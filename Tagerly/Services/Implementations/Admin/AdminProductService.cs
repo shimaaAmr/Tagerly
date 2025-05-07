@@ -6,6 +6,7 @@ using Tagerly.Repositories.Implementations;
 using Tagerly.Repositories.Interfaces;
 using Tagerly.Services.Interfaces.Admin;
 using Tagerly.ViewModels;
+using NuGet.Protocol.Core.Types;
 
 namespace Tagerly.Services.Implementations.Admin
 {
@@ -29,11 +30,20 @@ namespace Tagerly.Services.Implementations.Admin
 
         //}
 
+        //public async Task<IEnumerable<ProductApprovingVM>> GetAllProductsAsync()
+        //{
+        //    var products = await _productRepo.GetAllBySellerRoleAsync();
+        //    return _mapper.Map<IEnumerable<ProductApprovingVM>>(products);
+        //}
+
+
+        //بيحذف product من الموقع
         public async Task<IEnumerable<ProductApprovingVM>> GetAllProductsAsync()
         {
-            var products = await _productRepo.GetAllBySellerRoleAsync();
+            var products = await _productRepo.GetAllWithDetailsAsync();
             return _mapper.Map<IEnumerable<ProductApprovingVM>>(products);
         }
+
 
         public async Task<bool> ChangeApprovalStatusAsync(int id, bool isApproved)
         {

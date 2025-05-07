@@ -29,7 +29,10 @@ namespace Tagerly.Repositories.Interfaces
 		Task SaveChangesAsync();
 
 		Task<bool> SoftDeleteAsync(int id);
-		Task<bool> ApproveProductAsync(int id, bool isApproved);
+		Task<IEnumerable<Product>> GetAllWithDetailsAsync();
+		Task<IEnumerable<Product>> GetAllAsync();
+
+        Task<bool> ApproveProductAsync(int id, bool isApproved);
         Task<Product>GetByIdWithDetailsAsync(int id);
 
 

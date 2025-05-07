@@ -8,6 +8,7 @@ using Tagerly.DataAccess;
 using Tagerly.Models;
 using Tagerly.Repositories.Interfaces;
 using Tagerly.DataAccess.DbContexts;
+using Tagerly.Models.Enums;
 
 
 namespace Tagerly.Repositories.Implementations
@@ -27,9 +28,11 @@ namespace Tagerly.Repositories.Implementations
             return await _context.Products
                 .Include(p => p.Category)
                 .Include(p => p.Seller) // include Seller
-                .FirstOrDefaultAsync(p => p.Id == id);
+                //.FirstOrDefaultAsync(p => p.Id == id);
+			        .FirstOrDefaultAsync(p => p.Id == id && p.Status != ProductStatus.Deleted);
+
         }
-		public async Task<Product> GetByIdWithCategoryAsync(int id)
+        public async Task<Product> GetByIdWithCategoryAsync(int id)
 		{
 			return await _context.Products
 				.Include(p => p.Category)  // This ensures Category is loaded
@@ -110,8 +113,24 @@ namespace Tagerly.Repositories.Implementations
 			await _context.SaveChangesAsync();
 			return true;
 		}
+        public async Task<IEnumerable<Product>> GetAllWithDetailsAsync()
+        {
+            return await _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.Seller)
+                .Where(p => p.Status != ProductStatus.Deleted)
+                .ToListAsync();
+        }
 
-		public async Task<bool> ApproveProductAsync(int id, bool isApproved)
+        public async Task<IEnumerable<Product>> GetAllAsync()
+        {
+            return await _context.Products
+                .Where(p => p.Status != ProductStatus.Deleted)
+                .ToListAsync();
+        }
+
+
+        public async Task<bool> ApproveProductAsync(int id, bool isApproved)
 		{
 			var product = await _context.Products.FindAsync(id);
 			if (product == null) return false;
