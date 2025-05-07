@@ -57,11 +57,23 @@ namespace Tagerly.Services.Implementations.Admin
             return true;
         }
 
-       
+
         //================================
+        //public async Task<bool> DeleteProductAsync(int id)
+        //{
+        //    return await _productRepo.SoftDeleteAsync(id);
+        //}
+
         public async Task<bool> DeleteProductAsync(int id)
         {
-            return await _productRepo.SoftDeleteAsync(id);
+            var product = await _productRepo.GetByIdAsync(id);
+            if (product == null) return false;
+
+            product.Status = ProductStatus.Deleted;
+            _productRepo.Update(product);
+            await _productRepo.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<ProductApprovingVM> GetProductByIdAsync(int id)
