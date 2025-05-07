@@ -110,8 +110,10 @@
                 <td>
                     @if (product.Status == ProductStatus.Pending)
                     {
+                        
                         <a asp-action="Approve" asp-route-id="@product.Id" class="btn btn-approve">Approve</a>
                         <a asp-action="Reject" asp-route-id="@product.Id" class="btn btn-reject">Reject</a>
+        
                     }
                     <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-delete">Delete</a>
                 </td>

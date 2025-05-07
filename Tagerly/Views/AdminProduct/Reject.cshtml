@@ -1,9 +1,29 @@
-﻿@model Tagerly.ViewModels.AdminViewModel.ProductApprovingVM
-
+﻿@model ProductApprovingVM
 @{
     ViewData["Title"] = "Reject Product";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+<h2>Reject Product</h2>
+
+<div class="card p-4" style="background-color: var(--light-bg); border: 1px solid var(--beige);">
+    <div class="row">
+        <div class="col-md-4">
+            <img src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid" />
+        </div>
+        <div class="col-md-8">
+            <h3>@Model.Name</h3>
+            <p><strong>Description:</strong> @Model.Description</p>
+            <p><strong>Seller:</strong> @Model.SellerName</p>
+            <p><strong>Status:</strong> @Model.Status</p>
+
+            <form asp-action="RejectConfirmation" method="post">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <button type="submit" class="btn btn-danger">Confirm Reject</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
 
 <style>
     :root {
@@ -15,51 +35,8 @@
         --light-bg: #F5F1EB;
     }
 
-    body {
-        background-color: var(--light-bg);
-    }
-
-    .card {
-        background-color: var(--cream);
-        border: 1px solid var(--wood-medium);
-        padding: 20px;
-        border-radius: 10px;
-        max-width: 600px;
-        margin: auto;
-        margin-top: 40px;
-    }
-
-        .card h3 {
-            color: var(--wood-dark);
-        }
-
-    .btn-reject {
-        background-color: orange;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-    }
-
-    .product-img {
-        max-width: 100%;
-        height: auto;
-        border-radius: 8px;
-        margin-bottom: 15px;
+    .btn-danger {
+        background-color: #c0392b;
+        border-color: #922b21;
     }
 </style>
-
-<div class="card">
-    <h3>Reject Product</h3>
-
-    <img src="@Model.ImageUrl" alt="Product Image" class="product-img" />
-
-    <p><strong>Name:</strong> @Model.Name</p>
-    <p><strong>Description:</strong> @Model.Description</p>
-    <p><strong>Seller:</strong> @Model.SellerName</p>
-    <p><strong>Status:</strong> @Model.Status</p>
-
-    <form asp-action="RejectConfirmation" asp-route-id="@Model.Id" method="post" onsubmit="return confirm('Are you sure you want to reject this product?');">
-        <button type="submit" class="btn-reject">Reject</button>
-    </form>
-</div>
