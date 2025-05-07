@@ -5,60 +5,62 @@
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
-<style>
-    :root {
-        --wood-dark: #5E3023;
-        --wood-medium: #895737;
-        --wood-light: #B88B4A;
-        --cream: #E3DCCB;
-        --beige: #D8C4A7;
-        --light-bg: #F5F1EB;
-    }
-
-    body {
-        background-color: var(--light-bg);
-    }
-
-    .form-container {
-        background-color: var(--cream);
-        border-radius: 12px;
-        padding: 30px;
-        max-width: 600px;
-        margin: auto;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    h2 {
-        color: var(--wood-dark);
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    label {
-        color: var(--wood-dark);
-    }
-
-    input.form-control,
-    textarea.form-control {
-        border: 1px solid var(--wood-light);
-        border-radius: 8px;
-        padding: 8px;
-        background-color: var(--light-bg);
-    }
-
-    .btn-wood {
-        background-color: var(--wood-dark);
-        color: white;
-        border: none;
-        padding: 10px 16px;
-        border-radius: 6px;
-        transition: background-color 0.3s;
-    }
-
-        .btn-wood:hover {
-            background-color: var(--wood-medium);
+@section Style {
+    <style>
+        :root {
+            --wood-dark: #5E3023;
+            --wood-medium: #895737;
+            --wood-light: #B88B4A;
+            --cream: #E3DCCB;
+            --beige: #D8C4A7;
+            --light-bg: #F5F1EB;
         }
-</style>
+
+        body {
+            background-color: var(--light-bg);
+        }
+
+        .form-container {
+            background-color: var(--cream);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 600px;
+            margin: auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: var(--wood-dark);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            color: var(--wood-dark);
+        }
+
+        input.form-control,
+        textarea.form-control {
+            border: 1px solid var(--wood-light);
+            border-radius: 8px;
+            padding: 8px;
+            background-color: var(--light-bg);
+        }
+
+        .btn-wood {
+            background-color: var(--wood-dark);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+        }
+
+            .btn-wood:hover {
+                background-color: var(--wood-medium);
+            }
+    </style>
+}
 
 <div class="form-container mt-5">
     <h2>Create New Category</h2>

@@ -5,35 +5,37 @@
 	Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
-<style>
-	:root {
-		--wood-dark: #5E3023;
-		--wood-medium: #895737;
-		--wood-light: #B88B4A;
-		--cream: #E3DCCB;
-		--beige: #D8C4A7;
-		--light-bg: #F5F1EB;
-	}
+@section Style{
+	<style>
+		:root {
+			--wood-dark: #5E3023;
+			--wood-medium: #895737;
+			--wood-light: #B88B4A;
+			--cream: #E3DCCB;
+			--beige: #D8C4A7;
+			--light-bg: #F5F1EB;
+		}
 
-	body {
-		background-color: var(--light-bg);
-	}
+		body {
+			background-color: var(--light-bg);
+		}
 
-	.form-container {
-		background-color: var(--cream);
-		border: 1px solid var(--wood-medium);
-		padding: 20px;
-		border-radius: 10px;
-		max-width: 500px;
-		margin: auto;
-		margin-top: 40px;
-	}
+		.form-container {
+			background-color: var(--cream);
+			border: 1px solid var(--wood-medium);
+			padding: 20px;
+			border-radius: 10px;
+			max-width: 500px;
+			margin: auto;
+			margin-top: 40px;
+		}
 
-	h1, h4 {
-		color: var(--wood-dark);
-		text-align: center;
-	}
-</style>
+		h1, h4 {
+			color: var(--wood-dark);
+			text-align: center;
+		}
+	</style>
+}
 
 <div class="form-container">
 	<h1>Add Role</h1>

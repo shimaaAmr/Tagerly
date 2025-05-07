@@ -5,88 +5,90 @@
     Layout = "~/Views/Shared/AdminLayout.cshtml";
  }
 
-<style>
-    :root {
-        --wood-dark: #5E3023;
-        --wood-medium: #895737;
-        --wood-light: #B88B4A;
-        --cream: #E3DCCB;
-        --beige: #D8C4A7;
-        --light-bg: #F5F1EB;
-    }
-
-    body {
-        background-color: var(--light-bg);
-    }
-
-    .table-container {
-        background-color: var(--cream);
-        border-radius: 12px;
-        padding: 30px;
-        max-width: 1000px;
-        margin: auto;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    h2 {
-        color: var(--wood-dark);
-        text-align: center;
-        margin-bottom: 25px;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        background-color: var(--light-bg);
-    }
-
-    th, td {
-        padding: 12px 15px;
-        border: 1px solid var(--wood-light);
-        text-align: left;
-    }
-
-    th {
-        background-color: var(--wood-dark);
-        color: white;
-    }
-
-    tr:nth-child(even) {
-        background-color: var(--beige);
-    }
-
-    a.btn-wood {
-        background-color: var(--wood-dark);
-        color: white;
-        padding: 6px 10px;
-        border-radius: 6px;
-        text-decoration: none;
-        margin-right: 5px;
-        font-size: 0.9rem;
-    }
-
-        a.btn-wood:hover {
-            background-color: var(--wood-medium);
+@section Style{
+    <style>
+        :root {
+            --wood-dark: #5E3023;
+            --wood-medium: #895737;
+            --wood-light: #B88B4A;
+            --cream: #E3DCCB;
+            --beige: #D8C4A7;
+            --light-bg: #F5F1EB;
         }
 
-    .create-btn-container {
-        text-align: right;
-        margin-bottom: 15px;
-    }
+        body {
+            background-color: var(--light-bg);
+        }
 
-    .btn-create {
-        background-color: var(--wood-medium);
-        color: white;
-        padding: 8px 14px;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: bold;
-    }
+        .table-container {
+            background-color: var(--cream);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 1000px;
+            margin: auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-        .btn-create:hover {
+        h2 {
+            color: var(--wood-dark);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--light-bg);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid var(--wood-light);
+            text-align: left;
+        }
+
+        th {
             background-color: var(--wood-dark);
+            color: white;
         }
-</style>
+
+        tr:nth-child(even) {
+            background-color: var(--beige);
+        }
+
+        a.btn-wood {
+            background-color: var(--wood-dark);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin-right: 5px;
+            font-size: 0.9rem;
+        }
+
+            a.btn-wood:hover {
+                background-color: var(--wood-medium);
+            }
+
+        .create-btn-container {
+            text-align: right;
+            margin-bottom: 15px;
+        }
+
+        .btn-create {
+            background-color: var(--wood-medium);
+            color: white;
+            padding: 8px 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+            .btn-create:hover {
+                background-color: var(--wood-dark);
+            }
+    </style>
+}
 
 <div class="table-container mt-5">
     <h2>Category List</h2>

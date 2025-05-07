@@ -5,70 +5,72 @@
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
-<style>
-    :root {
-        --wood-dark: #5E3023;
-        --wood-medium: #895737;
-        --wood-light: #B88B4A;
-        --cream: #E3DCCB;
-        --beige: #D8C4A7;
-        --light-bg: #F5F1EB;
-    }
+@section Style{
+    <style>
+        :root {
+            --wood-dark: #5E3023;
+            --wood-medium: #895737;
+            --wood-light: #B88B4A;
+            --cream: #E3DCCB;
+            --beige: #D8C4A7;
+            --light-bg: #F5F1EB;
+        }
 
-    body {
-        background-color: var(--light-bg);
-    }
+        body {
+            background-color: var(--light-bg);
+        }
 
-    table {
-        width: 100%;
-        background-color: var(--cream);
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
+        table {
+            width: 100%;
+            background-color: var(--cream);
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
 
-    th, td {
-        padding: 12px;
-        border: 1px solid var(--wood-light);
-        text-align: center;
-        vertical-align: middle;
-    }
+        th, td {
+            padding: 12px;
+            border: 1px solid var(--wood-light);
+            text-align: center;
+            vertical-align: middle;
+        }
 
-    th {
-        background-color: var(--wood-dark);
-        color: white;
-    }
+        th {
+            background-color: var(--wood-dark);
+            color: white;
+        }
 
-    tr:nth-child(even) {
-        background-color: var(--beige);
-    }
+        tr:nth-child(even) {
+            background-color: var(--beige);
+        }
 
-    .btn {
-        padding: 6px 12px;
-        border-radius: 5px;
-        color: white;
-        text-decoration: none;
-        margin-right: 5px;
-    }
+        .btn {
+            padding: 6px 12px;
+            border-radius: 5px;
+            color: white;
+            text-decoration: none;
+            margin-right: 5px;
+        }
 
-    .btn-approve {
-        background-color: green;
-    }
+        .btn-approve {
+            background-color: green;
+        }
 
-    .btn-reject {
-        background-color: orange;
-    }
+        .btn-reject {
+            background-color: orange;
+        }
 
-    .btn-delete {
-        background-color: red;
-    }
+        .btn-delete {
+            background-color: red;
+        }
 
-    .product-img {
-        width: 80px;
-        height: 80px;
-        object-fit: cover;
-        border-radius: 8px;
-    }
-</style>
+        .product-img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+    </style>
+}
 
 <h2>Products</h2>
 
