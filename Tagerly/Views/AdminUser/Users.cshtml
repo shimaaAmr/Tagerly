@@ -7,6 +7,7 @@
 @model List<UserViewModel>
 @{
     ViewData["Title"] = "Manage Users";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
     var uniqueRoles = Model.Select(u => u.Role).Distinct().ToList();
 }
 
