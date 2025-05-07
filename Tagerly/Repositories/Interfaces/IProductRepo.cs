@@ -31,5 +31,7 @@ namespace Tagerly.Repositories.Interfaces
 		Task<bool> SoftDeleteAsync(int id);
 		Task<bool> ApproveProductAsync(int id, bool isApproved);
         Task<Product>GetByIdWithDetailsAsync(int id);
+
+
     }
 }
