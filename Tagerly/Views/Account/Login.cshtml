@@ -1,4 +1,4 @@
-﻿@model Tagerly.ViewModels.LoginViewModel
+﻿@model LoginViewModel
 @{
 	Layout = "_RegisterationLayout";
 }
@@ -29,6 +29,15 @@
 			<span>Don't have an account?</span>
 			<b onclick="toggle()" class="pointer" asp-action="SignUp">Sign up here</b>
 		</p>
+		<div class="form-group">
+			<p>
+				<a asp-action="ForgotPassword">Forgot your password?</a>
+			</p>
+		</div>
+		@* <p>
+			<span>Resend Confirmation Email!</span>
+			<b onclick="toggle()" class="pointer" asp-action="ResendConfirmationEmail">Resend</b>
+		</p> *@
 	</form>
 </div>
 

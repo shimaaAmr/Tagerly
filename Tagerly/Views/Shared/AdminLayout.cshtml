@@ -1,0 +1,106 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tagerly - Handmade Crafts Admin</title>
+
+    <link rel="stylesheet" href="~/Admin/css/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- ========== SIDEBAR ========== -->
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fas fa-hands-helping"></i>
+                <span>Tagerly</span>
+            </div>
+
+            <a class="menu-item active" asp-controller="Admin" asp-action="Dashboard">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a class="menu-item" asp-controller="AdminProduct" asp-action="Index">
+                <i class="fas fa-box-open"></i>
+                <span>Products</span>
+            </a>
+
+            <a class="menu-item" asp-controller="AdminCategory" asp-action="Index">
+                <i class="fas fa-tags"></i>
+                <span>Categories</span>
+            </a>
+
+            <a class="menu-item" asp-controller="AdminOrder" asp-action="Index">
+                <i class="fas fa-shopping-basket"></i>
+                <span>Orders</span>
+                <span class="badge"></span>
+            </a>
+
+            <a class="menu-item" asp-controller="AdminUser" asp-action="Users">
+                <i class="fas fa-users"></i>
+                <span>Users</span>
+            </a>
+
+            <a class="menu-item" asp-controller="Role" asp-action="AddRole">
+                <i class="fas fa-user-plus"></i>
+                <span>Add Role</span>
+            </a>
+
+           @*  <div class="menu-item">
+                <i class="fas fa-comment-alt"></i>
+                <span>Reviews</span>
+                <span class="badge new">3</span>
+            </div> *@
+
+            <div class="logout">
+                <div class="menu-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== MAIN CONTENT ========== -->
+        <div class="main-content">
+            <!-- ========== NAVBAR ========== -->
+            <div class="header">
+                <h1 class="page-title"></h1>
+                <div class="profile-container">
+                    <div class="notification-bell">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">5</span>
+                    </div>
+                    <div class="profile-dropdown">
+                        <span class="profile-name">Admin Profile</span>
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Profile" class="profile-img">
+                        <div class="profile-dropdown-menu">
+                            <a href="#">
+                                <i class="fas fa-user"></i>
+                                <span>Profile</span>
+                            </a>
+                            <a href="#">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Logout</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Render page-specific content here -->
+            @RenderBody()
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="~/Admin/js/script.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

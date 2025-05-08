@@ -1,4 +1,4 @@
-﻿@model Tagerly.ViewModels.AdminViewModel.ProductApprovingVM
+﻿@* @model Tagerly.ViewModels.AdminViewModel.ProductApprovingVM
 
 @{
     ViewData["Title"] = "Approve Product";
@@ -63,3 +63,47 @@
         <button type="submit" class="btn-approve">Approve</button>
     </form>
 </div>
+ *@
+ @model ProductApprovingVM
+@{
+    ViewData["Title"] = "Approve Product";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h2>Approve Product</h2>
+
+<div class="card p-4" style="background-color: var(--light-bg); border: 1px solid var(--beige);">
+    <div class="row">
+        <div class="col-md-4">
+            <img src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid" />
+        </div>
+        <div class="col-md-8">
+            <h3>@Model.Name</h3>
+            <p><strong>Description:</strong> @Model.Description</p>
+            <p><strong>Seller:</strong> @Model.SellerName</p>
+            <p><strong>Status:</strong> @Model.Status</p>
+
+            <form asp-action="ApproveConfirmation" method="post">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <button type="submit" class="btn btn-success">Confirm Approve</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    :root {
+        --wood-dark: #5E3023;
+        --wood-medium: #895737;
+        --wood-light: #B88B4A;
+        --cream: #E3DCCB;
+        --beige: #D8C4A7;
+        --light-bg: #F5F1EB;
+    }
+
+    .btn-success {
+        background-color: var(--wood-medium);
+        border-color: var(--wood-dark);
+    }
+</style>

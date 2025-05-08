@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Tagerly.Services.Interfaces;
+using Tagerly.ViewModels.AccountVieModel;
 
 namespace Tagerly.ViewModels.Configurations
 {
@@ -18,9 +19,9 @@ namespace Tagerly.ViewModels.Configurations
 
 			RuleFor(x => x.Email)
 			   .NotEmpty().WithMessage("Email is required")
-			   .EmailAddress().WithMessage("Invalid email format")
-			   .MustAsync(async (email, cancellation) => !await _userService.IsEmailTakenAsync(email))
-			   .WithMessage("This email is already registered");
+			   .EmailAddress().WithMessage("Invalid email format");
+			//.MustAsync(async (email, cancellation) => !await _userService.IsEmailTakenAsync(email))
+			//.WithMessage("This email is already registered");
 
 			RuleFor(x => x.Phone)
 				.NotEmpty().WithMessage("Phone number is required")

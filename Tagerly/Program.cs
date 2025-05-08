@@ -1,4 +1,4 @@
-using FluentValidation.AspNetCore;
+﻿using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Tagerly.DataAccess.DbContexts;
@@ -14,7 +14,6 @@ using Tagerly.Services.Interfaces;
 using Tagerly.Services.Interfaces.Admin;
 using Tagerly.ViewModels.Configurations;
 
-
 namespace Tagerly
 {
 	public class Program
@@ -28,7 +27,6 @@ namespace Tagerly
 
 			builder.Services.AddDbContext<TagerlyDbContext>(options =>
 			{
-				//options.UseSqlServer("Data Source=.;Initial Catalog=Organization;Integrated Security=True;Encrypt=False;Trust Server Certificate=True");
 				options.UseSqlServer(builder.Configuration.GetConnectionString("CS"));
 			});
 			builder.Services.AddScoped<IOrderRepo, OrderRepo>();
@@ -39,33 +37,36 @@ namespace Tagerly
 			builder.Services.AddScoped<IProductRepo, ProductRepo>();
 			// Add Services
 			builder.Services.AddScoped<IProductService, ProductService>();
-			//builder.Services.AddScoped<IProductService, ProductService>();
 			builder.Services.AddScoped<IUserService, UserService>();
 			builder.Services.AddScoped<ICategoryService, CategoryService>();
 			builder.Services.AddScoped<IAdminProductService, AdminProductService>();
 			builder.Services.AddScoped<ICartService, CartService>();
 			builder.Services.AddScoped<IOrderService, OrderService>();
 			builder.Services.AddScoped<IEmailService, EmailService>();
-            builder.Services.AddScoped<IAdminOrderService, AdminOrderService>();
+			builder.Services.AddScoped<IAdminOrderService, AdminOrderService>();
+			builder.Services.AddScoped<IDashboardService, DashboardService>();
 
-            builder.Services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
-
-
+			builder.Services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
 
 			builder.Services.AddControllersWithViews()
-		   .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<SignUpViewModelValidator>());
+				.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<SignUpViewModelValidator>());
 			// AutoMapper
 			builder.Services.AddAutoMapper(typeof(ProductProfile));
 			builder.Services.AddAutoMapper(typeof(AdminProductProfile));
 
-
-			builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+			_ = builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 			{
 				options.Password.RequireNonAlphanumeric = false;
+				options.User.RequireUniqueEmail = true;
+				options.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultEmailProvider;
+
+
 			})
-			   .AddEntityFrameworkStores<TagerlyDbContext>();
+				.AddEntityFrameworkStores<TagerlyDbContext>().
+				AddDefaultTokenProviders();
 
 
+			#region Add Roles
 			async Task SeedRolesAsync(IServiceProvider serviceProvider)
 			{
 				var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
@@ -79,21 +80,56 @@ namespace Tagerly
 					}
 				}
 			}
+			#endregion
+
+			#region Add Admin
+			async Task SeedAdminUserAsync(IServiceProvider serviceProvider)
+			{
+				var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+				var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+				string adminEmail = "tagerly588@gmail.com";
+				string adminPassword = "Admin@123";
+
+				if (await userManager.FindByEmailAsync(adminEmail) == null)
+				{
+					var adminUser = new ApplicationUser
+					{
+						UserName = "AdminTagerly",
+						Email = adminEmail,
+						Address = "Admin Office",
+						PhoneNumber = "123-456-7890",
+						EmailConfirmed = true
+					};
+
+					var result = await userManager.CreateAsync(adminUser, adminPassword);
+					if (result.Succeeded)
+					{
+						await userManager.AddToRoleAsync(adminUser, "Admin");
+					}
+				}
+			}
+			#endregion
+
+			builder.Services.AddLogging(logging =>
+			{
+				logging.AddConsole();
+				logging.SetMinimumLevel(LogLevel.Debug);
+			});
 
 			var app = builder.Build();
-			// Call the seeding method
+			// Call the seeding methods
 			using (var scope = app.Services.CreateScope())
 			{
 				var services = scope.ServiceProvider;
 				await SeedRolesAsync(services);
+				await SeedAdminUserAsync(services);
 			}
-
 
 			// Configure the HTTP request pipeline.
 			if (!app.Environment.IsDevelopment())
 			{
 				app.UseExceptionHandler("/Home/Error");
-				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 				app.UseHsts();
 			}
 
@@ -103,6 +139,18 @@ namespace Tagerly
 			app.UseRouting();
 			app.UseAuthentication();
 			app.UseAuthorization();
+
+			#region Custom routes
+			app.MapControllerRoute(
+			name: "sellerProducts",
+			pattern: "Seller/Products/{action=Index}/{id?}",
+			defaults: new { controller = "Product" });
+
+			app.MapControllerRoute(
+				name: "buyerProducts",
+				pattern: "Products/{action=Index}/{id?}",
+				defaults: new { controller = "Buyer" }); 
+			#endregion
 
 			app.MapControllerRoute(
 				name: "default",

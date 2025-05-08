@@ -1,0 +1,10 @@
+﻿@{
+	ViewData["Title"] = "Sign Up Successful";
+}
+
+<div class="container text-center">
+	<h1>Sign Up Successful!</h1>
+	<p>A confirmation link has been sent to your email. Please check your email and confirm your account to log in.</p>
+	<p>If you didn't receive the email, check your spam folder or <a href="@Url.Action("ResendConfirmationEmail", "Account")">resend the email</a>.</p>
+	<a href="@Url.Action("Login", "Account")" class="btn btn-primary">Log In</a>
+</div>

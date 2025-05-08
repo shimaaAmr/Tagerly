@@ -6,6 +6,7 @@ using Tagerly.Repositories.Implementations;
 using Tagerly.Repositories.Interfaces;
 using Tagerly.Services.Interfaces.Admin;
 using Tagerly.ViewModels;
+using NuGet.Protocol.Core.Types;
 
 namespace Tagerly.Services.Implementations.Admin
 {
@@ -27,24 +28,34 @@ namespace Tagerly.Services.Implementations.Admin
         //    var products = await _repo.GetAllAsync();
         //    return _mapper.Map<IEnumerable<ProductApprovingVM>>(products);
 
-
         //}
 
+        //public async Task<IEnumerable<ProductApprovingVM>> GetAllProductsAsync()
+        //{
+        //    var products = await _productRepo.GetAllBySellerRoleAsync();
+        //    return _mapper.Map<IEnumerable<ProductApprovingVM>>(products);
+        //}
+
+
+        //بيحذف product من الموقع
         public async Task<IEnumerable<ProductApprovingVM>> GetAllProductsAsync()
         {
-            var products = await _productRepo.GetAllBySellerRoleAsync();
+            var products = await _productRepo.GetAllWithDetailsAsync();
             return _mapper.Map<IEnumerable<ProductApprovingVM>>(products);
         }
 
-        public async Task<bool> ApproveProductAsync(int id)
+
+        public async Task<bool> ChangeApprovalStatusAsync(int id, bool isApproved)
         {
             var product = await _repo.GetByIdAsync(id);
             if (product == null) return false;
-            product.Status = ProductStatus.Approved;
+
+            product.Status = isApproved ? ProductStatus.Approved : ProductStatus.Rejected;
             _repo.Update(product);
             await _repo.SaveChangesAsync();
             return true;
         }
+
 
         public async Task<bool> RejectProductAsync(int id)
         {
@@ -56,19 +67,25 @@ namespace Tagerly.Services.Implementations.Admin
             return true;
         }
 
-       
-
 
         //================================
+        //public async Task<bool> DeleteProductAsync(int id)
+        //{
+        //    return await _productRepo.SoftDeleteAsync(id);
+        //}
+
         public async Task<bool> DeleteProductAsync(int id)
         {
-            return await _productRepo.SoftDeleteAsync(id);
+            var product = await _productRepo.GetByIdAsync(id);
+            if (product == null) return false;
+
+            product.Status = ProductStatus.Deleted;
+            _productRepo.Update(product);
+            await _productRepo.SaveChangesAsync();
+
+            return true;
         }
 
-        public async Task<bool> ChangeApprovalStatusAsync(int id, bool isApproved)
-        {
-            return await _productRepo.ApproveProductAsync(id, isApproved);
-        }
         public async Task<ProductApprovingVM> GetProductByIdAsync(int id)
         {
             var product = await _productRepo.GetByIdAsync(id);
