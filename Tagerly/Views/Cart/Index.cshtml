@@ -112,7 +112,7 @@
                     </div>
                 </div>
 
-                <a asp-controller="Checkout" asp-action="Index" class="btn btn-white w-100 mt-3 @(Model?.CartItems?.Any() != true ? "disabled" : "")">
+                <a asp-controller="Order" asp-action="PlaceOrder" class="btn btn-white w-100 mt-3 @(Model?.CartItems?.Any() != true ? "disabled" : "")">
                     <i class="ri-secure-payment-line align-bottom"></i> Proceed to Checkout
                 </a>
 
@@ -136,3 +136,7 @@
         </div>
     </div>
 </section>
+<!-- Add this before your theme.bundle.js -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/assets/js/theme.bundle.js"></script>
+<script src="~/assets/js/theme.bundle.js"></script>

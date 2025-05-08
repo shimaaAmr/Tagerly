@@ -197,6 +197,7 @@
 <body>
     <div class="notification-container">
         @if (TempData["SuccessMessage"] != null)
+
         {
             <div class="alert-notification alert-success show">
                 <i class="ri-checkbox-circle-fill icon"></i>
@@ -209,6 +210,7 @@
         }
 
         @if (TempData["ErrorMessage"] != null)
+
         {
             <div class="alert-notification alert-danger show">
                 <i class="ri-error-warning-fill icon"></i>
@@ -221,6 +223,7 @@
         }
 
         @if (TempData["InfoMessage"] != null)
+
         {
             <div class="alert-notification alert-info show">
                 <i class="ri-information-fill icon"></i>
@@ -233,6 +236,7 @@
         }
 
         @if (TempData["WarningMessage"] != null)
+
         {
             <div class="alert-notification alert-warning show">
                 <i class="ri-alert-fill icon"></i>
@@ -291,6 +295,7 @@
                 <!-- User Actions -->
                 <div class="d-flex align-items-center">
                     @if (User.Identity.IsAuthenticated)
+
                     {
                         <div class="dropdown me-3">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -300,6 +305,7 @@
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <li><a class="dropdown-item" asp-controller="User" asp-action="UpdateProfile" asp-route-id="@ViewData["UserId"]">My Profile</a></li>
                                 @if (User.IsInRole("Seller"))
+
                                 {
                                     <li><a class="dropdown-item" asp-controller="Product" asp-action="Index">My Products</a></li>
                                 }
@@ -308,7 +314,9 @@
                             </ul>
                         </div>
                     }
+
                     else
+
                     {
                         <div class="d-flex">
                             <a asp-controller="Account" asp-action="Login" class="nav-link me-3">
@@ -418,10 +426,13 @@
         </div>
     </footer>
     <script src="~/assets/js/theme.bundle.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Or if using a local copy or via a package manager -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
     <script>
         // Auto-dismiss notifications after 5 seconds
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const notifications = document.querySelectorAll('.alert-notification');
 
             notifications.forEach(notification => {
