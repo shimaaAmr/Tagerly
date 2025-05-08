@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Tagerly.Services.Interfaces;
+using Tagerly.ViewModels.AccountVieModel;
 
 namespace Tagerly.ViewModels.Configurations
 {

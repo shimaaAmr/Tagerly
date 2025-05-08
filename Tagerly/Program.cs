@@ -1,4 +1,4 @@
-using FluentValidation.AspNetCore;
+﻿using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Tagerly.DataAccess.DbContexts;
@@ -54,15 +54,19 @@ namespace Tagerly
 			builder.Services.AddAutoMapper(typeof(ProductProfile));
 			builder.Services.AddAutoMapper(typeof(AdminProductProfile));
 
-			builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+			_ = builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 			{
 				options.Password.RequireNonAlphanumeric = false;
 				options.User.RequireUniqueEmail = true;
+				options.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultEmailProvider;
+
 
 			})
 				.AddEntityFrameworkStores<TagerlyDbContext>().
 				AddDefaultTokenProviders();
 
+
+			#region Add Roles
 			async Task SeedRolesAsync(IServiceProvider serviceProvider)
 			{
 				var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
@@ -76,7 +80,9 @@ namespace Tagerly
 					}
 				}
 			}
+			#endregion
 
+			#region Add Admin
 			async Task SeedAdminUserAsync(IServiceProvider serviceProvider)
 			{
 				var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
@@ -103,6 +109,8 @@ namespace Tagerly
 					}
 				}
 			}
+			#endregion
+
 			builder.Services.AddLogging(logging =>
 			{
 				logging.AddConsole();

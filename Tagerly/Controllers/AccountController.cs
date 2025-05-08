@@ -3,13 +3,10 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Tagerly.Models;
-using Tagerly.ViewModels;
 using System.Threading.Tasks;
-using Tagerly.Services.Implementations;
 using Tagerly.Services.Interfaces;
-using AspNetCoreGeneratedDocument;
-using Microsoft.CodeAnalysis.Operations;
-
+using Microsoft.AspNetCore.Authorization;
+using Tagerly.ViewModels.AccountVieModel;
 
 namespace Tagerly.Controllers
 {
@@ -23,19 +20,17 @@ namespace Tagerly.Controllers
 		public AccountController(
 			UserManager<ApplicationUser> userManager,
 			SignInManager<ApplicationUser> signInManager,
-			IEmailService emailService, ICartService cartService
-			)
+			IEmailService emailService,
+			ICartService cartService)
 		{
 			_userManager = userManager;
 			_signInManager = signInManager;
 			_emailService = emailService;
 			_cartService = cartService;
-
 		}
 
 		#region Sign Up
 		[HttpGet]
-
 		public IActionResult SignUp()
 		{
 			return View();
@@ -78,9 +73,8 @@ namespace Tagerly.Controllers
 					var confirmationLink = Url.Action("ConfirmEmail", "Account",
 						new { userId = user.Id, token }, protocol: Request.Scheme);
 
-					// Get email body from template service
+					// Get email body from email service
 					var emailBody = _emailService.GetEmailConfirmationTemplate(user.UserName, confirmationLink);
-
 					await _emailService.SendEmailAsync(user.Email, "Confirm Your Email", emailBody);
 
 					return RedirectToAction(nameof(SignUpSuccess));
@@ -126,9 +120,9 @@ namespace Tagerly.Controllers
 			if (result.Succeeded)
 			{
 				List<Claim> claims = new List<Claim>
-		{
-			new Claim("UserAddress", user.Address ?? string.Empty)
-		};
+				{
+					new Claim("UserAddress", user.Address ?? string.Empty)
+				};
 				await _signInManager.SignInWithClaimsAsync(user, isPersistent: false, claims);
 
 				if (await _userManager.IsInRoleAsync(user, "Buyer"))
@@ -147,32 +141,37 @@ namespace Tagerly.Controllers
 		}
 
 		[HttpGet]
+		[AllowAnonymous]
 		public IActionResult ResendConfirmationEmail()
 		{
-			return View();
+			return View(new ResendConfirmationEmailViewModel());
 		}
 
 		[HttpPost]
+		[AllowAnonymous]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> ResendConfirmationEmail(string email)
+		public async Task<IActionResult> ResendConfirmationEmail(ResendConfirmationEmailViewModel model)
 		{
-			var user = await _userManager.FindByEmailAsync(email);
-			if (user == null || user.EmailConfirmed)
+			if (!ModelState.IsValid)
 			{
+				return View(model);
+			}
+
+			var user = await _userManager.FindByEmailAsync(model.Email);
+			if (user != null && !await _userManager.IsEmailConfirmedAsync(user))
+			{
+				var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+				var confirmationLink = Url.Action("ConfirmEmail", "Account",
+					new { userId = user.Id, token }, protocol: Request.Scheme);
+
+				var emailBody = _emailService.GetEmailConfirmationTemplate(user.UserName, confirmationLink);
+				await _emailService.SendEmailAsync(model.Email, "Confirm Your Email", emailBody);
+
 				return RedirectToAction("SignUpSuccess");
 			}
 
-			var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-			var confirmationLink = Url.Action("ConfirmEmail", "Account",
-				new { userId = user.Id, token }, protocol: Request.Scheme);
-
-			var emailBody = _emailService.GetEmailConfirmationTemplate(user.UserName, confirmationLink);
-
-			await _emailService.SendEmailAsync(user.Email, "Confirm Your Email", emailBody);
-
-			return RedirectToAction(nameof(SignUpSuccess));
+			return RedirectToAction("SignUpSuccess");
 		}
-
 		#endregion
 
 		#region Log In
@@ -195,9 +194,9 @@ namespace Tagerly.Controllers
 					if (isFound)
 					{
 						List<Claim> claims = new List<Claim>
-				{
-					new Claim("UserAddress", appUser.Address ?? string.Empty)
-				};
+						{
+							new Claim("UserAddress", appUser.Address ?? string.Empty)
+						};
 						await _signInManager.SignInWithClaimsAsync(appUser, loginViewModel.RemmemberMe, claims);
 
 						if (await _userManager.IsInRoleAsync(appUser, "Admin"))
@@ -214,12 +213,11 @@ namespace Tagerly.Controllers
 						}
 					}
 				}
-				if (!appUser.EmailConfirmed)
+				if (appUser != null && !appUser.EmailConfirmed)
 				{
 					ModelState.AddModelError(string.Empty, "Please confirm your email first.");
 					return View(loginViewModel);
 				}
-
 
 				ModelState.AddModelError(string.Empty, "Email or password not valid");
 			}
@@ -240,6 +238,94 @@ namespace Tagerly.Controllers
 		{
 			await _signInManager.SignOutAsync();
 			return RedirectToAction(nameof(Login));
+		}
+		#endregion
+
+		#region Forgot Password
+		[HttpGet]
+		[AllowAnonymous]
+		public IActionResult ForgotPassword()
+		{
+			return View();
+		}
+
+		[HttpPost]
+		[AllowAnonymous]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+		{
+			if (ModelState.IsValid)
+			{
+				var user = await _userManager.FindByEmailAsync(model.Email);
+				if (user != null && await _userManager.IsEmailConfirmedAsync(user))
+				{
+					var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+					var callbackUrl = Url.Action("ResetPassword", "Account",
+						new { email = model.Email, token = token }, Request.Scheme);
+
+					var emailBody = _emailService.GetPasswordResetTemplate(user.UserName, callbackUrl);
+					await _emailService.SendEmailAsync(model.Email, "Reset Password", emailBody);
+
+					return RedirectToAction(nameof(ForgotPasswordConfirmation));
+				}
+				return RedirectToAction(nameof(ForgotPasswordConfirmation));
+			}
+			return View(model);
+		}
+
+		[HttpGet]
+		[AllowAnonymous]
+		public IActionResult ResetPassword(string email, string token)
+		{
+			if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(token))
+			{
+				return BadRequest("Invalid reset request.");
+			}
+			var model = new ResetPasswordViewModel { Email = email, Token = token };
+			return View(model);
+		}
+
+		[HttpPost]
+		[AllowAnonymous]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View(model);
+			}
+
+			var user = await _userManager.FindByEmailAsync(model.Email);
+			if (user == null)
+			{
+				return RedirectToAction(nameof(ResetPasswordConfirmation));
+			}
+
+			var result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+			if (result.Succeeded)
+			{
+				return RedirectToAction(nameof(ResetPasswordConfirmation));
+			}
+
+			foreach (var error in result.Errors)
+			{
+				ModelState.AddModelError(string.Empty, error.Description);
+			}
+			return View(model);
+		}
+
+		[HttpGet]
+		[AllowAnonymous]
+		public IActionResult ForgotPasswordConfirmation()
+		{
+			return View();
+		}
+
+		[HttpGet]
+		[AllowAnonymous]
+		public IActionResult ResetPasswordConfirmation()
+		{
+			return View();
 		}
 		#endregion
 	}
