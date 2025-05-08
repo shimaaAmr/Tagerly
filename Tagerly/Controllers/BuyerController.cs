@@ -51,11 +51,6 @@ namespace Tagerly.Controllers
 			{
 				return NotFound();
 			}
-
-			if (product == null)
-			{
-				return NotFound();
-			}
 			return View(_mapper.Map<ProductViewModel>(product));
 		}
 
