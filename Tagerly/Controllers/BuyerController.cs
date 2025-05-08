@@ -47,11 +47,15 @@ namespace Tagerly.Controllers
 			var product = await _productService.GetProductByIdAsync(id);
 
 			//Only show approved products to buyers
-			if (product == null || product.IsApproved != true)
-			{
-				return NotFound();
-			}
-			return View(_mapper.Map<ProductViewModel>(product));
+			//if (product == null || product.IsApproved != true)
+			//{
+			//	return NotFound();
+			//}
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return View(_mapper.Map<ProductViewModel>(product));
 		}
 
 		private async Task LoadCategories(int? selectedId = null)
