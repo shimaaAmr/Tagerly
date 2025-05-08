@@ -12,6 +12,7 @@ namespace Tagerly.Controllers
 {
 	public class AccountController : Controller
 	{
+		#region DI
 		private readonly UserManager<ApplicationUser> _userManager;
 		private readonly SignInManager<ApplicationUser> _signInManager;
 		private readonly IEmailService _emailService;
@@ -28,6 +29,7 @@ namespace Tagerly.Controllers
 			_emailService = emailService;
 			_cartService = cartService;
 		}
+		#endregion
 
 		#region Sign Up
 		[HttpGet]
@@ -125,16 +127,18 @@ namespace Tagerly.Controllers
 				};
 				await _signInManager.SignInWithClaimsAsync(user, isPersistent: false, claims);
 
-				if (await _userManager.IsInRoleAsync(user, "Buyer"))
-				{
-					return RedirectToAction("Index", "Home");
-				}
-				else if (await _userManager.IsInRoleAsync(user, "Seller"))
-				{
-					return RedirectToAction("Index", "Product");
-				}
+				//if (await _userManager.IsInRoleAsync(user, "Buyer"))
+				//{
+				//	return RedirectToAction("Index", "Home");
+				//}
+				//else if (await _userManager.IsInRoleAsync(user, "Seller"))
+				//{
+				//	return RedirectToAction("Index", "Product");
+				//}
 
-				return RedirectToAction("Index", "Home");
+				//return RedirectToAction("Index", "Home");
+				return RedirectToAction("Login", "Account");
+
 			}
 
 			return View("Error");
@@ -193,10 +197,16 @@ namespace Tagerly.Controllers
 					bool isFound = await _userManager.CheckPasswordAsync(appUser, loginViewModel.Password);
 					if (isFound)
 					{
-						List<Claim> claims = new List<Claim>
+
+						if (!appUser.EmailConfirmed)
 						{
-							new Claim("UserAddress", appUser.Address ?? string.Empty)
-						};
+							ModelState.AddModelError(string.Empty, "Please confirm your email first.");
+							return View(loginViewModel);
+						}
+						List<Claim> claims = new List<Claim>
+				{
+					new Claim("UserAddress", appUser.Address ?? string.Empty)
+				};
 						await _signInManager.SignInWithClaimsAsync(appUser, loginViewModel.RemmemberMe, claims);
 
 						if (await _userManager.IsInRoleAsync(appUser, "Admin"))
@@ -212,11 +222,6 @@ namespace Tagerly.Controllers
 							return RedirectToAction("Index", "Product");
 						}
 					}
-				}
-				if (appUser != null && !appUser.EmailConfirmed)
-				{
-					ModelState.AddModelError(string.Empty, "Please confirm your email first.");
-					return View(loginViewModel);
 				}
 
 				ModelState.AddModelError(string.Empty, "Email or password not valid");

@@ -1,14 +1,35 @@
 ﻿@{
 	ViewData["Title"] = "Confirm Logout - Tagerly";
-	Layout = "_LogoutLayout";
+	Layout = "~/Views/Shared/_Layout.cshtml"; // استخدام الـ Layout الأساسي
 }
 
-<div class="logout-confirmation">
-	<h4>Are you sure want to logout?</h4>
+<div class="container-box">
+	<h4>Are you sure you want to logout?</h4>
 	<div class="button-group">
-		<a href="#" class="btn-secondary" onclick="hideLogoutModal()">Cancel</a>
+		<a asp-action="Index" asp-controller="Home" class="btn btn-secondary logout-btn" onclick="hideLogoutModal()">Cancel</a>
 		<form asp-action="ConfirmLogout" asp-controller="Account" method="post" style="display: inline;">
-			<button type="submit" class="btn-handmade">Logout</button>
+			<button type="submit" class="btn btn-primary logout-btn">Logout</button>
 		</form>
 	</div>
 </div>
+
+<style>
+	/* تنسيقات خاصة بالصفحة */
+	.container-box h4 {
+		color: #6B705C; /* أخضر زيتوني */
+		margin-bottom: 20px;
+		font-size: 20px;
+	}
+
+	.button-group {
+		display: flex;
+		justify-content: center;
+		gap: 20px;
+	}
+
+	/* التأكد من إزالة أي تأثير غير مرغوب من الـ form */
+	form {
+		margin: 0;
+		display: inline-block;
+	}
+</style>
