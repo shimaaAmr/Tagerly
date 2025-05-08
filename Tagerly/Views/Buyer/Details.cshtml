@@ -21,10 +21,13 @@
                     <h4 style="color: #8b5e3c;">@Model.Price.ToString("C")</h4>
 
                     @if (Model.Quantity > 0)
+
                     {
                         <span class="badge" style="background-color: #c4a484; color: #5c3d24;">In Stock (@Model.Quantity available)</span>
                     }
+
                     else
+
                     {
                         <span class="badge bg-secondary">Out of Stock</span>
                     }
@@ -39,7 +42,9 @@
                                 <select id="quantity-selector" class="form-select" @(Model.Quantity <= 0 ? "disabled" : "")>
                                     @{
                                         var maxQuantity = Math.Min(10, Model.Quantity);
+
                                         for (int i = 1; i <= maxQuantity; i++)
+
                                         {
                                             <option value="@i">@i</option>
                                         }
@@ -136,54 +141,139 @@
     }
 </style>
 
-
+<!-- Add this before your theme.bundle.js -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/assets/js/theme.bundle.js"></script>
+<script src="~/assets/js/theme.bundle.js"></script>
 @section Scripts {
     <script>
-        $(document).ready(function() {
-            // Favorite button handler
-            $('.btn-favorite').click(function() {
+        $(document).ready(function () {
+            // Favorite button click handler
+            $('.btn-favorite').click(function (e) {
+                e.preventDefault();
                 const productId = $(this).data('product-id');
                 $(this).toggleClass('active');
 
+                // Toggle heart icon
                 const icon = $(this).find('i');
                 if ($(this).hasClass('active')) {
                     icon.removeClass('ri-heart-line').addClass('ri-heart-fill');
                     // AJAX call to add favorite
+                    $.post('/Favorites/Add', { productId: productId }, function (response) {
+                        if (!response.success) {
+                            $(this).toggleClass('active');
+                            icon.removeClass('ri-heart-fill').addClass('ri-heart-line');
+                        }
+                    });
                 } else {
                     icon.removeClass('ri-heart-fill').addClass('ri-heart-line');
                     // AJAX call to remove favorite
+                    $.ajax({
+                        url: '/Favorites/Remove',
+                        type: 'DELETE',
+                        data: { productId: productId },
+                        success: function (response) {
+                            if (!response.success) {
+                                $(this).toggleClass('active');
+                                icon.removeClass('ri-heart-line').addClass('ri-heart-fill');
+                            }
+                        }
+                    });
                 }
             });
 
-            // Add to cart handler with quantity and anti-forgery token
-            $('.btn-add-to-cart').click(function() {
+            // Add to cart button click handler
+            $('.btn-add-to-cart').click(function (e) {
+                e.preventDefault();
                 const productId = $(this).data('product-id');
-                const quantity = $('#quantity-selector').val();
                 const button = $(this);
-                const token = $('input[name="__RequestVerificationToken"]').val();
 
-                button.html('<span class="spinner-border spinner-border-sm"></span> Adding...');
+                // Add loading state
+                button.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Adding...');
                 button.prop('disabled', true);
 
-                $.ajax({
-                    url: '/Buyer/AddToCart',
-                    type: 'POST',
-                    data: {
-                        productId: productId,
-                        quantity: quantity,
-                        __RequestVerificationToken: token
-                    },
-                    success: function(response) {
-                        // Handle redirect or show success message
-                        window.location.href = '/Buyer'; // Redirect to index
-                    },
-                    error: function(xhr, status, error) {
+                // AJAX call to add to cart
+                $.post('/Cart/AddItem', { productId: productId, quantity: 1 }, function (response) {
+                    if (response.success) {
+                        button.html('<i class="ri-check-line"></i> Added!');
+                        // Update cart count in navbar
+                        updateCartCount();
+                        showToast('Product added to cart successfully!', 'success');
+                    } else {
+                        button.html('<i class="ri-error-warning-line"></i> Error');
+                        showToast(response.message || 'Failed to add item to cart', 'error');
+                    }
+                    setTimeout(function () {
                         button.html('<i class="ri-shopping-cart-line"></i> Add to Cart');
                         button.prop('disabled', false);
-                        alert('Failed to add item to cart: ' + error);
+                    }, 1500);
+                }).fail(function (xhr) {
+                    if (xhr.status === 401) {
+                        // User is not authenticated
+                        window.location.href = '/Account/Login?returnUrl=' + encodeURIComponent(window.location.pathname);
+                    } else {
+                        button.html('<i class="ri-error-warning-line"></i> Error');
+                        showToast('Failed to add item to cart', 'error');
+                        setTimeout(function () {
+                            button.html('<i class="ri-shopping-cart-line"></i> Add to Cart');
+                            button.prop('disabled', false);
+                        }, 1500);
                     }
                 });
             });
+
+            // Update cart count in navbar
+            function updateCartCount() {
+                $.get('/Cart/GetItemCount', function (count) {
+                    const cartCountElement = $('.cart-count');
+                    if (cartCountElement.length) {
+                        cartCountElement.text(count);
+
+                        // Add animation effect
+                        cartCountElement.addClass('animate_animated animate_heartBeat');
+                        setTimeout(function () {
+                            cartCountElement.removeClass('animate_animated animate_heartBeat');
+                        }, 1000);
+                    }
+                });
+            }
+
+            // Display toast notifications
+            function showToast(message, type = 'info') {
+                // Check if toast container exists, if not create it
+                if ($('#toast-container').length === 0) {
+                    $('body').append('<div id="toast-container" class="position-fixed bottom-0 end-0 p-3" style="z-index: 5"></div>');
+                }
+
+                // Create toast element
+                const toastId = 'toast-' + Date.now();
+                const bgClass = type === 'success' ? 'bg-success' :
+                    type === 'error' ? 'bg-danger' :
+                        type === 'warning' ? 'bg-warning' : 'bg-info';
+
+                const toastHtml = `
+                                    <div id="${toastId}" class="toast align-items-center ${bgClass} text-white border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                                        <div class="d-flex">
+                                            <div class="toast-body">
+                                                ${message}
+                                            </div>
+                                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                                        </div>
+                                    </div>
+                                `;
+
+                // Add toast to container
+                $('#toast-container').append(toastHtml);
+
+                // Initialize and show the toast
+                const toastElement = new bootstrap.Toast(document.getElementById(toastId), {
+                    delay: 3000
+                });
+                toastElement.show();
+            }
+
+            // Initialize any existing cart count
+            updateCartCount();
         });
     </script>
 }
