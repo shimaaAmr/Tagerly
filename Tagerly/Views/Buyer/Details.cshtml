@@ -139,12 +139,6 @@
     .dropdown-menu {
         z-index: 1000;
     }
-</style>
-
-<!-- Add this before your theme.bundle.js -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/assets/js/theme.bundle.js"></script>
-<script src="~/assets/js/theme.bundle.js"></script>
 @section Scripts {
     <script>
         $(document).ready(function () {
@@ -182,10 +176,11 @@
                 }
             });
 
-            // Add to cart button click handler
+            // Add to cart button click handler with quantity
             $('.btn-add-to-cart').click(function (e) {
                 e.preventDefault();
                 const productId = $(this).data('product-id');
+                const quantity = parseInt($('#quantity-selector').val());
                 const button = $(this);
 
                 // Add loading state
@@ -193,7 +188,7 @@
                 button.prop('disabled', true);
 
                 // AJAX call to add to cart
-                $.post('/Cart/AddItem', { productId: productId, quantity: 1 }, function (response) {
+                $.post('/Cart/AddItem', { productId: productId, quantity: quantity }, function (response) {
                     if (response.success) {
                         button.html('<i class="ri-check-line"></i> Added!');
                         // Update cart count in navbar
@@ -201,8 +196,17 @@
                         showToast('Product added to cart successfully!', 'success');
                     } else {
                         button.html('<i class="ri-error-warning-line"></i> Error');
-                        showToast(response.message || 'Failed to add item to cart', 'error');
+                        
+                        // Check if it's a stock availability error
+                        if (response.availableStock !== undefined) {
+                            // It's a stock availability issue
+                            showStockWarning(response.availableStock, response.inCartQuantity, quantity);
+                        } else {
+                            // Other error
+                            showToast(response.message || 'Failed to add item to cart', 'error');
+                        }
                     }
+                    
                     setTimeout(function () {
                         button.html('<i class="ri-shopping-cart-line"></i> Add to Cart');
                         button.prop('disabled', false);
@@ -221,6 +225,56 @@
                     }
                 });
             });
+
+            // Function to show stock warning modal
+            function showStockWarning(availableStock, inCartQuantity, requestedQuantity) {
+                // Check if modal container exists, if not create it
+                if ($('#stock-warning-modal').length === 0) {
+                    $('body').append(`
+                        <div class="modal fade" id="stock-warning-modal" tabindex="-1" aria-labelledby="stockWarningModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-warning">
+                                        <h5 class="modal-title" id="stockWarningModalLabel">Stock Availability Warning</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body" id="stock-warning-body">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <a href="/Cart" class="btn" style="background-color: #5c3d24; color: white;">View Cart</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                }
+
+                // Set the modal body content
+                let message = `<div class="alert alert-warning">
+                    <h5><i class="ri-error-warning-line"></i> Not Enough Stock</h5>
+                    <p>Sorry, we don't have enough items in stock to fulfill your request.</p>
+                    <hr>
+                    <ul>
+                        <li>Available in stock: <strong>${availableStock}</strong> items</li>
+                        <li>Already in your cart: <strong>${inCartQuantity}</strong> items</li>
+                        <li>You requested: <strong>${requestedQuantity}</strong> more items</li>
+                    </ul>`;
+                
+                if (availableStock - inCartQuantity > 0) {
+                    message += `<p>You can add up to <strong>${availableStock - inCartQuantity}</strong> more items to your cart.</p>`;
+                } else if (inCartQuantity > 0) {
+                    message += `<p>You already have the maximum available quantity in your cart.</p>`;
+                }
+                
+                message += `</div>`;
+                
+                $('#stock-warning-body').html(message);
+
+                // Show the modal
+                var stockModal = new bootstrap.Modal(document.getElementById('stock-warning-modal'));
+                stockModal.show();
+            }
 
             // Update cart count in navbar
             function updateCartCount() {
@@ -252,15 +306,15 @@
                         type === 'warning' ? 'bg-warning' : 'bg-info';
 
                 const toastHtml = `
-                                    <div id="${toastId}" class="toast align-items-center ${bgClass} text-white border-0" role="alert" aria-live="assertive" aria-atomic="true">
-                                        <div class="d-flex">
-                                            <div class="toast-body">
-                                                ${message}
-                                            </div>
-                                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                                        </div>
-                                    </div>
-                                `;
+                    <div id="${toastId}" class="toast align-items-center ${bgClass} text-white border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="d-flex">
+                            <div class="toast-body">
+                                ${message}
+                            </div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                    </div>
+                `;
 
                 // Add toast to container
                 $('#toast-container').append(toastHtml);

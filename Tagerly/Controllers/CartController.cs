@@ -72,7 +72,7 @@ namespace Tagerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RemoveFromCart(int productId)
+        public async Task<IActionResult> RemoveFromCart(int cartItemId)
         {
             var userId = GetUserId();
             if (string.IsNullOrEmpty(userId))
@@ -80,7 +80,7 @@ namespace Tagerly.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            await _cartService.RemoveFromCart(userId, productId);
+            await _cartService.RemoveFromCart(userId, cartItemId);
             TempData["Success"] = "Product removed from cart.";
             return RedirectToAction("Index");
         }

@@ -64,7 +64,7 @@
                                     </td>
                                     <td>
                                         <form asp-action="RemoveFromCart" method="post">
-                                            <input type="hidden" name="productId" value="@item.ProductId" />
+                                            <input type="hidden" name="cartItemId" value="@item.Id" />
                                             <button type="submit" class="btn btn-link p-0 text-danger">
                                                 <i class="ri-close-circle-line ri-lg"></i>
                                             </button>
@@ -139,4 +139,4 @@
 <!-- Add this before your theme.bundle.js -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/assets/js/theme.bundle.js"></script>
-<script src="~/assets/js/theme.bundle.js"></script>
+
