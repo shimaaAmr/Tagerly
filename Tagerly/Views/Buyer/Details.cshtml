@@ -80,65 +80,6 @@
 </div>
 
 
-<style>
-    .btn-favorite {
-        background-color: white;
-        color: #5c3d24;
-        border: 1px solid #5c3d24;
-        transition: all 0.3s ease;
-    }
-
-        .btn-favorite:hover {
-            background-color: #f5f1eb;
-        }
-
-        .btn-favorite.active {
-            background-color: #ff6b6b;
-            color: white;
-            border-color: #ff6b6b;
-        }
-
-    .btn-add-to-cart {
-        background-color: #5c3d24;
-        color: white;
-        transition: all 0.3s ease;
-    }
-
-        .btn-add-to-cart:hover {
-            background-color: #8b5e3c;
-        }
-
-        .btn-add-to-cart:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-        }
-    /* Add this to your style section */
-    #quantity-selector {
-        appearance: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        padding-right: 1.5rem;
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%235c3d24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
-        background-repeat: no-repeat;
-        background-position: right 0.5rem center;
-        background-size: 16px 12px;
-        z-index: 1;
-    }
-
-        /* Remove default arrow in IE */
-        #quantity-selector::-ms-expand {
-            display: none;
-        }
-
-    /* Ensure dropdown appears above other elements */
-    .form-select {
-        z-index: 2;
-    }
-
-    /* Fix for dropdown menu */
-    .dropdown-menu {
-        z-index: 1000;
-    }
 @section Scripts {
     <script>
         $(document).ready(function () {
@@ -196,7 +137,7 @@
                         showToast('Product added to cart successfully!', 'success');
                     } else {
                         button.html('<i class="ri-error-warning-line"></i> Error');
-                        
+
                         // Check if it's a stock availability error
                         if (response.availableStock !== undefined) {
                             // It's a stock availability issue
@@ -206,7 +147,7 @@
                             showToast(response.message || 'Failed to add item to cart', 'error');
                         }
                     }
-                    
+
                     setTimeout(function () {
                         button.html('<i class="ri-shopping-cart-line"></i> Add to Cart');
                         button.prop('disabled', false);
@@ -260,15 +201,15 @@
                         <li>Already in your cart: <strong>${inCartQuantity}</strong> items</li>
                         <li>You requested: <strong>${requestedQuantity}</strong> more items</li>
                     </ul>`;
-                
+
                 if (availableStock - inCartQuantity > 0) {
                     message += `<p>You can add up to <strong>${availableStock - inCartQuantity}</strong> more items to your cart.</p>`;
                 } else if (inCartQuantity > 0) {
                     message += `<p>You already have the maximum available quantity in your cart.</p>`;
                 }
-                
+
                 message += `</div>`;
-                
+
                 $('#stock-warning-body').html(message);
 
                 // Show the modal
