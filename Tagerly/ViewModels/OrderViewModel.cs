@@ -19,8 +19,6 @@ namespace Tagerly.ViewModels
 
         public string Notes { get; set; }
 
-        [Display(Name = "I agree to terms & conditions")]
-        [Range(typeof(bool), "true", "true", ErrorMessage = "You must accept the terms")]
         public bool Agreement { get; set; }
         public decimal Subtotal { get; set; }
     }
