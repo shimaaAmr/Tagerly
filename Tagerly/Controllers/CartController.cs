@@ -36,6 +36,26 @@ namespace Tagerly.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> AddItem(int productId, int quantity = 1)
+        {
+            var userId = GetUserId();
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Json(new { success = false, message = "Please login to add items to cart" });
+            }
+
+            try
+            {
+                await _cartService.AddToCart(userId, productId, quantity);
+                return Json(new { success = true, message = "Item added to cart successfully" });
+            }
+            catch (System.Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddToCart(int productId, int quantity = 1)
         {
@@ -93,6 +113,20 @@ namespace Tagerly.Controllers
             await _cartService.ClearCart(userId);
             TempData["Success"] = "Cart cleared.";
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetItemCount()
+        {
+            var userId = GetUserId();
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Json(0);
+            }
+
+            var cartViewModel = await _cartService.GetUserCart(userId);
+            int itemCount = cartViewModel?.CartItems?.Sum(i => i.Quantity) ?? 0;
+            return Json(itemCount);
         }
     }
 }

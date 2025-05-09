@@ -3,196 +3,197 @@
 <html lang="en" dir="ltr">
 
 <head>
-    <!-- Meta Tags -->
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Tagerly Store for Unique Handmade Products">
-    <meta name="author" content="Tagerly">
-    <meta name="keywords" content="Handmade Products, Gifts, Home Decor">
+	<!-- Meta Tags -->
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Tagerly Store for Unique Handmade Products">
+	<meta name="author" content="Tagerly">
+	<meta name="keywords" content="Handmade Products, Gifts, Home Decor">
 
-    <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="~/assets/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="~/assets/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="~/assets/favicon/favicon-16x16.png">
+	<!-- Favicon -->
+	<link rel="apple-touch-icon" sizes="180x180" href="~/assets/favicon/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="~/assets/favicon/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="~/assets/favicon/favicon-16x16.png">
 
-    <!-- Vendor CSS -->
-    <link rel="stylesheet" href="~/assets/css/libs.bundle.css" />
+	<!-- Vendor CSS -->
+	<link rel="stylesheet" href="~/assets/css/libs.bundle.css" />
 
-    <!-- Main CSS -->
-    <link rel="stylesheet" href="~/assets/css/theme.bundle.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+	<!-- Main CSS -->
+	<link rel="stylesheet" href="~/assets/css/theme.bundle.css" />
+	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+	<!-- Google Fonts -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
 
-    <title>Tagerly | Unique Handmade Products</title>
+	<title>Tagerly | Unique Handmade Products</title>
 
-    <style>
-        body {
-            font-family: 'Tajawal', sans-serif;
-        }
+	<style>
+		body {
+			font-family: 'Tajawal', sans-serif;
+		}
 
-        .navbar-brand {
-            font-weight: 700;
-        }
+		.navbar-brand {
+			font-weight: 700;
+		}
 
-        .dropdown-megamenu {
-            right: 0 !important;
-            left: auto !important;
-        }
+		.dropdown-megamenu {
+			right: 0 !important;
+			left: auto !important;
+		}
 
-        .rtl-dropdown {
-            text-align: right;
-            direction: rtl;
-        }
+		.rtl-dropdown {
+			text-align: right;
+			direction: rtl;
+		}
 
-        .bg-primary {
-            background-color: #8f7668 !important;
-        }
+		.bg-primary {
+			background-color: #8f7668 !important;
+		}
 
-        .text-primary {
-            color: #8f7668 !important;
-        }
+		.text-primary {
+			color: #8f7668 !important;
+		}
 
-        .footer-bg {
-            background-color: rgb(165, 97, 42) !important;
-        }
+		.footer-bg {
+			background-color: rgb(165, 97, 42) !important;
+		}
 
-        /* Notification Styles - Improved Version */
-        .notification-container {
-            position: fixed;
-            top: 80px;
-            right: 20px;
-            z-index: 1100;
-            width: 350px;
-        }
+		/* Notification Styles - Improved Version */
+		.notification-container {
+			position: fixed;
+			top: 80px;
+			right: 20px;
+			z-index: 1100;
+			width: 350px;
+		}
 
-        .alert-notification {
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-            transition: all 0.3s ease;
-            border-left: 4px solid transparent;
-            opacity: 0;
-            transform: translateY(-20px);
-            animation: fadeIn 0.3s ease forwards;
-        }
+		.alert-notification {
+			padding: 1rem 1.5rem;
+			border-radius: 8px;
+			box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+			display: flex;
+			align-items: center;
+			margin-bottom: 1rem;
+			transition: all 0.3s ease;
+			border-left: 4px solid transparent;
+			opacity: 0;
+			transform: translateY(-20px);
+			animation: fadeIn 0.3s ease forwards;
+		}
 
-            .alert-notification.show {
-                opacity: 1;
-                transform: translateY(0);
-            }
+			.alert-notification.show {
+				opacity: 1;
+				transform: translateY(0);
+			}
 
-            .alert-notification .icon {
-                font-size: 1.5rem;
-                margin-right: 1rem;
-            }
+			.alert-notification .icon {
+				font-size: 1.5rem;
+				margin-right: 1rem;
+			}
 
-        .alert-success {
-            background-color: #f6ffed;
-            color: #52c41a;
-            border-left-color: #52c41a;
-        }
+		.alert-success {
+			background-color: #f6ffed;
+			color: #52c41a;
+			border-left-color: #52c41a;
+		}
 
-        .alert-danger {
-            background-color: #fff2f0;
-            color: #ff4d4f;
-            border-left-color: #ff4d4f;
-        }
+		.alert-danger {
+			background-color: #fff2f0;
+			color: #ff4d4f;
+			border-left-color: #ff4d4f;
+		}
 
-        .alert-info {
-            background-color: #e6f7ff;
-            color: #1890ff;
-            border-left-color: #1890ff;
-        }
+		.alert-info {
+			background-color: #e6f7ff;
+			color: #1890ff;
+			border-left-color: #1890ff;
+		}
 
-        .alert-warning {
-            background-color: #fffbe6;
-            color: #faad14;
-            border-left-color: #faad14;
-        }
+		.alert-warning {
+			background-color: #fffbe6;
+			color: #faad14;
+			border-left-color: #faad14;
+		}
 
-        @@keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
+		@@keyframes fadeIn {
+			from {
+				opacity: 0;
+				transform: translateY(-20px);
+			}
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
 
-        /* Responsive adjustments */
-        @@media (max-width: 768px) {
-            .notification-container {
-                width: 90%;
-                left: 5%;
-                right: 5%;
-                top: 70px;
-            }
-        }
+		/* Responsive adjustments */
+		@@media (max-width: 768px) {
+			.notification-container {
+				width: 90%;
+				left: 5%;
+				right: 5%;
+				top: 70px;
+			}
+		}
 
-        /* Delete Modal Specific Styles */
-        .modal-danger .modal-header {
-            background-color: #dc3545;
-            color: white;
-            border-bottom: none;
-        }
+		/* Delete Modal Specific Styles */
+		.modal-danger .modal-header {
+			background-color: #dc3545;
+			color: white;
+			border-bottom: none;
+		}
 
-        .modal-danger .alert {
-            border-left: 4px solid #dc3545;
-            background-color: rgba(248, 215, 218, 0.2);
-        }
+		.modal-danger .alert {
+			border-left: 4px solid #dc3545;
+			background-color: rgba(248, 215, 218, 0.2);
+		}
 
-        .modal-danger .btn-danger {
-            background-color: #dc3545;
-            border-color: #dc3545;
-            transition: all 0.3s;
-        }
+		.modal-danger .btn-danger {
+			background-color: #dc3545;
+			border-color: #dc3545;
+			transition: all 0.3s;
+		}
 
-            .modal-danger .btn-danger:hover {
-                background-color: #bb2d3b;
-                border-color: #b02a37;
-            }
+			.modal-danger .btn-danger:hover {
+				background-color: #bb2d3b;
+				border-color: #b02a37;
+			}
 
-        /* Theme color overrides */
-        .bg-primary {
-            background-color: rgb(165, 97, 42) !important;
-        }
+		/* Theme color overrides */
+		.bg-primary {
+			background-color: rgb(165, 97, 42) !important;
+		}
 
-        .text-primary {
-            color: rgb(165, 97, 42) !important;
-        }
+		.text-primary {
+			color: rgb(165, 97, 42) !important;
+		}
 
-        .btn-primary {
-            background-color: rgb(165, 97, 42);
-            border-color: rgb(165, 97, 42);
-        }
+		.btn-primary {
+			background-color: rgb(165, 97, 42);
+			border-color: rgb(165, 97, 42);
+		}
 
-            .btn-primary:hover {
-                background-color: rgb(145, 85, 37);
-                border-color: rgb(145, 85, 37);
-            }
+			.btn-primary:hover {
+				background-color: rgb(145, 85, 37);
+				border-color: rgb(145, 85, 37);
+			}
 
-        /* Badge color */
-        .badge.bg-primary {
-            background-color: #8f7668 !important;
-        }
+		/* Badge color */
+		.badge.bg-primary {
+			background-color: #8f7668 !important;
+		}
 
-        /* Fix for RTL dropdown */
-        .rtl-dropdown {
-            text-align: left;
-            direction: ltr;
-        }
-    </style>
+		/* Fix for RTL dropdown */
+		.rtl-dropdown {
+			text-align: left;
+			direction: ltr;
+		}
+	</style>
+
 </head>
 
 <body>

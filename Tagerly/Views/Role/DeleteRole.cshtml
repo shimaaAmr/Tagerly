@@ -1,55 +1,97 @@
 ﻿@model Tagerly.ViewModels.RoleViewModel
 
 @{
-	ViewBag.Title = "Delete Role";
-	Layout = "~/Views/Shared/AdminLayout.cshtml";
+    ViewBag.Title = "Delete Role";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
 <style>
-	:root {
-		--wood-dark: #5E3023;
-		--wood-medium: #895737;
-		--wood-light: #B88B4A;
-		--cream: #E3DCCB;
-		--beige: #D8C4A7;
-		--light-bg: #F5F1EB;
-	}
+    :root {
+        --wood-dark: #5E3023;
+        --wood-medium: #895737;
+        --wood-light: #B88B4A;
+        --cream: #E3DCCB;
+        --beige: #D8C4A7;
+        --light-bg: #F5F1EB;
+    }
 
-	body {
-		background-color: var(--light-bg);
-	}
+    body {
+        background-color: var(--light-bg);
+        font-family: 'Cairo', sans-serif;
+    }
 
-	.form-container {
-		background-color: var(--cream);
-		border: 1px solid var(--wood-medium);
-		padding: 20px;
-		border-radius: 10px;
-		max-width: 500px;
-		margin: auto;
-		margin-top: 40px;
-	}
+    .form-container {
+        background-color: var(--cream);
+        border: 1px solid var(--wood-medium);
+        padding: 30px;
+        border-radius: 15px;
+        max-width: 550px;
+        margin: 40px auto;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
 
-	h2 {
-		color: var(--wood-dark);
-		text-align: center;
-	}
+    h2 {
+        color: var(--wood-dark);
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    label {
+        font-weight: bold;
+        color: var(--wood-dark);
+    }
+
+    .form-control {
+        border-radius: 8px;
+        padding: 10px;
+        font-size: 1rem;
+    }
+
+    .btn-danger {
+        background-color: #b02a37;
+        border-color: #a52834;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 1rem;
+    }
+
+        .btn-danger:hover {
+            background-color: #a52834;
+            border-color: #92252f;
+        }
+
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border-color: #c3e6cb;
+        padding: 10px;
+        margin-top: 20px;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
 </style>
 
 <div class="form-container">
-	<h2>Delete Role</h2>
+    <h2>Delete Role</h2>
 
-	<form asp-action="DeleteRole" method="post">
-		<div class="form-group">
-			<label for="selectedRole">Select Role to Delete</label>
-			<select asp-items="ViewBag.Roles" class="form-control" name="selectedRole">
-				<option value="">-- Select Role --</option>
-			</select>
-		</div>
-		<button type="submit" class="btn btn-danger mt-2">Delete Role</button>
-	</form>
+    <form asp-action="DeleteRole" method="post">
+        <div class="form-group">
+            <label for="selectedRole">Select Role to Delete</label>
+            <select asp-items="ViewBag.Roles" class="form-control" name="selectedRole">
+                <option value="">-- Select Role --</option>
+            </select>
+        </div>
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-danger">Delete Role</button>
+        </div>
+    </form>
 
-	@if (ViewBag.Message != null)
-	{
-		<div class="alert alert-success mt-3">@ViewBag.Message</div>
-	}
+    @if (ViewBag.Message != null)
+    {
+        <div class="alert alert-success">@ViewBag.Message</div>
+    }
 </div>

@@ -2,9 +2,23 @@
 	ViewData["Title"] = "Sign Up Successful";
 }
 
-<div class="container text-center">
+<div class="container-box">
 	<h1>Sign Up Successful!</h1>
 	<p>A confirmation link has been sent to your email. Please check your email and confirm your account to log in.</p>
-	<p>If you didn't receive the email, check your spam folder or <a href="@Url.Action("ResendConfirmationEmail", "Account")">resend the email</a>.</p>
-	<a href="@Url.Action("Login", "Account")" class="btn btn-primary">Log In</a>
+	<p>If you didn't receive the email, check your spam folder or <a href="@Url.Action("ResendConfirmationEmail", "Account")" class="action-link">resend the email</a>.</p>
+	<a href="@Url.Action("Login", "Account")" class="btn-custom">Log In</a>
 </div>
+
+<style>
+	.container-box h1 {
+		color: #6B705C;
+		margin-bottom: 20px;
+		font-size: 28px;
+	}
+
+	.container-box p {
+		color: #8B6F47;
+		font-size: 16px;
+		margin-bottom: 15px;
+	}
+</style>

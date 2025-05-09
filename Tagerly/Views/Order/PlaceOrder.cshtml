@@ -86,12 +86,6 @@
                     <p class="text-muted">Your cart is empty.</p>
                 }
 
-                <div class="form-check my-4">
-                    <input asp-for="Agreement" class="form-check-input" />
-                    <label asp-for="Agreement" class="form-check-label">I agree to terms & conditions</label>
-                    <span asp-validation-for="Agreement" class="text-danger"></span>
-                </div>
-
                 <div class="d-grid mt-4">
                     <button type="submit" class="btn btn-dark w-100">Complete Order</button>
                 </div>
@@ -101,7 +95,9 @@
 </section>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+   
 
-    </script>
 }
