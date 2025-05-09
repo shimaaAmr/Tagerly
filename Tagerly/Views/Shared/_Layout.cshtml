@@ -193,6 +193,7 @@
 			direction: ltr;
 		}
 	</style>
+
 </head>
 
 <body>
@@ -266,32 +267,24 @@
             <!-- Main Navigation -->
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="productsDropdown" data-bs-toggle="dropdown">
-                            Products
-                        </a>
-                        <div class="dropdown-menu dropdown-megamenu" aria-labelledby="productsDropdown">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <h6 class="dropdown-header">Handmade Products</h6>
-                                        <a class="dropdown-item" href="#">Personal Care</a>
-                                        <a class="dropdown-item" href="#">Home Decor</a>
-                                        <a class="dropdown-item" href="#">Gifts</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
+
+                    <!-- Main Products link - visible to everyone -->
                     <li class="nav-item">
-                        <a class="nav-link" href="#">About Us</a>
+                        <a class="nav-link" asp-controller="Buyer" asp-action="Index">Products</a>
                     </li>
+
+                    <!-- Seller Dashboard link - only for sellers -->
+                    @if (User.IsInRole("Seller"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Product" asp-action="Index">Product Management</a>
+                        </li>
+                    }
+
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Blog</a>
+                        <a class="nav-link" href="#about">About Us</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Contact</a>
-                    </li>
+                  
                 </ul>
 
                 <!-- User Actions -->
