@@ -21,7 +21,6 @@
 	<ItemGroup>
 		<Folder Include="DataAccess/ConfigurationClasses" />
 		<Folder Include="Mapping" />
-		<Folder Include="Migrations\" />
 		<Folder Include="Services/Interfaces" />
 		<Folder Include="Services/Implementations" />
 	</ItemGroup>
