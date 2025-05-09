@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Products List";
+
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
@@ -43,23 +44,34 @@
     }
 
     .btn {
-        padding: 6px 12px;
-        border-radius: 5px;
+        padding: 6px 14px;
+        border-radius: 6px;
         color: white;
         text-decoration: none;
-        margin-right: 5px;
+        margin: 2px;
+        font-weight: bold;
+        display: inline-block;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        font-family: Arial, sans-serif;
     }
 
     .btn-approve {
-        background-color: green;
+        background-color: #28a745; /* أخضر */
     }
 
     .btn-reject {
-        background-color: orange;
+        background-color: #ffc107; /* أصفر */
+        color: black;
     }
 
     .btn-delete {
-        background-color: red;
+        background-color: #dc3545; /* أحمر */
+    }
+
+    .btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        opacity: 0.95;
     }
 
     .product-img {
@@ -85,6 +97,7 @@
     </thead>
     <tbody>
         @foreach (var product in Model)
+
         {
             <tr>
                 <td>
@@ -96,12 +109,15 @@
                 <td>
                     @switch (product.Status)
                     {
+
                         case ProductStatus.Pending:
                             @:Pending
                             break;
+
                         case ProductStatus.Approved:
                             @:Approved
                             break;
+
                         case ProductStatus.Rejected:
                             @:Rejected
                             break;
@@ -110,15 +126,13 @@
                 <td>
                     @if (product.Status == ProductStatus.Pending)
                     {
-                        
-                        <a asp-action="Approve" asp-route-id="@product.Id" class="btn btn-approve">Approve</a>
-                        <a asp-action="Reject" asp-route-id="@product.Id" class="btn btn-reject">Reject</a>
-        
+                        <a asp-action="Approve" asp-route-id="@product.Id" class="btn btn-approve">✔ Approve</a>
+                        <a asp-action="Reject" asp-route-id="@product.Id" class="btn btn-reject">✖ Reject</a>
                     }
-                    <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-delete">Delete</a>
+                    <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-delete">🗑 Delete</a>
                 </td>
+
             </tr>
         }
     </tbody>
 </table>
-
