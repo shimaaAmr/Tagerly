@@ -1,23 +1,34 @@
-﻿namespace Tagerly.ViewModels
+﻿using Microsoft.AspNetCore.Http;
+
+namespace Tagerly.ViewModels
 {
     public class ProductViewModel
     {
+        #region Product Properties
         public int ProductId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
         public int Quantity { get; set; }
+        #endregion
+
+        #region Image Handling
         public string ImageUrl { get; set; }
+        public IFormFile ImageFile { get; set; }
+        #endregion
+
+        #region Category Information
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public IFormFile ImageFile { get; set; }
+        #endregion
 
-        // Seller properties
+        #region Seller Information
         public string SellerId { get; set; }
         public string SellerName { get; set; }
+        #endregion
 
-        // Add approval status
-        public bool? IsApproved { get; set; }
-
+        #region Approval Status
+        public bool? IsApproved { get; set; } // Null = Pending, True = Approved, False = Rejected
+        #endregion
     }
 }

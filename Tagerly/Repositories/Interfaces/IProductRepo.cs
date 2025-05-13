@@ -1,40 +1,40 @@
-﻿using Tagerly.Models;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
-using System.Linq.Expressions;
-
-using System.Linq.Expressions;
 using Tagerly.Models;
-
 
 namespace Tagerly.Repositories.Interfaces
 {
-	public interface IProductRepo : IGenericRepo<Product>
-	{
+    public interface IProductRepo : IGenericRepo<Product>
+    {
+        #region Extended Read Operations
+        Task<Product> GetByIdWithDetailsAsync(int id);
+        Task<Product> GetByIdWithCategoryAsync(int id);
+        Task<IEnumerable<Product>> GetAllWithDetailsAsync();
+        Task<IEnumerable<Product>> GetAllAsync();
+        Task<IEnumerable<Product>> GetProductsByCategoryAsync(int categoryId);
+        Task<List<Product>> GetAllBySellerRoleAsync();
+        #endregion
 
-		// يمكن إضافة دوال خاصة بالمنتجات هنا
+        #region Filtered/Search Operations
+        Task<IEnumerable<Product>> FindAsync(Expression<Func<Product, bool>> predicate);
+        Task<(IEnumerable<Product> Items, int TotalCount)> GetPagedAsync(
+            int pageIndex,
+            int pageSize,
+            Expression<Func<Product, bool>> filter = null,
+            Func<IQueryable<Product>, IOrderedQueryable<Product>> orderBy = null);
+        #endregion
 
-		//Task<List<Product>> GetProductsByCategoryAsync(int categoryId);
-		Task<List<Product>> GetAllBySellerRoleAsync();
-		Task<Product> GetByIdWithCategoryAsync(int id);
-		Task<IEnumerable<Product>> FindAsync(Expression<Func<Product, bool>> predicate);
-		Task<(IEnumerable<Product> Items, int TotalCount)> GetPagedAsync(
-			int pageIndex,
-			int pageSize,
-			Expression<Func<Product, bool>> filter = null,
-			Func<IQueryable<Product>, IOrderedQueryable<Product>> orderBy = null);
-		Task<IEnumerable<Product>> GetProductsByCategoryAsync(int categoryId);
-
-		Task UpdateAsync(Product product);
-		Task SaveChangesAsync();
-
-		Task<bool> SoftDeleteAsync(int id);
-		Task<IEnumerable<Product>> GetAllWithDetailsAsync();
-		Task<IEnumerable<Product>> GetAllAsync();
-
+        #region Status Management
+        Task<bool> SoftDeleteAsync(int id);
         Task<bool> ApproveProductAsync(int id, bool isApproved);
-        Task<Product>GetByIdWithDetailsAsync(int id);
+        #endregion
 
-
+        #region Save Operations
+        Task UpdateAsync(Product product);
+        Task SaveChangesAsync();
+        #endregion
     }
 }

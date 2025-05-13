@@ -1,12 +1,13 @@
-﻿using Tagerly.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Tagerly.Models;
 
 namespace Tagerly.Repositories.Interfaces
 {
     public interface ICategoryRepo : IGenericRepo<Category>
     {
-        // يمكن إضافة دوال خاصة بالتصنيفات هنا
-        Task<List<Category>> GetCategoriesWithProductsAsync();
+        #region Extended Read Operations
+        Task<IEnumerable<Category>> GetAllWithProductsAsync();
+        #endregion
     }
 }
