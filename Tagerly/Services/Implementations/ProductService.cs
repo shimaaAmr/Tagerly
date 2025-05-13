@@ -10,23 +10,31 @@ namespace Tagerly.Services.Implementations
 {
     public class ProductService : IProductService
     {
+        #region Fields & Constructor
         private readonly IProductRepo _repository;
         private readonly IMapper _mapper;
-        private readonly string _imageUploadPath = Path.Combine("wwwroot", "images");
+        private readonly string _imageUploadPath;
 
         public ProductService(IProductRepo repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
+            _imageUploadPath = Path.Combine("wwwroot", "images");
             EnsureUploadDirectoryExists();
         }
+        #endregion
 
+        #region Initialization
         private void EnsureUploadDirectoryExists()
         {
             if (!Directory.Exists(_imageUploadPath))
+            {
                 Directory.CreateDirectory(_imageUploadPath);
+            }
         }
+        #endregion
 
+        #region Public Methods
         public async Task<ProductPagedResult> GetFilteredProductsAsync(ProductFilterViewModel productFilterVM)
         {
             var filter = productFilterVM.BuildFilter();
@@ -38,18 +46,11 @@ namespace Tagerly.Services.Implementations
                 filter,
                 orderBy);
 
-            return new ProductPagedResult
-            {
-                Products = _mapper.Map<IEnumerable<ProductViewModel>>(products),
-                TotalCount = totalCount,
-                PageIndex = productFilterVM.PageIndex,
-                PageSize = productFilterVM.PageSize
-            };
+            return MapToPagedResult(products, totalCount, productFilterVM);
         }
 
         public async Task<ProductViewModel> GetProductByIdAsync(int id)
         {
-            // Make sure to include Seller in your query
             var product = await _repository.GetByIdWithDetailsAsync(id);
             return product == null ? null : _mapper.Map<ProductViewModel>(product);
         }
@@ -62,62 +63,114 @@ namespace Tagerly.Services.Implementations
         public async Task AddProductAsync(ProductViewModel productVM)
         {
             var product = _mapper.Map<Product>(productVM);
-            product.ImageUrl = await HandleImageUploadAsync(productVM.ImageFile);
-            product.SellerId = productVM.SellerId; // Ensure seller ID is set
 
-            await _repository.AddAsync(product);
+            product.ImageUrl = await HandleImageUploadAsync(productVM.ImageFile);
+            product.SellerId = productVM.SellerId;
+
+            await _repository.AddAsync(product); 
             await _repository.SaveChangesAsync();
         }
+
         public async Task UpdateProductAsync(ProductViewModel productVM)
         {
-            var existingProduct = await _repository.GetByIdAsync(productVM.ProductId)
-                ?? throw new KeyNotFoundException("Product not found");
-
-            // Preserve existing image if no new file is uploaded
-            var existingImageUrl = existingProduct.ImageUrl;
-
-            _mapper.Map(productVM, existingProduct);
-
-            if (productVM.ImageFile != null && productVM.ImageFile.Length > 0)
-            {
-                // New image uploaded - delete old and save new
-                DeleteImageIfExists(existingImageUrl);
-                existingProduct.ImageUrl = await HandleImageUploadAsync(productVM.ImageFile);
-            }
-            else
-            {
-                // No new image - keep the existing one
-                existingProduct.ImageUrl = existingImageUrl;
-            }
-
-            _repository.Update(existingProduct);
-            await _repository.SaveChangesAsync();
+            var existingProduct = await GetExistingProductOrThrow(productVM.ProductId);
+            UpdateProductWithImage(existingProduct, productVM);
+            await SaveProductAsync(existingProduct);
         }
 
         public async Task DeleteProductAsync(int id)
         {
-            var product = await _repository.GetByIdAsync(id);
-            if (product == null)
-                throw new KeyNotFoundException("Product not found");
+            var product = await GetExistingProductOrThrow(id);
+            DeleteProductImage(product);
+            await RemoveProductAsync(product);
+        }
+        #endregion
 
-            DeleteImageIfExists(product.ImageUrl);
+        #region Private Methods
+        private ProductPagedResult MapToPagedResult(
+            IEnumerable<Product> products,
+            int totalCount,
+            ProductFilterViewModel productFilterVM)
+        {
+            return new ProductPagedResult
+            {
+                Products = _mapper.Map<IEnumerable<ProductViewModel>>(products),
+                TotalCount = totalCount,
+                PageIndex = productFilterVM.PageIndex,
+                PageSize = productFilterVM.PageSize
+            };
+        }
+
+        private async Task<Product> GetExistingProductOrThrow(int id)
+        {
+            var product = await _repository.GetByIdAsync(id);
+            return product ?? throw new KeyNotFoundException("Product not found");
+        }
+
+        private void UpdateProductWithImage(Product existingProduct, ProductViewModel productVM)
+        {
+            var existingImageUrl = existingProduct.ImageUrl;
+            _mapper.Map(productVM, existingProduct);
+
+            if (productVM.ImageFile != null && productVM.ImageFile.Length > 0)
+            {
+                DeleteImageIfExists(existingImageUrl);
+                existingProduct.ImageUrl = HandleImageUploadAsync(productVM.ImageFile).Result;
+            }
+            else
+            {
+                existingProduct.ImageUrl = existingImageUrl;
+            }
+        }
+
+        private async Task SaveProductAsync(Product product)
+        {
+            _repository.Update(product);
+            await _repository.SaveChangesAsync();
+        }
+
+        private async Task RemoveProductAsync(Product product)
+        {
             _repository.Delete(product);
             await _repository.SaveChangesAsync();
+        }
+
+        private void DeleteProductImage(Product product)
+        {
+            if (!string.IsNullOrEmpty(product.ImageUrl))
+            {
+                DeleteImageIfExists(product.ImageUrl);
+            }
         }
 
         private async Task<string> HandleImageUploadAsync(IFormFile file)
         {
             if (file == null || file.Length == 0) return null;
 
-            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-            var filePath = Path.Combine(_imageUploadPath, fileName);
+            var fileName = GenerateUniqueFileName(file.FileName);
+            var filePath = GetFilePath(fileName);
 
+            await SaveFileAsync(file, filePath);
+
+            return $"/images/{fileName}";
+        }
+
+        private string GenerateUniqueFileName(string originalFileName)
+        {
+            return $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
+        }
+
+        private string GetFilePath(string fileName)
+        {
+            return Path.Combine(_imageUploadPath, fileName);
+        }
+
+        private async Task SaveFileAsync(IFormFile file, string filePath)
+        {
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 await file.CopyToAsync(stream);
             }
-
-            return $"/images/{fileName}";
         }
 
         private void DeleteImageIfExists(string imageUrl)
@@ -130,5 +183,6 @@ namespace Tagerly.Services.Implementations
                 File.Delete(imagePath);
             }
         }
+        #endregion
     }
 }

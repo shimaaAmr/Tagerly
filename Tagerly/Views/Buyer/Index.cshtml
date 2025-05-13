@@ -1,11 +1,8 @@
 ﻿@model IEnumerable<ProductViewModel>
 @{
     ViewData["Title"] = "Our Products";
-
     var filterModel = ViewBag.FilterModel as ProductFilterViewModel ?? new ProductFilterViewModel();
-
     int currentPage = ViewBag.CurrentPage ?? 1;
-
     int totalPages = ViewBag.TotalPages ?? 1;
 }
 
@@ -15,14 +12,14 @@
         transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
-        border-radius: 12px !important; /* Rounded corners for the card */
+        border-radius: 12px !important;
         border: 1px solid #e0d6cc !important;
     }
 
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(139, 94, 60, 0.2);
-        }
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(139, 94, 60, 0.2);
+    }
 
     .card-img-container {
         position: relative;
@@ -151,46 +148,131 @@
     .row-cols-md-4 .card-text {
         display: none; /* Hide description to save space */
     }
+    /* New Pagination Styles */
+    .pagination-container {
+        margin-top: 2rem;
+        display: flex;
+        justify-content: center;
+    }
+
+    .pagination {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .page-item {
+        margin: 0;
+    }
+
+    .page-link {
+        color: #5c3d24;
+        background-color: #F5F1EB;
+        border: 1px solid #c4a484;
+        border-radius: 6px !important;
+        padding: 0.5rem 0.9rem;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+
+        .page-link:hover {
+            background-color: #e0d6cc;
+            color: #5c3d24;
+            border-color: #8b5e3c;
+        }
+
+    .page-item.active .page-link {
+        background-color: #8b5e3c;
+        border-color: #8b5e3c;
+        color: white;
+    }
+
+    .page-item.disabled .page-link {
+        color: #a38f7a;
+        background-color: #F5F1EB;
+        border-color: #e0d6cc;
+        pointer-events: none;
+    }
+
+    .page-link-prev-next {
+        min-width: 90px;
+        text-align: center;
+    }
+
 </style>
 
 <div class="container py-4" style="background-color: #F5F1EB;">
     <h1 class="text-center mb-4" style="color: #8b5e3c;">Discover Our Products</h1>
 
     <!-- Filter Section -->
-    <div class="card mb-4" style="border-color: #c4a484;">
-        <div class="card-body">
-            <form asp-action="Index" method="get" class="row g-3">
-                <div class="col-md-4">
-                    <input name="searchString" value="@filterModel.SearchString"
-                           class="form-control" placeholder="Search products..."
-                           style="border-color: #8b5e3c;" />
-                </div>
+    <div class="card mb-4" style="border: 2px solid #c4a484; border-radius: 10px;">
+        <div class="card-body p-3">
+            <form asp-action="Index" method="get" class="row g-3 align-items-center">
+
+                <!-- Search Input -->
                 <div class="col-md-3">
-                    <select name="categoryId" class="form-control" asp-items="ViewBag.Categories"
-                            style="border-color: #8b5e3c;">
+                    <input name="searchString" value="@filterModel.SearchString"
+                           class="form-control"
+                           placeholder="Search products..."
+                           style="border: 2px solid #8b5e3c; height: 45px; border-radius: 8px;">
+                </div>
+
+                <!-- Category Dropdown -->
+                <div class="col-md-2">
+                    <select name="categoryId" class="form-select"
+                            asp-items="ViewBag.Categories"
+                            style="border: 2px solid #8b5e3c; height: 45px; border-radius: 8px;">
                         <option value="">All Categories</option>
                     </select>
                 </div>
-                <div class="col-md-3">
-                    <select name="sortOrder" class="form-control" style="border-color: #8b5e3c;">
+
+                <!-- Sort Dropdown -->
+                <div class="col-md-2">
+                    <select name="sortOrder" class="form-select"
+                            style="border: 2px solid #8b5e3c; height: 45px; border-radius: 8px;">
                         <option value="">Default Sorting</option>
-                        <option value="price" selected="@(filterModel.SortOrder == "price")">Price: Low to High</option>
-                        <option value="price_desc" selected="@(filterModel.SortOrder == "price_desc")">Price: High to Low</option>
+                        <option value="price" selected="@(filterModel.SortOrder == "price")">Price Low-High</option>
+                        <option value="price_desc" selected="@(filterModel.SortOrder == "price_desc")">Price High-Low</option>
                     </select>
                 </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn w-100" style="background-color: #8b5e3c; color: white;">
-                        Filter
-                    </button>
+
+                <!-- In Stock Checkbox -->
+                <div class="col-md-2 d-flex align-items-center">
+                    <input class="form-check-input me-2"
+                           type="checkbox"
+                           name="inStockOnly"
+                           id="inStockOnly"
+                           value="true"
+                           style="width: 24px; height: 24px; border-color: #8b5e3c;"
+                    @(filterModel.InStockOnly == true ? "checked" : "")>
+                    <label class="form-check-label fw-bold mb-0"
+                           for="inStockOnly"
+                           style="color: #5c3d24; font-size: 1.2rem;">
+                        In Stock Only
+                    </label>
                 </div>
+
+                <!-- Buttons: Apply + Reset -->
+                <div class="col-md-3 d-flex justify-content-end gap-2">
+                    <button type="submit" class="btn d-flex align-items-center justify-content-center"
+                            style="min-width: 140px; background-color: #8b5e3c; color: white; height: 45px; font-weight: 500;">
+                        <i class="fas fa-check me-1"></i> Apply
+                    </button>
+
+                    <a asp-action="Index"
+                       class="btn d-flex align-items-center justify-content-center"
+                       style="min-width: 110px; background-color: #e3dccb; color: #5c3d24; border: 1px solid #8b5e3c; height: 45px; font-weight: 500;">
+                        <i class="fas fa-undo me-1"></i> Reset
+                    </a>
+                </div>
+
             </form>
         </div>
     </div>
 
+
     <!-- Product Grid -->
     <div class="row row-cols-1 row-cols-md-4 g-4">
         @foreach (var product in Model)
-
         {
             <div class="col">
                 <div class="card h-100 shadow-sm product-card">
@@ -211,13 +293,10 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <h5 style="color: #8b5e3c;">@product.Price.ToString("C")</h5>
                             @if (product.Quantity > 0)
-
                             {
                                 <span class="badge stock-badge" style="background-color: #c4a484; color: #5c3d24;">In Stock</span>
                             }
-
                             else
-
                             {
                                 <span class="badge bg-secondary stock-badge">Out of Stock</span>
                             }
@@ -241,45 +320,40 @@
 
     <!-- Pagination -->
     @if (totalPages > 1)
-
     {
-        <nav aria-label="Page navigation" class="mt-4">
-            <ul class="pagination justify-content-center">
+        <div class="pagination-container">
+            <ul class="pagination">
                 <li class="page-item @(currentPage == 1 ? "disabled" : "")">
-                    <a class="page-link"
+                    <a class="page-link page-link-prev-next"
                        asp-action="Index"
                        asp-all-route-data="@Context.Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString())"
-                       asp-route-pageIndex="@(currentPage - 1)"
-                       style="color: #5c3d24;">
+                       asp-route-pageIndex="@(currentPage - 1)">
                         &laquo; Previous
                     </a>
                 </li>
 
                 @for (int i = 1; i <= totalPages; i++)
-
                 {
                     <li class="page-item @(i == currentPage ? "active" : "")">
                         <a class="page-link"
                            asp-action="Index"
                            asp-all-route-data="@Context.Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString())"
-                           asp-route-pageIndex="@i"
-                           style="@(i == currentPage ? "background-color: #8b5e3c; color: white; border-color: #5c3d24;" : "color: #5c3d24;")">
+                           asp-route-pageIndex="@i">
                             @i
                         </a>
                     </li>
                 }
 
                 <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
-                    <a class="page-link"
+                    <a class="page-link page-link-prev-next"
                        asp-action="Index"
                        asp-all-route-data="@Context.Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString())"
-                       asp-route-pageIndex="@(currentPage + 1)"
-                       style="color: #5c3d24;">
+                       asp-route-pageIndex="@(currentPage + 1)">
                         Next &raquo;
                     </a>
                 </li>
             </ul>
-        </nav>
+        </div>
     }
 </div>
 

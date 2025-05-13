@@ -8,6 +8,7 @@ namespace Tagerly.ViewModels
 {
     public class ProductFilterViewModel
     {
+        #region Filter Properties
         public int PageIndex { get; set; } = 1;
         public int PageSize { get; set; } = 10;
         public string SortOrder { get; set; }
@@ -16,35 +17,28 @@ namespace Tagerly.ViewModels
         public decimal? MinPrice { get; set; }
         public decimal? MaxPrice { get; set; }
         public bool? InStockOnly { get; set; }
-
-        // Properties for role-based filtering
         public string SellerId { get; set; }
         public bool? IsApproved { get; set; }
+        #endregion
 
+        #region Filter Building
         public Expression<Func<Product, bool>> BuildFilter()
         {
             // Start with basic filter (not deleted)
-            Expression<Func<Product, bool>> filter = p => p.Status != ProductStatus.Deleted; // Filter out deleted products by default
+            Expression<Func<Product, bool>> filter = p => p.Status != ProductStatus.Deleted;
 
-            // Apply approval status filter based on the IsApproved flag
+            // Apply approval status filter
             if (IsApproved.HasValue)
             {
                 if (IsApproved.Value)
                 {
-                    // If IsApproved is true (set by BuyerController),
-                    // filter for products with Status == Approved
                     filter = Combine(filter, p => p.Status == ProductStatus.Approved);
                 }
                 else
                 {
-                    // If IsApproved is false, you might want to filter for
-                    // products that are NOT Approved (Pending, Rejected).
                     filter = Combine(filter, p => p.Status == ProductStatus.Pending || p.Status == ProductStatus.Rejected);
                 }
             }
-            // If IsApproved is null, no specific approval status filter is applied
-            // (This would be useful for an admin list showing ALL statuses except deleted)
-
 
             // Apply seller filter if specified
             if (!string.IsNullOrEmpty(SellerId))
@@ -56,8 +50,8 @@ namespace Tagerly.ViewModels
             if (!string.IsNullOrWhiteSpace(SearchString))
             {
                 filter = Combine(filter, p =>
-                    (p.Name != null && p.Name.Contains(SearchString)) || // Null check for safety
-                    (p.Description != null && p.Description.Contains(SearchString))); // Null check for safety
+                    (p.Name != null && p.Name.Contains(SearchString)) ||
+                    (p.Description != null && p.Description.Contains(SearchString)));
             }
 
             // Apply category filter
@@ -85,7 +79,9 @@ namespace Tagerly.ViewModels
 
             return filter;
         }
+        #endregion
 
+        #region Sorting
         public Func<IQueryable<Product>, IOrderedQueryable<Product>> BuildSort()
         {
             return SortOrder?.ToLower() switch
@@ -98,8 +94,9 @@ namespace Tagerly.ViewModels
                 _ => q => q.OrderBy(p => p.Name), // Default sorting
             };
         }
+        #endregion
 
-        // Helper method to combine expressions using AndAlso
+        #region Expression Helper
         private Expression<Func<T, bool>> Combine<T>(
             Expression<Func<T, bool>> first,
             Expression<Func<T, bool>> second)
@@ -112,32 +109,25 @@ namespace Tagerly.ViewModels
             var rightVisitor = new ReplaceExpressionVisitor(second.Parameters[0], parameter);
             var right = rightVisitor.Visit(second.Body);
 
-            var body = Expression.AndAlso(left, right);
-
-            return Expression.Lambda<Func<T, bool>>(body, parameter);
-        }
-    }
-
-    // Helper visitor to replace parameters in expressions
-    // Required for correctly combining expressions
-    public class ReplaceExpressionVisitor : ExpressionVisitor
-    {
-        private readonly Expression _oldValue;
-        private readonly Expression _newValue;
-
-        public ReplaceExpressionVisitor(Expression oldValue, Expression newValue)
-        {
-            _oldValue = oldValue;
-            _newValue = newValue;
+            return Expression.Lambda<Func<T, bool>>(Expression.AndAlso(left, right), parameter);
         }
 
-        public override Expression Visit(Expression node)
+        private class ReplaceExpressionVisitor : ExpressionVisitor
         {
-            if (node == _oldValue)
+            private readonly Expression _oldValue;
+            private readonly Expression _newValue;
+
+            public ReplaceExpressionVisitor(Expression oldValue, Expression newValue)
             {
-                return _newValue;
+                _oldValue = oldValue;
+                _newValue = newValue;
             }
-            return base.Visit(node);
+
+            public override Expression Visit(Expression node)
+            {
+                return node == _oldValue ? _newValue : base.Visit(node);
+            }
         }
+        #endregion
     }
 }

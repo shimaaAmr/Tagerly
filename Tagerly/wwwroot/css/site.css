@@ -374,3 +374,90 @@ body {
     }
 
 /*#endregion */
+/* Improved table responsiveness */
+@media (max-width: 992px) {
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .table {
+        width: 100%;
+        display: block;
+    }
+    
+    .table thead {
+        display: none;
+    }
+    
+    .table tbody, .table tr, .table td {
+        display: block;
+        width: 100%;
+    }
+    
+    .table tr {
+        margin-bottom: 1rem;
+        border: 1px solid var(--wood-light);
+        border-radius: 8px;
+    }
+    
+    .table td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+        border-top: 1px solid var(--wood-light);
+        border-right: none;
+    }
+    
+    .table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0.8rem;
+        width: calc(50% - 1.6rem);
+        padding-right: 10px;
+        font-weight: 600;
+        text-align: left;
+        color: var(--wood-dark);
+    }
+    
+    .table td:first-child {
+        border-top: none;
+    }
+    
+    .action-buttons {
+        min-width: auto;
+    }
+    
+    .btn-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: flex-end;
+    }
+    
+    .btn-group .btn {
+        flex: 1;
+        min-width: 80px;
+    }
+}
+
+/* Improved description handling */
+.table td:nth-child(2) {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media (max-width: 992px) {
+    .table td:nth-child(2) {
+        max-width: none;
+        white-space: normal;
+        text-overflow: clip;
+    }
+}
+
+/* Add data-labels for mobile view */
+.table td {
+    data-label: attr(data-column);
+}
