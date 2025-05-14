@@ -60,36 +60,33 @@ body {
 
 /*#region SignUpSuccess */
 
-
-/* تنسيق عام للحاويات */
 .container-box {
     max-width: 500px;
     margin: 50px auto;
     padding: 30px;
     border: 1px solid #ddd;
     border-radius: 10px;
-    background-color: #F5E8C7; /* بيج ناعم */
+    background-color: #F5E8C7;
     text-align: center;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* تنسيق عام للروابط */
 .action-link {
-    color: #D2691E; /* برتقالي محروق */
-    text-decoration: none;
+    color: #D2691E;
+    / text-decoration: none;
     font-weight: bold;
 }
 
     .action-link:hover {
         text-decoration: underline;
-        color: #A85216; /* برتقالي أغمق */
+        color: #A85216;
     }
 
-/* تنسيق عام للأزرار */
+
 .btn-custom {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #D2691E; /* برتقالي محروق */
+    background-color: #D2691E;
     color: white;
     text-decoration: none;
     border-radius: 5px;
@@ -98,7 +95,7 @@ body {
 }
 
     .btn-custom:hover {
-        background-color: #A85216; /* برتقالي أغمق */
+        background-color: #A85216;
     }
 
 
@@ -106,23 +103,22 @@ body {
 
 /*#region ForgotPassword */
 
-/* تنسيق عام للحاويات */
+
 .container-box {
     max-width: 400px;
     margin: 50px auto;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 10px;
-    background-color: #F5E8C7; /* بيج ناعم */
+    background-color: #F5E8C7;
     text-align: center;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* تنسيق عام للأزرار */
 .btn-custom {
     padding: 10px;
     font-size: 16px;
-    background-color: #D2691E; /* برتقالي محروق */
+    background-color: #D2691E;
     color: white;
     border: none;
     border-radius: 5px;
@@ -130,68 +126,61 @@ body {
 }
 
     .btn-custom:hover {
-        background-color: #A85216; /* برتقالي أغمق */
+        background-color: #A85216;
     }
 
-/* تنسيق رسائل التحقق */
 .text-danger {
-    color: #A85216; /* برتقالي أغمق */
+    color: #A85216;
 }
 
 /*#endregion */
 
 /*#region ForgotPasswordConfirmation */
-
-/* تنسيق عام للحاويات (موجود بالفعل) */
 .container-box {
     max-width: 500px;
     margin: 50px auto;
     padding: 30px;
     border: 1px solid #ddd;
     border-radius: 10px;
-    background-color: #F5E8C7; /* بيج ناعم */
+    background-color: #F5E8C7;
     text-align: center;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* تنسيق عام للروابط (موجود بالفعل) */
 .action-link {
-    color: #D2691E; /* برتقالي محروق */
+    color: #D2691E;
     text-decoration: none;
     font-weight: bold;
     font-size: 16px;
-    padding: 5px 10px; /* إضافة مسافة داخلية للرابط */
+    padding: 5px 10px;
     border-radius: 5px;
     transition: background-color 0.3s, color 0.3s;
 }
 
     .action-link:hover {
-        background-color: #D2691E; /* برتقالي محروق كخلفية */
-        color: white; /* اللون الأبيض عند الـ hover */
+        background-color: #D2691E;
+        color: white;
         text-decoration: none;
     }
 
 /*#endregion */
 
 /*#region ResendConfirmationEmail */
-
-/* تنسيق عام للحاويات (موجود بالفعل في Site.css) */
 .container-box {
     max-width: 400px;
     margin: 50px auto;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 10px;
-    background-color: #F5E8C7; /* بيج ناعم */
+    background-color: #F5E8C7;
     text-align: center;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* تنسيق عام للأزرار (موجود بالفعل في Site.css) */
 .btn-custom {
     padding: 10px;
     font-size: 16px;
-    background-color: #D2691E; /* برتقالي محروق */
+    background-color: #D2691E;
     color: white;
     border: none;
     border-radius: 5px;
@@ -199,25 +188,22 @@ body {
 }
 
     .btn-custom:hover {
-        background-color: #A85216; /* برتقالي أغمق */
+        background-color: #A85216;
     }
 
-/* تنسيق رسائل التحقق (موجود بالفعل في Site.css) */
 .text-danger {
-    color: #A85216; /* برتقالي أغمق */
+    color: #A85216;
 }
 
-/* تنسيق عام للمدخلات */
 .form-control {
     border-radius: 5px;
     border: 1px solid #ddd;
     padding: 8px;
 }
 
-/* تنسيق عام للتنبيهات */
 .alert-danger {
     background-color: #f8d7da;
-    color: #A85216; /* برتقالي أغمق */
+    color: #A85216;
     padding: 10px;
     border-radius: 5px;
     margin-bottom: 20px;
@@ -235,20 +221,17 @@ body {
 /*#endregion */
 
 /*#region Confirm Logout */
-
-/* تنسيق عام للحاويات (موجود بالفعل) */
 .container-box {
     max-width: 400px;
     margin: 50px auto;
     padding: 30px;
     border: 1px solid #ddd;
     border-radius: 10px;
-    background-color: #F5E8C7; /* بيج ناعم */
+    background-color: #F5E8C7;
     text-align: center;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* تنسيق عام للأزرار */
 .btn {
     display: inline-block;
     font-size: 16px;
@@ -259,25 +242,24 @@ body {
 }
 
 .btn-primary {
-    background-color: #D2691E; /* برتقالي محروق */
+    background-color: #D2691E;
     color: white;
     border: none;
 }
 
     .btn-primary:hover {
-        background-color: #A85216; /* برتقالي أغمق */
+        background-color: #A85216;
     }
 
 .btn-secondary {
-    background-color: #8B6F47; /* بني فاتح */
+    background-color: #8B6F47;
     color: white;
 }
 
     .btn-secondary:hover {
-        background-color: #6F5C3F; /* بني أغمق */
+        background-color: #6F5C3F;
     }
 
-/* تنسيق خاص لأزرار تسجيل الخروج */
 .logout-btn {
     width: 120px;
     padding: 12px 0;
@@ -285,24 +267,21 @@ body {
 /*#endregion */
 
 /*#region ResetPassword */
-
-/* تنسيق عام للحاويات (موجود بالفعل في Site.css) */
 .container-box {
     max-width: 400px;
     margin: 50px auto;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 10px;
-    background-color: #F5E8C7; /* بيج ناعم */
+    background-color: #F5E8C7;
     text-align: center;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* تنسيق عام للأزرار (موجود بالفعل في Site.css) */
 .btn-custom {
     padding: 10px;
     font-size: 16px;
-    background-color: #D2691E; /* برتقالي محروق */
+    background-color: #D2691E;
     color: white;
     border: none;
     border-radius: 5px;
@@ -310,15 +289,14 @@ body {
 }
 
     .btn-custom:hover {
-        background-color: #A85216; /* برتقالي أغمق */
+        background-color: #A85216;
     }
 
-/* تنسيق رسائل التحقق (موجود بالفعل في Site.css) */
+
 .text-danger {
-    color: #A85216; /* برتقالي أغمق */
+    color: #A85216;
 }
 
-/* تنسيق عام للمدخلات */
 .form-control {
     border-radius: 5px;
     border: 1px solid #ddd;
@@ -326,10 +304,9 @@ body {
     width: 100%;
 }
 
-/* تنسيق عام للتنبيهات */
 .alert-danger {
     background-color: #f8d7da;
-    color: #A85216; /* برتقالي أغمق */
+    color: #A85216;
     padding: 10px;
     border-radius: 5px;
     margin-bottom: 20px;
@@ -348,29 +325,26 @@ body {
 /*#endregion */
 
 /*#region ResetPasswordConfirmation */
-
-/* تنسيق عام للحاويات (موجود بالفعل في Site.css) */
 .container-box {
     max-width: 500px;
     margin: 50px auto;
     padding: 30px;
     border: 1px solid #ddd;
     border-radius: 10px;
-    background-color: #F5E8C7; /* بيج ناعم */
+    background-color: #F5E8C7;
     text-align: center;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* تنسيق عام للروابط (موجود بالفعل في Site.css) */
 .action-link {
-    color: #D2691E; /* برتقالي محروق */
+    color: #D2691E;
     text-decoration: none;
     font-weight: bold;
 }
 
     .action-link:hover {
         text-decoration: underline;
-        color: #A85216; /* برتقالي أغمق */
+        color: #A85216;
     }
 
 /*#endregion */
