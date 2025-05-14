@@ -61,7 +61,7 @@ body {
 /*#region SignUpSuccess */
 
 
-/* تنسيق عام للحاويات */
+
 .container-box {
     max-width: 500px;
     margin: 50px auto;
@@ -371,6 +371,26 @@ body {
     .action-link:hover {
         text-decoration: underline;
         color: #A85216; /* برتقالي أغمق */
+    }
+
+/*#endregion */
+
+/*#region AccessDenied */
+
+.action-link {
+    color: #D2691E; /* برتقالي محروق */
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+    .action-link:hover {
+        background-color: #D2691E;
+        color: white;
+        text-decoration: none;
     }
 
 /*#endregion */

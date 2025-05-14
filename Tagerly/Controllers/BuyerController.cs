@@ -5,10 +5,11 @@ using Tagerly.Services.Interfaces;
 using Tagerly.ViewModels;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Tagerly.Controllers
 {
-
+	[Authorize(Roles = "Buyer")]
 	public class BuyerController : Controller
 	{
 		private readonly IProductService _productService;
@@ -51,11 +52,11 @@ namespace Tagerly.Controllers
 			//{
 			//	return NotFound();
 			//}
-            if (product == null)
-            {
-                return NotFound();
-            }
-            return View(_mapper.Map<ProductViewModel>(product));
+			if (product == null)
+			{
+				return NotFound();
+			}
+			return View(_mapper.Map<ProductViewModel>(product));
 		}
 
 		private async Task LoadCategories(int? selectedId = null)

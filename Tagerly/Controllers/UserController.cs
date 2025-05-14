@@ -6,9 +6,11 @@ using System.IO;
 using System.Threading.Tasks;
 using Tagerly.DataAccess.DbContexts;
 using Tagerly.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Tagerly.Controllers
 {
+	[Authorize]
 	public class UserController : Controller
 	{
 		private readonly UserManager<ApplicationUser> _identityUserManager;

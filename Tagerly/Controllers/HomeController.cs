@@ -36,38 +36,39 @@ using Microsoft.AspNetCore.Mvc;
 using Tagerly.Models;
 using System.Linq;
 using Tagerly.DataAccess.DbContexts;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Tagerly.Controllers
 {
-    public class HomeController : Controller
-    {
-        private readonly ILogger<HomeController> _logger;
-        private readonly TagerlyDbContext _context;
+	public class HomeController : Controller
+	{
+		private readonly ILogger<HomeController> _logger;
+		private readonly TagerlyDbContext _context;
 
-        public HomeController(
-            ILogger<HomeController> logger,
-            TagerlyDbContext context)
-        {
-            _logger = logger;
-            _context = context;
-        }
+		public HomeController(
+			ILogger<HomeController> logger,
+			TagerlyDbContext context)
+		{
+			_logger = logger;
+			_context = context;
+		}
 
-        public IActionResult Index()
-        {
-            var categories = _context.Categories.ToList();
-            ViewBag.Categories = categories;
-            return View();
-        }
+		public IActionResult Index()
+		{
+			var categories = _context.Categories.ToList();
+			ViewBag.Categories = categories;
+			return View();
+		}
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+		public IActionResult Privacy()
+		{
+			return View();
+		}
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-    }
+		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+		public IActionResult Error()
+		{
+			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+		}
+	}
 }

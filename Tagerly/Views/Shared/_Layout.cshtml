@@ -21,7 +21,7 @@
 
 	<!-- Main CSS -->
 	<link rel="stylesheet" href="~/assets/css/theme.bundle.css" />
-	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/css/css/site.css" asp-append-version="true" />
 
 	<!-- Google Fonts -->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,168 +31,168 @@
 	<title>Tagerly | Unique Handmade Products</title>
 
 	@* <style>
-		body {
-			font-family: 'Tajawal', sans-serif;
-		}
+        body {
+            font-family: 'Tajawal', sans-serif;
+        }
 
-		.navbar-brand {
-			font-weight: 700;
-		}
+        .navbar-brand {
+            font-weight: 700;
+        }
 
-		.dropdown-megamenu {
-			right: 0 !important;
-			left: auto !important;
-		}
+        .dropdown-megamenu {
+            right: 0 !important;
+            left: auto !important;
+        }
 
-		.rtl-dropdown {
-			text-align: right;
-			direction: rtl;
-		}
+        .rtl-dropdown {
+            text-align: right;
+            direction: rtl;
+        }
 
-		.bg-primary {
-			background-color: #8f7668 !important;
-		}
+        .bg-primary {
+            background-color: #8f7668 !important;
+        }
 
-		.text-primary {
-			color: #8f7668 !important;
-		}
+        .text-primary {
+            color: #8f7668 !important;
+        }
 
-		.footer-bg {
-			background-color: rgb(165, 97, 42) !important;
-		}
+        .footer-bg {
+            background-color: rgb(165, 97, 42) !important;
+        }
 
-		/* Notification Styles - Improved Version */
-		.notification-container {
-			position: fixed;
-			top: 80px;
-			right: 20px;
-			z-index: 1100;
-			width: 350px;
-		}
+        /* Notification Styles - Improved Version */
+        .notification-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 1100;
+            width: 350px;
+        }
 
-		.alert-notification {
-			padding: 1rem 1.5rem;
-			border-radius: 8px;
-			box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-			display: flex;
-			align-items: center;
-			margin-bottom: 1rem;
-			transition: all 0.3s ease;
-			border-left: 4px solid transparent;
-			opacity: 0;
-			transform: translateY(-20px);
-			animation: fadeIn 0.3s ease forwards;
-		}
+        .alert-notification {
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeIn 0.3s ease forwards;
+        }
 
-			.alert-notification.show {
-				opacity: 1;
-				transform: translateY(0);
-			}
+            .alert-notification.show {
+                opacity: 1;
+                transform: translateY(0);
+            }
 
-			.alert-notification .icon {
-				font-size: 1.5rem;
-				margin-right: 1rem;
-			}
+            .alert-notification .icon {
+                font-size: 1.5rem;
+                margin-right: 1rem;
+            }
 
-		.alert-success {
-			background-color: #f6ffed;
-			color: #52c41a;
-			border-left-color: #52c41a;
-		}
+        .alert-success {
+            background-color: #f6ffed;
+            color: #52c41a;
+            border-left-color: #52c41a;
+        }
 
-		.alert-danger {
-			background-color: #fff2f0;
-			color: #ff4d4f;
-			border-left-color: #ff4d4f;
-		}
+        .alert-danger {
+            background-color: #fff2f0;
+            color: #ff4d4f;
+            border-left-color: #ff4d4f;
+        }
 
-		.alert-info {
-			background-color: #e6f7ff;
-			color: #1890ff;
-			border-left-color: #1890ff;
-		}
+        .alert-info {
+            background-color: #e6f7ff;
+            color: #1890ff;
+            border-left-color: #1890ff;
+        }
 
-		.alert-warning {
-			background-color: #fffbe6;
-			color: #faad14;
-			border-left-color: #faad14;
-		}
+        .alert-warning {
+            background-color: #fffbe6;
+            color: #faad14;
+            border-left-color: #faad14;
+        }
 
-		@@keyframes fadeIn {
-			from {
-				opacity: 0;
-				transform: translateY(-20px);
-			}
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
 
-			to {
-				opacity: 1;
-				transform: translateY(0);
-			}
-		}
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-		/* Responsive adjustments */
-		@@media (max-width: 768px) {
-			.notification-container {
-				width: 90%;
-				left: 5%;
-				right: 5%;
-				top: 70px;
-			}
-		}
+        /* Responsive adjustments */
+        @@media (max-width: 768px) {
+            .notification-container {
+                width: 90%;
+                left: 5%;
+                right: 5%;
+                top: 70px;
+            }
+        }
 
-		/* Delete Modal Specific Styles */
-		.modal-danger .modal-header {
-			background-color: #dc3545;
-			color: white;
-			border-bottom: none;
-		}
+        /* Delete Modal Specific Styles */
+        .modal-danger .modal-header {
+            background-color: #dc3545;
+            color: white;
+            border-bottom: none;
+        }
 
-		.modal-danger .alert {
-			border-left: 4px solid #dc3545;
-			background-color: rgba(248, 215, 218, 0.2);
-		}
+        .modal-danger .alert {
+            border-left: 4px solid #dc3545;
+            background-color: rgba(248, 215, 218, 0.2);
+        }
 
-		.modal-danger .btn-danger {
-			background-color: #dc3545;
-			border-color: #dc3545;
-			transition: all 0.3s;
-		}
+        .modal-danger .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            transition: all 0.3s;
+        }
 
-			.modal-danger .btn-danger:hover {
-				background-color: #bb2d3b;
-				border-color: #b02a37;
-			}
+            .modal-danger .btn-danger:hover {
+                background-color: #bb2d3b;
+                border-color: #b02a37;
+            }
 
-		/* Theme color overrides */
-		.bg-primary {
-			background-color: rgb(165, 97, 42) !important;
-		}
+        /* Theme color overrides */
+        .bg-primary {
+            background-color: rgb(165, 97, 42) !important;
+        }
 
-		.text-primary {
-			color: rgb(165, 97, 42) !important;
-		}
+        .text-primary {
+            color: rgb(165, 97, 42) !important;
+        }
 
-		.btn-primary {
-			background-color: rgb(165, 97, 42);
-			border-color: rgb(165, 97, 42);
-		}
+        .btn-primary {
+            background-color: rgb(165, 97, 42);
+            border-color: rgb(165, 97, 42);
+        }
 
-			.btn-primary:hover {
-				background-color: rgb(145, 85, 37);
-				border-color: rgb(145, 85, 37);
-			}
+            .btn-primary:hover {
+                background-color: rgb(145, 85, 37);
+                border-color: rgb(145, 85, 37);
+            }
 
-		/* Badge color */
-		.badge.bg-primary {
-			background-color: #8f7668 !important;
-		}
+        /* Badge color */
+        .badge.bg-primary {
+            background-color: #8f7668 !important;
+        }
 
-		/* Fix for RTL dropdown */
-		.rtl-dropdown {
-			text-align: left;
-			direction: ltr;
-		}
-	</style> *@
+        /* Fix for RTL dropdown */
+        .rtl-dropdown {
+            text-align: left;
+            direction: ltr;
+        }
+    </style> *@
 
 </head>
 
@@ -200,7 +200,6 @@
 
 	<div class="notification-container">
 		@if (TempData["SuccessMessage"] != null)
-
 		{
 			<div class="alert-notification alert-success show">
 				<i class="ri-checkbox-circle-fill icon"></i>
@@ -213,7 +212,6 @@
 		}
 
 		@if (TempData["ErrorMessage"] != null)
-
 		{
 			<div class="alert-notification alert-danger show">
 				<i class="ri-error-warning-fill icon"></i>
@@ -226,7 +224,6 @@
 		}
 
 		@if (TempData["InfoMessage"] != null)
-
 		{
 			<div class="alert-notification alert-info show">
 				<i class="ri-information-fill icon"></i>
@@ -239,7 +236,6 @@
 		}
 
 		@if (TempData["WarningMessage"] != null)
-
 		{
 			<div class="alert-notification alert-warning show">
 				<i class="ri-alert-fill icon"></i>
@@ -290,7 +286,6 @@
 				<!-- User Actions -->
 				<div class="d-flex align-items-center">
 					@if (User.Identity.IsAuthenticated)
-
 					{
 						<div class="dropdown me-3">
 							<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -300,7 +295,6 @@
 							<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
 								<li><a class="dropdown-item" asp-controller="User" asp-action="UpdateProfile" asp-route-id="@ViewData["UserId"]">My Profile</a></li>
 								@if (User.IsInRole("Seller"))
-
 								{
 									<li><a class="dropdown-item" asp-controller="Product" asp-action="Index">My Products</a></li>
 								}
@@ -309,9 +303,7 @@
 							</ul>
 						</div>
 					}
-
 					else
-
 					{
 						<div class="d-flex">
 							<a asp-controller="Account" asp-action="Login" class="nav-link me-3">
@@ -412,7 +404,7 @@
 					<p class="mb-0">© 2023 Tagerly. All rights reserved.</p>
 				</div>
 				<div class="col-md-6 text-center text-md-end">
-					<img src="~/assets/images/payment/paypal.png" alt="Payment Methods" height="30">
+					<img src="~/assets/images/payment/paypal.png" alt="Payment Methods" height="80">
 				</div>
 			</div>
 		</div>
