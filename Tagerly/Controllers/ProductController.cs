@@ -12,6 +12,7 @@ namespace Tagerly.Controllers
     [Authorize(Roles = "Seller")]
     public class ProductController : Controller
     {
+        #region Fields & Constructor
         private readonly IProductService _productService;
         private readonly ICategoryService _categoryService;
         private readonly IMapper _mapper;
@@ -25,20 +26,21 @@ namespace Tagerly.Controllers
             _categoryService = categoryService;
             _mapper = mapper;
         }
+        #endregion
 
+        #region Product Views
         public async Task<IActionResult> Index(ProductFilterViewModel productFilterVM)
         {
-            var sellerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            productFilterVM.SellerId = sellerId; // Add this filter
-
+            productFilterVM.SellerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             await LoadCategories(productFilterVM.CategoryId);
-            var result = await _productService.GetFilteredProductsAsync(productFilterVM);
 
+            var result = await _productService.GetFilteredProductsAsync(productFilterVM);
             ViewBag.FilterModel = productFilterVM;
             ViewBag.TotalPages = result.TotalPages;
 
             return View(_mapper.Map<IEnumerable<ProductViewModel>>(result.Products));
         }
+
         public async Task<IActionResult> Details(int id)
         {
             var product = await _productService.GetProductByIdAsync(id);
@@ -55,12 +57,15 @@ namespace Tagerly.Controllers
 
             return View(_mapper.Map<ProductViewModel>(product));
         }
+        #endregion
+
+        #region Create Operations
         public async Task<IActionResult> Create()
         {
             await LoadCategories();
             return View(new ProductViewModel());
         }
-       
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductViewModel productVM)
@@ -87,6 +92,9 @@ namespace Tagerly.Controllers
                 return View(productVM);
             }
         }
+        #endregion
+
+        #region Update Operations
         public async Task<IActionResult> Edit(int id)
         {
             var product = await _productService.GetProductByIdAsync(id);
@@ -106,8 +114,6 @@ namespace Tagerly.Controllers
             productVM.SellerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (id != productVM.ProductId) return NotFound();
-
-            RemoveUnboundModelFields();
 
             if (!ModelState.IsValid)
             {
@@ -134,15 +140,15 @@ namespace Tagerly.Controllers
                 return View(productVM);
             }
         }
+        #endregion
 
-
+        #region Delete Operations
         public async Task<IActionResult> Delete(int id)
         {
             var product = await _productService.GetProductByIdAsync(id);
             if (product == null) return NotFound();
 
-            var productVM = _mapper.Map<ProductViewModel>(product);
-            return View(productVM);
+            return View(_mapper.Map<ProductViewModel>(product));
         }
 
         [HttpPost, ActionName("Delete")]
@@ -164,8 +170,9 @@ namespace Tagerly.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        #endregion
 
-        #region Helpers
+        #region Helper Methods
         private async Task LoadCategories(int? selectedId = null)
         {
             var categories = await _categoryService.GetAllCategoriesAsync();
@@ -174,13 +181,12 @@ namespace Tagerly.Controllers
 
         private void RemoveUnboundModelFields()
         {
-            // These fields are auto-mapped and not directly bound in form
             ModelState.Remove(nameof(ProductViewModel.ImageUrl));
             ModelState.Remove(nameof(ProductViewModel.ImageFile));
             ModelState.Remove(nameof(ProductViewModel.CategoryName));
             ModelState.Remove(nameof(ProductViewModel.SellerId));
             ModelState.Remove(nameof(ProductViewModel.SellerName));
-        } 
+        }
         #endregion
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Tagerly.DataAccess.DbContexts;
@@ -11,27 +12,22 @@ namespace Tagerly.Repositories.Implementations
     public class GenericRepo<T> : IGenericRepo<T> where T : class
     {
         protected readonly TagerlyDbContext _context;
-        private readonly DbSet<T> _dbSet;
+        protected readonly DbSet<T> _dbSet;
 
         public GenericRepo(TagerlyDbContext context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
             _dbSet = _context.Set<T>();
         }
-        public async Task AddAsync(T entity)
-        {
-            await _dbSet.AddAsync(entity);
-        }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
-        {
-            return await _dbSet.ToListAsync();
-        }
+        #region CRUD Implementation
+        public async Task AddAsync(T entity) => await _dbSet.AddAsync(entity);
 
-        public async Task<T> GetByIdAsync(int id)
-        {
-            return await _dbSet.FindAsync(id);
-        }
+        public async Task<IEnumerable<T>> GetAllAsync() =>
+            await _dbSet.AsNoTracking().ToListAsync();
+
+        public async Task<T> GetByIdAsync(int id) =>
+            await _dbSet.FindAsync(id);
 
         public void Update(T entity)
         {
@@ -41,20 +37,25 @@ namespace Tagerly.Repositories.Implementations
 
         public void Delete(T entity)
         {
+            if (_context.Entry(entity).State == EntityState.Detached)
+                _dbSet.Attach(entity);
             _dbSet.Remove(entity);
         }
 
-        public async Task SaveChangesAsync()
-        {
+        public async Task SaveChangesAsync() =>
             await _context.SaveChangesAsync();
-        }
+        #endregion
 
-        public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
-        {
-            return await _dbSet.Where(predicate).ToListAsync();
-        }
+        #region Query Implementation
+        public async Task<bool> ExistsAsync(Expression<Func<T, bool>> predicate) =>
+            await _dbSet.AnyAsync(predicate);
 
-        public async Task<IEnumerable<T>> GetPagedAsync(
+        public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate) =>
+            await _dbSet.Where(predicate).AsNoTracking().ToListAsync();
+        #endregion
+
+        #region Paging Implementation
+        public async Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(
             int pageIndex,
             int pageSize,
             Expression<Func<T, bool>> filter = null,
@@ -63,19 +64,20 @@ namespace Tagerly.Repositories.Implementations
             IQueryable<T> query = _dbSet;
 
             if (filter != null)
-            {
                 query = query.Where(filter);
-            }
+
+            var totalCount = await query.CountAsync();
 
             if (orderBy != null)
-            {
                 query = orderBy(query);
-            }
 
-            return await query
+            var items = await query
                 .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
+                .AsNoTracking()
                 .ToListAsync();
+
+            return (items, totalCount);
         }
 
         public async Task<IEnumerable<T>> GetFilteredAsync(
@@ -86,13 +88,14 @@ namespace Tagerly.Repositories.Implementations
             IQueryable<T> query = _dbSet;
 
             if (filterCondition != null)
-            {
                 query = query.Where(filterCondition);
-            }
 
-            query = query.SkipWhile(skipCondition).TakeWhile(takeCondition);
-
-            return await query.ToListAsync();
+            return await query
+                .SkipWhile(skipCondition)
+                .TakeWhile(takeCondition)
+                .AsNoTracking()
+                .ToListAsync();
         }
+        #endregion
     }
 }

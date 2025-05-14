@@ -37,15 +37,29 @@
         margin-bottom: 1.5rem;
     }
 
-    .btn-primary {
-        background-color: var(--wood);
-        border-color: var(--wood-dark);
+    /* Button Styles */
+    .form-actions {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 1.5rem;
     }
 
-        .btn-primary:hover {
-            background-color: var(--wood-dark);
-            border-color: var(--wood);
-        }
+    .btn {
+        padding: 6px 16px;
+        font-size: 14px;
+        min-width: 100px; /* Fixed width instead of full width */
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
 </style>
 
 <div class="page-center">
@@ -70,15 +84,16 @@
                 <img src="@Model.ImageUrl" alt="Product Image" class="img-thumbnail" style="max-height: 200px;" />
             </div>
         }
-        </dl>
 
         <form asp-action="Delete">
             <input type="hidden" asp-for="ProductId" />
-            <input type="submit" value="Delete" class="btn btn-danger" />
-            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            <div class="form-actions">
+                <input type="submit" value="Delete" class="btn btn-danger" />
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </div>
         </form>
     </div>
 </div>
-<!-- Add this before your theme.bundle.js -->
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/assets/js/theme.bundle.js"></script>
