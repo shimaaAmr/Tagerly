@@ -10,11 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace Tagerly.Controllers
 {
 	[Authorize(Roles = "Buyer")]
-	public class BuyerController : Controller
-	{
-		private readonly IProductService _productService;
-		private readonly ICategoryService _categoryService;
-		private readonly IMapper _mapper;
+	
     public class BuyerController : Controller
     {
         #region Fields & Constructor
