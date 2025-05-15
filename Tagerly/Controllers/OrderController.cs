@@ -8,7 +8,7 @@ using Tagerly.ViewModels;
 
 namespace Tagerly.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Buyer")]
     public class OrderController : Controller
     {
         private readonly IOrderService _orderService;
