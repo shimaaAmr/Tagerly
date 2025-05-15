@@ -165,6 +165,7 @@ namespace Tagerly.Repositories.Implementations
         }
         #endregion
 
+        #region Analytics
         public async Task<List<TopProductViewModel>> GetTopSellingProductsAsync(int count)
         {
             return await _context.OrderDetails
@@ -179,6 +180,6 @@ namespace Tagerly.Repositories.Implementations
                 .Take(count)
                 .ToListAsync();
         }
-
+        #endregion
     }
 }
