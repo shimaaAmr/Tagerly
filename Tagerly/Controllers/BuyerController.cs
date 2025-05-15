@@ -5,9 +5,11 @@ using Tagerly.ViewModels;
 using AutoMapper;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Tagerly.Controllers
 {
+    [Authorize(Roles = "Buyer")]
     public class BuyerController : Controller
     {
         #region Fields & Constructor
