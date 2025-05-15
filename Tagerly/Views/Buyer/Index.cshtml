@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<ProductViewModel>
 @{
     ViewData["Title"] = "Our Products";
-    var filterModel = ViewBag.FilterModel as ProductFilterViewModel ?? new ProductFilterViewModel();
+    var productFilterVM = ViewBag.ProductFilterVM as ProductFilterViewModel ?? new ProductFilterViewModel();
     int currentPage = ViewBag.CurrentPage ?? 1;
     int totalPages = ViewBag.TotalPages ?? 1;
 }
@@ -210,7 +210,7 @@
 
                 <!-- Search Input -->
                 <div class="col-md-3">
-                    <input name="searchString" value="@filterModel.SearchString"
+                    <input name="searchString" value="@productFilterVM.SearchString"
                            class="form-control"
                            placeholder="Search products..."
                            style="border: 2px solid #8b5e3c; height: 45px; border-radius: 8px;">
@@ -230,8 +230,8 @@
                     <select name="sortOrder" class="form-select"
                             style="border: 2px solid #8b5e3c; height: 45px; border-radius: 8px;">
                         <option value="">Default Sorting</option>
-                        <option value="price" selected="@(filterModel.SortOrder == "price")">Price Low-High</option>
-                        <option value="price_desc" selected="@(filterModel.SortOrder == "price_desc")">Price High-Low</option>
+                        <option value="price" selected="@(productFilterVM.SortOrder == "price")">Price Low-High</option>
+                        <option value="price_desc" selected="@(productFilterVM.SortOrder == "price_desc")">Price High-Low</option>
                     </select>
                 </div>
 
@@ -243,7 +243,7 @@
                            id="inStockOnly"
                            value="true"
                            style="width: 24px; height: 24px; border-color: #8b5e3c;"
-                    @(filterModel.InStockOnly == true ? "checked" : "")>
+                    @(productFilterVM.InStockOnly == true ? "checked" : "")>
                     <label class="form-check-label fw-bold mb-0"
                            for="inStockOnly"
                            style="color: #5c3d24; font-size: 1.2rem;">

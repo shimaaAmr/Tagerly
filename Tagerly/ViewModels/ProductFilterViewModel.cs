@@ -17,6 +17,7 @@ namespace Tagerly.ViewModels
         public decimal? MinPrice { get; set; }
         public decimal? MaxPrice { get; set; }
         public bool? InStockOnly { get; set; }
+        public bool? OutOfStockOnly { get; set; } 
         public string SellerId { get; set; }
         public bool? IsApproved { get; set; }
         #endregion
@@ -75,6 +76,10 @@ namespace Tagerly.ViewModels
             if (InStockOnly.HasValue && InStockOnly.Value)
             {
                 filter = Combine(filter, p => p.Quantity > 0);
+            }
+            else if (OutOfStockOnly.HasValue && OutOfStockOnly.Value)
+            {
+                filter = Combine(filter, p => p.Quantity == 0);
             }
 
             return filter;

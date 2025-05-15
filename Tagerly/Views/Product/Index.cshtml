@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<ProductViewModel>
 @{
     ViewData["Title"] = "Products";
-    var filterModel = ViewBag.FilterModel as ProductFilterViewModel ?? new ProductFilterViewModel();
+    var productFilterVM = ViewBag.ProductFilterVM as ProductFilterViewModel ?? new ProductFilterViewModel();
     var totalPages = ViewBag.TotalPages as int? ?? 1;
 }
 
@@ -308,17 +308,16 @@
                         <div class="search-box">
                             <div class="input-group">
                                 <input class="form-control" type="search"
-                                       name="searchString" value="@filterModel.SearchString"
+                                       name="searchString" value="@productFilterVM.SearchString"
                                        placeholder="Search products..." />
                                 <button class="btn btn-primary" type="submit">
-                                    <i class="fas fa-search"></i> Search
+                                    <i class="fas fa-search"></i> Apply
                                 </button>
                                 <a asp-action="Index" class="btn btn-outline-secondary">
                                     <i class="fas fa-sync-alt"></i> Reset
                                 </a>
                             </div>
                         </div>
-
                         <div class="filter-controls">
                             <div class="filter-group">
                                 <select name="categoryId" class="form-select" asp-items="ViewBag.Categories">
@@ -328,9 +327,9 @@
 
                             <div class="form-check filter-group">
                                 <input class="form-check-input" type="checkbox"
-                                       name="inStockOnly" id="inStockOnly"
-                                @(filterModel.InStockOnly == true ? "checked" : "") value="true" />
-                                <label class="form-check-label" for="inStockOnly">In Stock Only</label>
+                                       name="outOfStockOnly" id="outOfStockOnly"
+                                @(productFilterVM.OutOfStockOnly == true ? "checked" : "") value="true" />
+                                <label class="form-check-label" for="outOfStockOnly">Out of Stock Only</label>
                             </div>
                         </div>
                     </div>
@@ -404,38 +403,38 @@
             {
                 <nav aria-label="Product pagination" class="mt-4">
                     <ul class="pagination justify-content-center">
-                        <li class="page-item @(filterModel.PageIndex == 1 ? "disabled" : "")">
+                        <li class="page-item @(productFilterVM.PageIndex == 1 ? "disabled" : "")">
                             <a class="page-link"
                                asp-action="Index"
-                               asp-route-pageIndex="@(filterModel.PageIndex - 1)"
-                               asp-route-searchString="@filterModel.SearchString"
-                               asp-route-categoryId="@filterModel.CategoryId"
-                               asp-route-inStockOnly="@filterModel.InStockOnly">
+                               asp-route-pageIndex="@(productFilterVM.PageIndex - 1)"
+                               asp-route-searchString="@productFilterVM.SearchString"
+                               asp-route-categoryId="@productFilterVM.CategoryId"
+                               asp-route-inStockOnly="@productFilterVM.InStockOnly">
                                 &laquo;
                             </a>
                         </li>
 
                         @for (int i = 1; i <= totalPages; i++)
                         {
-                            <li class="page-item @(i == filterModel.PageIndex ? "active" : "")">
+                            <li class="page-item @(i == productFilterVM.PageIndex ? "active" : "")">
                                 <a class="page-link"
                                    asp-action="Index"
                                    asp-route-pageIndex="@i"
-                                   asp-route-searchString="@filterModel.SearchString"
-                                   asp-route-categoryId="@filterModel.CategoryId"
-                                   asp-route-inStockOnly="@filterModel.InStockOnly">
+                                   asp-route-searchString="@productFilterVM.SearchString"
+                                   asp-route-categoryId="@productFilterVM.CategoryId"
+                                   asp-route-inStockOnly="@productFilterVM.InStockOnly">
                                     @i
                                 </a>
                             </li>
                         }
 
-                        <li class="page-item @(filterModel.PageIndex == totalPages ? "disabled" : "")">
+                        <li class="page-item @(productFilterVM.PageIndex == totalPages ? "disabled" : "")">
                             <a class="page-link"
                                asp-action="Index"
-                               asp-route-pageIndex="@(filterModel.PageIndex + 1)"
-                               asp-route-searchString="@filterModel.SearchString"
-                               asp-route-categoryId="@filterModel.CategoryId"
-                               asp-route-inStockOnly="@filterModel.InStockOnly">
+                               asp-route-pageIndex="@(productFilterVM.PageIndex + 1)"
+                               asp-route-searchString="@productFilterVM.SearchString"
+                               asp-route-categoryId="@productFilterVM.CategoryId"
+                               asp-route-inStockOnly="@productFilterVM.InStockOnly">
                                 &raquo;
                             </a>
                         </li>
