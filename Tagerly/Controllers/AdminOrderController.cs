@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Tagerly.Services.Interfaces;
 using Tagerly.Services.Interfaces.Admin;
 
 namespace Tagerly.Controllers
@@ -13,12 +12,15 @@ namespace Tagerly.Controllers
             _AdminOrderService = AdminOrderService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string status = "", string search = "")
         {
-            var orders = await _AdminOrderService.GetPendingOrdersAsync();
+            var orders = await _AdminOrderService.GetFilteredOrdersAsync(status, search);
+            ViewBag.StatusFilter = status;
+            ViewBag.SearchQuery = search;
             return View(orders);
         }
 
+        [HttpPost]
         public async Task<IActionResult> MarkAsDelivered(int id)
         {
             var result = await _AdminOrderService.MarkAsDeliveredAsync(id);

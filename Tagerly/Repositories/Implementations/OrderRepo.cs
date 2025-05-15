@@ -80,5 +80,13 @@ namespace Tagerly.Repositories.Implementations
 
             return order;
         }
+
+        public IQueryable<Order> GetAllWithUserAndDetails()
+        {
+            return _context.Orders
+                .Include(o => o.User)
+                .Include(o => o.OrderDetails);
+        }
+
     }
 }

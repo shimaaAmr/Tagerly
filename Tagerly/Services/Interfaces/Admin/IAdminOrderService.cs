@@ -6,5 +6,7 @@ namespace Tagerly.Services.Interfaces.Admin
     {
         Task<List<AdminOrderViewModel>> GetPendingOrdersAsync();
         Task<bool> MarkAsDeliveredAsync(int orderId);
+        Task<List<AdminOrderViewModel>> GetFilteredOrdersAsync(string status, string search);
+
     }
 }

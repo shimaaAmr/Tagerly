@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Reflection.Emit;
 using Tagerly.Models;
 
 namespace Tagerly.DataAccess.ConfigurationClasses
@@ -26,6 +27,7 @@ namespace Tagerly.DataAccess.ConfigurationClasses
                    .WithOne(od => od.Order)
                    .HasForeignKey(od => od.OrderId)
                    .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }

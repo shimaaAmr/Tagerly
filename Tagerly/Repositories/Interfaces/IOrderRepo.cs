@@ -17,6 +17,8 @@ namespace Tagerly.Repositories.Interfaces
         Task<IEnumerable<Order>> FindAsync(Expression<Func<Order, bool>> predicate);
         Task<Order> GetByIdAsync(int id);
         Task UpdateAsync(Order order);
+        IQueryable<Order> GetAllWithUserAndDetails();
+
         Task SaveChangesAsync();
     }
 }

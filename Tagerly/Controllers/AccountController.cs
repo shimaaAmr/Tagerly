@@ -200,11 +200,11 @@ namespace Tagerly.Controllers
 					return View(loginViewModel);
 				}
 
-				if (!appUser.IsActive)
-				{
-					ModelState.AddModelError(string.Empty, "Your account is deactivated.");
-					return View(loginViewModel);
-				}
+				//if (!appUser.IsActive)
+				//{
+				//	ModelState.AddModelError(string.Empty, "Your account is deactivated.");
+				//	return View(loginViewModel);
+				//}
 
 				bool isFound = await _userManager.CheckPasswordAsync(appUser, loginViewModel.Password);
 				if (!isFound)
