@@ -108,7 +108,7 @@
                 <div class="py-3 border-bottom border-white opacity-25 mb-3">
                     <div class="d-flex justify-content-between fw-bold fs-5">
                         <span>Total</span>
-                        <span>@Model?.Total.ToString("C")</span>
+                        <span>@Model?.SubTotal.ToString("C")</span>
                     </div>
                 </div>
 
@@ -116,13 +116,6 @@
                     <i class="ri-secure-payment-line align-bottom"></i> Proceed to Checkout
                 </a>
 
-                <div class="text-center mt-3">
-                    <small class="text-white-50">or</small>
-                </div>
-
-                <a href="#" class="btn btn-outline-light w-100 mt-2 @(Model?.CartItems?.Any() != true ? "disabled" : "")">
-                    <i class="ri-paypal-fill align-bottom"></i> Checkout with PayPal
-                </a>
             </div>
 
             <!-- Payment Methods -->

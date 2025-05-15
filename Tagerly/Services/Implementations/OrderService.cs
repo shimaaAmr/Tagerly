@@ -36,8 +36,8 @@ namespace Tagerly.Services.Implementations
         public async Task<Order> PlaceOrder(
             string userId,
             PaymentMethod paymentMethod,
-            string shippingAddress,
-            string billingAddress,
+            Governorate selectedGovernorate,
+            string Address,
             string email,
             string notes)
         {
@@ -91,8 +91,8 @@ namespace Tagerly.Services.Implementations
                     UserId = userId,
                     OrderDate = DateTime.UtcNow,
                     Status = "Pending",
-                    ShippingAddress = shippingAddress,
-                    BillingAddress = billingAddress,
+                    SelectedGovernorate = selectedGovernorate,
+                    Address = Address,
                     PaymentMethod = paymentMethod.ToString(),
                     Email = email,
                     Notes = notes,

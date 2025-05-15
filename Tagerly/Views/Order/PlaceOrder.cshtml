@@ -4,6 +4,26 @@
 @{
     ViewData["Title"] = "Checkout";
 }
+ 
+    <style>
+        .custom-dropdown {
+            font-size: 0.9rem;
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            background-color: #f8f9fa;
+            transition: all 0.3s ease-in-out;
+        display: block;
+        width: 100%;
+        }
+
+            .custom-dropdown:focus {
+                border-color: #007bff;
+                box-shadow: 0 0 5px rgba(0,123,255,0.5);
+                outline: none;
+            }
+    </style>
+
 
 <section class="mt-5 container">
     <h1 class="mb-4 display-5 fw-bold text-center">Checkout Securely</h1>
@@ -24,18 +44,31 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
-            <!-- Shipping Address -->
-            <div class="mb-3">
-                <label asp-for="ShippingAddress" class="form-label"></label>
-                <textarea asp-for="ShippingAddress" class="form-control" rows="3"></textarea>
-                <span asp-validation-for="ShippingAddress" class="text-danger"></span>
+            <!-- Governorate -->
+            <div class="form-group mb-3">
+                <label asp-for="SelectedGovernorate" class="form-label fw-semibold d-block mb-2">
+                    اختر المحافظة
+                </label>
+
+                <select asp-for="SelectedGovernorate"
+                        asp-items="Html.GetEnumSelectList<Governorate>()"
+                        class="custom-dropdown">
+                    <option value="">-- اختر المحافظة --</option>
+                </select>
+
+                <span asp-validation-for="SelectedGovernorate" class="text-danger small"></span>
             </div>
+
+
+
+
+
 
             <!-- Billing Address -->
             <div class="mb-3">
-                <label asp-for="BillingAddress" class="form-label"></label>
-                <textarea asp-for="BillingAddress" class="form-control" rows="2"></textarea>
-                <span asp-validation-for="BillingAddress" class="text-danger"></span>
+                <label asp-for="Address" class="form-label"></label>
+                <textarea asp-for="Address" class="form-control" rows="2"></textarea>
+                <span asp-validation-for="Address" class="text-danger"></span>
             </div>
 
             <!-- Payment Method -->
@@ -78,7 +111,7 @@
                     <hr />
                     <div class="d-flex justify-content-between fw-bold">
                         <span>Total</span>
-                        <span>@cart.Total.ToString("C")</span>
+                        <span>@cart.SubTotal.ToString("C")</span>
                     </div>
                 }
                 else

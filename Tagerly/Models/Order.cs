@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Tagerly.Models.Enums;
 
 namespace Tagerly.Models
 {
@@ -19,12 +20,13 @@ namespace Tagerly.Models
 
         public ICollection<OrderDetail> OrderDetails { get; set; }
         public Payment Payment { get; set; } =new Payment();
-        public string ShippingAddress { get; internal set; }
+        public Governorate SelectedGovernorate { get; set; }
 
-        public string BillingAddress { get; set; }
+        public string  Address { get; set; }
         public string PaymentMethod { get; set; }
         public string Notes { get; set; }
         public string Email { get; set; }
         public decimal TotalAmount { get; set; }
+      
     }
 }

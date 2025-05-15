@@ -1,0 +1,31 @@
+﻿namespace Tagerly.Models.Enums
+{
+    public enum Governorate
+    {
+    Cairo,
+    Giza,
+    Alexandria,
+    Dakahlia,
+    Sharqia,
+    Monufia,
+    Gharbia,
+    Beheira,
+    Fayoum,
+    KafrElSheikh,
+    BeniSuef,
+    Minya,
+    Assiut,
+    Sohag,
+    Qena,
+    Luxor,
+    Aswan,
+    RedSea,
+    NewValley,
+    Matrouh,
+    NorthSinai,
+    SouthSinai,
+    PortSaid,
+    Ismailia,
+    Suez
+    }
+}
