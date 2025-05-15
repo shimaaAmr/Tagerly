@@ -69,8 +69,8 @@ namespace Tagerly.Controllers
                 var order = await _orderService.PlaceOrder(
                     GetUserId(),
                     model.PaymentMethod,
-                    model.ShippingAddress,
-                    model.BillingAddress,
+                    model.SelectedGovernorate,
+                    model.Address,
                     model.Email,
                     model.Notes
                 );
@@ -108,7 +108,7 @@ namespace Tagerly.Controllers
                 OrderId = order.Id,
                 OrderDate = order.OrderDate,
                 TotalAmount = order.TotalAmount, // استخدم القيمة المباشرة بدلاً من order.Payment.Amount
-                ShippingAddress = order.ShippingAddress,
+                Address = order.Address,
                 PaymentMethod = order.PaymentMethod, // استخدم القيمة المباشرة
                 Items = order.OrderDetails.Select(od => new OrderItemViewModel
                 {

@@ -5,11 +5,11 @@ namespace Tagerly.ViewModels
 {
     public class OrderViewModel
     {
-        [Required(ErrorMessage = "Shipping address is required")]
-        public string ShippingAddress { get; set; }
+        [Required(ErrorMessage = "Governorate is required")]
+        public Governorate SelectedGovernorate { get; set; }
 
-        [Required(ErrorMessage = "Billing address is required")]
-        public string BillingAddress { get; set; }
+        [Required(ErrorMessage = "Address is required")]
+        public string Address { get; set; }
 
         [Required(ErrorMessage = "Payment method is required")]
         public PaymentMethod PaymentMethod { get; set; }

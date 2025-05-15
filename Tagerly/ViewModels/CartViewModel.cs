@@ -7,7 +7,8 @@
         public List<CartItemViewModel> CartItems { get; set; } = new List<CartItemViewModel>();
 
         public decimal SubTotal => CartItems.Sum(i => i.Quantity * i.ProductPrice);
-        public decimal Total => SubTotal * 1.1m; // Including 10% tax
+        public decimal SellerFee => SubTotal * 0.05m; // 5% خصم من البائع
+        public decimal SellerNet => SubTotal - SellerFee; //يوصل للبائع
 
         // خاصية جديدة لحساب عدد العناصر الإجمالي
         public int TotalItems => CartItems.Sum(i => i.Quantity);

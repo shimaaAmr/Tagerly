@@ -10,8 +10,8 @@ namespace Tagerly.Services.Interfaces
         Task<Order> PlaceOrder(
             string userId,
             PaymentMethod paymentMethod,
-            string shippingAddress,
-            string billingAddress, // أضف هذا الباراميتر
+            Governorate SelectedGovernorate ,
+            string Address, // أضف هذا الباراميتر
             string email,
             string notes); // أضف هذا الباراميتر
 
