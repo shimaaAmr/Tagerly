@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Tagerly.Repositories.Interfaces;
 using Tagerly.Services.Interfaces.Admin;
 using Tagerly.ViewModels.AdminViewModel;
@@ -34,5 +35,22 @@ namespace Tagerly.Services.Implementations.Admin
 
             return true;
         }
+
+        public async Task<List<AdminOrderViewModel>> GetFilteredOrdersAsync(string status, string search)
+        {
+            var query = _orderRepo.GetAllWithUserAndDetails(); // يرجّع IQueryable<Order>
+
+            if (!string.IsNullOrEmpty(status))
+                query = query.Where(o => o.Status == status);
+
+            if (!string.IsNullOrEmpty(search))
+                query = query.Where(o => o.User.Email.Contains(search) || o.Id.ToString().Contains(search));
+
+            var orders = await query.ToListAsync();
+
+            return _mapper.Map<List<AdminOrderViewModel>>(orders);
+        }
+
+
     }
 }

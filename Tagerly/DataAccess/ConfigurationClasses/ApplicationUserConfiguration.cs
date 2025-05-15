@@ -38,7 +38,7 @@ namespace Tagerly.DataAccess.ConfigurationClasses
 			// خصائص إضافية
 			builder.Property(u => u.Address).HasMaxLength(200);
 			builder.Property(u => u.IsActive)
-	   .HasDefaultValue(true);
+	       .HasDefaultValue(true);
 
 		}
 	}

@@ -99,7 +99,8 @@ namespace Tagerly
 						Email = adminEmail,
 						Address = "Admin Office",
 						PhoneNumber = "123-456-7890",
-						EmailConfirmed = true
+						EmailConfirmed = true,
+						IsActive=true
 					};
 
 					var result = await userManager.CreateAsync(adminUser, adminPassword);

@@ -1,7 +1,7 @@
 ﻿@model List<AdminOrderViewModel>
 
 @{
-    ViewBag.Title = "Pending Orders";
+    ViewBag.Title = "Orders Management";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
@@ -25,6 +25,37 @@
         text-align: center;
         margin: 40px 0 20px;
     }
+
+    .filter-form {
+        width: 90%;
+        margin: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+        .filter-form select,
+        .filter-form input[type="text"],
+        .filter-form button {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--wood-medium);
+            font-size: 1rem;
+        }
+
+        .filter-form button {
+            background-color: var(--wood-dark);
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+            .filter-form button:hover {
+                background-color: var(--wood-medium);
+            }
 
     .alert-success, .alert-danger {
         max-width: 900px;
@@ -74,7 +105,7 @@
         }
 </style>
 
-<h2>Pending Orders</h2>
+<h2>Orders Management</h2>
 
 @if (TempData["Success"] != null)
 {
@@ -84,6 +115,27 @@
 {
     <div class="alert alert-danger">@TempData["Error"]</div>
 }
+
+<!-- Filter Form -->
+<form method="get" asp-action="Index" class="filter-form">
+    @{
+        var statuses = new List<string> { "All", "Pending", "Delivered" };
+        string selectedStatus = ViewBag.StatusFilter ?? "";
+    }
+
+    <select name="status">
+        @foreach (var status in statuses)
+        {
+            var value = status == "All" ? "" : status;
+            <option value="@value" selected="@(selectedStatus == value ? "selected" : null)">
+                @status
+            </option>
+        }
+    </select>
+
+    <input type="text" name="search" value="@ViewBag.SearchQuery" placeholder="Search by Email or Order ID" />
+    <button type="submit">Search</button>
+</form>
 
 <table class="table table-bordered">
     <thead>
@@ -106,10 +158,17 @@
                 <td>@order.Status</td>
                 <td>@order.TotalAmount.ToString("C")</td>
                 <td>
-                    <form asp-action="MarkAsDelivered" asp-route-id="@order.Id" method="post"
-                          onsubmit="return confirm('Are you sure you want to mark this order as delivered?');">
-                        <button type="submit" class="btn btn-success btn-sm">Mark as Delivered</button>
-                    </form>
+                    @if (order.Status == "Pending")
+                    {
+                        <form asp-action="MarkAsDelivered" asp-route-id="@order.Id" method="post"
+                              onsubmit="return confirm('Are you sure you want to mark this order as delivered?');">
+                            <button type="submit" class="btn btn-success btn-sm">Mark as Delivered</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Delivered</span>
+                    }
                 </td>
             </tr>
         }

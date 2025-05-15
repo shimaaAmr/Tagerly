@@ -90,7 +90,7 @@ namespace Tagerly.Services.Implementations
                 {
                     UserId = userId,
                     OrderDate = DateTime.UtcNow,
-                    Status = "Processing",
+                    Status = "Pending",
                     ShippingAddress = shippingAddress,
                     BillingAddress = billingAddress,
                     PaymentMethod = paymentMethod.ToString(),
@@ -105,7 +105,7 @@ namespace Tagerly.Services.Implementations
                         PaymentDate = DateTime.UtcNow,
                         TransactionId = Guid.NewGuid().ToString(), // Generate a proper transaction ID
                         UserId = userId,
-                        Status = "pending"
+                        Status = "Pending"
                     }
                 };
 
