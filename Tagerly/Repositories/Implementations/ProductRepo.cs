@@ -1,154 +1,167 @@
-﻿using System.Linq;
-using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Tagerly.DataAccess;
-using Tagerly.Models;
-using Tagerly.Repositories.Interfaces;
 using Tagerly.DataAccess.DbContexts;
+using Tagerly.Models;
 using Tagerly.Models.Enums;
-
+using Tagerly.Repositories.Interfaces;
 
 namespace Tagerly.Repositories.Implementations
 {
-	public class ProductRepo : GenericRepo<Product>, IProductRepo
-	{
-		private readonly TagerlyDbContext _context;
-		private readonly DbSet<Product> _dbSet;
+    public class ProductRepo : GenericRepo<Product>, IProductRepo
+    {
+        #region Fields & Constructor
+        private readonly TagerlyDbContext _context;
+        private readonly DbSet<Product> _dbSet;
 
-		public ProductRepo(TagerlyDbContext context) : base(context)
-		{
-			_context = context;
-			_dbSet = context.Set<Product>();
-		}
+        public ProductRepo(TagerlyDbContext context) : base(context)
+        {
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _dbSet = context.Set<Product>();
+        }
+        #endregion
+
+        #region Extended Read Operations
         public async Task<Product> GetByIdWithDetailsAsync(int id)
         {
-            return await _context.Products
+            return await _dbSet
                 .Include(p => p.Category)
-                .Include(p => p.Seller) // include Seller
-                //.FirstOrDefaultAsync(p => p.Id == id);
-			        .FirstOrDefaultAsync(p => p.Id == id && p.Status != ProductStatus.Deleted);
-
+                .Include(p => p.Seller)
+                .FirstOrDefaultAsync(p => p.Id == id && p.Status != ProductStatus.Deleted);
         }
+
         public async Task<Product> GetByIdWithCategoryAsync(int id)
-		{
-			return await _context.Products
-				.Include(p => p.Category)  // This ensures Category is loaded
-				.FirstOrDefaultAsync(p => p.Id == id);
-		}
-		public async Task<IEnumerable<Product>> FindAsync(Expression<Func<Product, bool>> predicate)
-		{
-			return await _dbSet
-				.Include(p => p.Category)
-				.Where(predicate)
-				.ToListAsync();
-		}
+        {
+            return await _dbSet
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(p => p.Id == id && p.Status != ProductStatus.Deleted);
+        }
 
-		public async Task<(IEnumerable<Product> Items, int TotalCount)> GetPagedAsync(
-			int pageIndex,
-			int pageSize,
-			Expression<Func<Product, bool>> filter = null,
-			Func<IQueryable<Product>, IOrderedQueryable<Product>> orderBy = null)
-		{
-			IQueryable<Product> query = _dbSet.Include(p => p.Category);
-
-			if (filter != null)
-			{
-				query = query.Where(filter);
-			}
-
-			var totalCount = await query.CountAsync();
-
-			if (orderBy != null)
-			{
-				query = orderBy(query);
-			}
-
-			var items = await query
-				.Skip((pageIndex - 1) * pageSize)
-				.Take(pageSize)
-				.ToListAsync();
-
-			return (items, totalCount);
-		}
-
-		public async Task<List<Product>> GetAllBySellerRoleAsync()
-		{
-			var sellerRoleId = await _context.Roles
-				.Where(r => r.Name == "Seller")
-				.Select(r => r.Id)
-				.FirstOrDefaultAsync();
-
-			return await _context.Products
-				.Include(p => p.Seller)
-				.Where(p => _context.UserRoles
-					.Any(ur => ur.UserId == p.SellerId && ur.RoleId == sellerRoleId))
-				.ToListAsync();
-		}
-
-
-		public async Task<IEnumerable<Product>> GetProductsByCategoryAsync(int categoryId)
-		{
-			return await _dbSet
-				.Include(p => p.Category)
-				.Where(p => p.CategoryId == categoryId)
-				.ToListAsync();
-		}
-
-
-		public async Task UpdateAsync(Product product)
-		{
-			_context.Products.Update(product);
-			await Task.CompletedTask; // ليتوافق مع التوازع async
-		}
-		public async Task<bool> SoftDeleteAsync(int id)
-		{
-			var product = await _context.Products.FindAsync(id);
-			if (product == null) return false;
-
-			product.IsDeleted = true;
-			_context.Products.Update(product);
-			await _context.SaveChangesAsync();
-			return true;
-		}
         public async Task<IEnumerable<Product>> GetAllWithDetailsAsync()
         {
-            return await _context.Products
+            return await _dbSet
                 .Include(p => p.Category)
                 .Include(p => p.Seller)
                 .Where(p => p.Status != ProductStatus.Deleted)
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Product>> GetAllAsync()
+        public new async Task<IEnumerable<Product>> GetAllAsync()
         {
-            return await _context.Products
+            return await _dbSet
                 .Where(p => p.Status != ProductStatus.Deleted)
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Product>> GetProductsByCategoryAsync(int categoryId)
+        {
+            return await _dbSet
+                .Include(p => p.Category)
+                .Where(p => p.CategoryId == categoryId && p.Status != ProductStatus.Deleted)
+                .ToListAsync();
+        }
+
+        public async Task<List<Product>> GetAllBySellerRoleAsync()
+        {
+            var sellerRoleId = await _context.Roles
+                .Where(r => r.Name == "Seller")
+                .Select(r => r.Id)
+                .FirstOrDefaultAsync();
+
+            return await _dbSet
+                .Include(p => p.Seller)
+                .Where(p => _context.UserRoles
+                    .Any(ur => ur.UserId == p.SellerId && ur.RoleId == sellerRoleId) &&
+                    p.Status != ProductStatus.Deleted)
+                .ToListAsync();
+        }
+        #endregion
+
+        #region Filtered/Search Operations
+        public new async Task<IEnumerable<Product>> FindAsync(Expression<Func<Product, bool>> predicate)
+        {
+            return await _dbSet
+                .Include(p => p.Category)
+                .Where(p => p.Status != ProductStatus.Deleted)
+                .Where(predicate)
+                .ToListAsync();
+        }
+
+        public async Task<(IEnumerable<Product> Items, int TotalCount)> GetPagedAsync(
+            int pageIndex,
+            int pageSize,
+            Expression<Func<Product, bool>> filter = null,
+            Func<IQueryable<Product>, IOrderedQueryable<Product>> orderBy = null)
+        {
+            IQueryable<Product> query = _dbSet
+                .Include(p => p.Category)
+                .Where(p => p.Status != ProductStatus.Deleted);
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            var totalCount = await query.CountAsync();
+
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+
+            var items = await query
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (items, totalCount);
+        }
+        #endregion
+
+        #region Status Management
+        public async Task<bool> SoftDeleteAsync(int id)
+        {
+            var product = await _dbSet.FindAsync(id);
+            if (product == null || product.Status == ProductStatus.Deleted)
+                return false;
+
+            product.Status = ProductStatus.Deleted;
+            _dbSet.Update(product);
+            await _context.SaveChangesAsync();
+            return true;
+        }
 
         public async Task<bool> ApproveProductAsync(int id, bool isApproved)
-		{
-			var product = await _context.Products.FindAsync(id);
-			if (product == null) return false;
+        {
+            var product = await _dbSet.FindAsync(id);
+            if (product == null || product.Status == ProductStatus.Deleted)
+                return false;
 
-			product.IsApproved = isApproved;
-			_context.Products.Update(product);
-			await _context.SaveChangesAsync();
-			return true;
-		}
+            product.IsApproved = isApproved;
+            _dbSet.Update(product);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        #endregion
 
-    
+        #region Save Operations
+        public new async Task UpdateAsync(Product product)
+        {
+            if (product == null) throw new ArgumentNullException(nameof(product));
+            if (product.Status == ProductStatus.Deleted)
+                throw new InvalidOperationException("Cannot update a deleted product");
 
+            _dbSet.Update(product);
+            await Task.CompletedTask;
+        }
 
-        public async Task SaveChangesAsync()
-		{
-			await _context.SaveChangesAsync();
-		}
-
-
-	}
+        public new async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
+        #endregion
+    }
 }
