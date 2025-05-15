@@ -20,7 +20,7 @@ namespace Tagerly.Models
 
         public ICollection<OrderDetail> OrderDetails { get; set; }
         public Payment Payment { get; set; } =new Payment();
-        public Governorate SelectedGovernorate { get; set; }
+        public Governorate SelectedGovernorate { get; set; } 
 
         public string  Address { get; set; }
         public string PaymentMethod { get; set; }

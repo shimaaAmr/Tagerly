@@ -109,6 +109,7 @@ namespace Tagerly.Controllers
                 OrderDate = order.OrderDate,
                 TotalAmount = order.TotalAmount, // استخدم القيمة المباشرة بدلاً من order.Payment.Amount
                 Address = order.Address,
+                SelectedGovernorate=order.SelectedGovernorate,
                 PaymentMethod = order.PaymentMethod, // استخدم القيمة المباشرة
                 Items = order.OrderDetails.Select(od => new OrderItemViewModel
                 {
