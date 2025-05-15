@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Tagerly.Models;
+using Tagerly.ViewModels.AdminViewModel;
 
 namespace Tagerly.Repositories.Interfaces
 {
@@ -36,5 +37,8 @@ namespace Tagerly.Repositories.Interfaces
         Task UpdateAsync(Product product);
         Task SaveChangesAsync();
         #endregion
+
+        Task<List<TopProductViewModel>> GetTopSellingProductsAsync(int count);
+
     }
 }
