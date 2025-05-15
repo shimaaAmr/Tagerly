@@ -27,6 +27,9 @@ namespace Tagerly.Models
         public string Notes { get; set; }
         public string Email { get; set; }
         public decimal TotalAmount { get; set; }
-      
+        public decimal SubTotal { get; set; }
+        public decimal SellerFee { get; set; }
+        public decimal SellerNet { get; set; }
+
     }
 }

@@ -84,7 +84,9 @@ namespace Tagerly.Services.Implementations
                     // Store quantity updates for later processing
                     productUpdates[cartItem.ProductId] = cartItem.Quantity;
                 }
-
+                var subTotal = orderDetails.Sum(i => i.Quantity * i.Price);
+                var sellerFee = subTotal * 0.10m; // 10 % من البيعه
+                var sellerNet = subTotal - sellerFee;
                 // 3. Create and save order
                 var order = new Order
                 {
@@ -96,9 +98,14 @@ namespace Tagerly.Services.Implementations
                     PaymentMethod = paymentMethod.ToString(),
                     Email = email,
                     Notes = notes,
-                    TotalAmount = totalAmount,
                     OrderDetails = orderDetails,
+                    TotalAmount = subTotal , // لو فيه ضريبة على المشتري
+
+                    SubTotal = subTotal,
+                    SellerFee = sellerFee,
+                    SellerNet = sellerNet,
                     Payment = new Payment
+
                     {
                         Amount = totalAmount,
                         Method = paymentMethod.ToString(),
@@ -106,6 +113,7 @@ namespace Tagerly.Services.Implementations
                         TransactionId = Guid.NewGuid().ToString(), // Generate a proper transaction ID
                         UserId = userId,
                         Status = "Pending"
+
                     }
                 };
 
