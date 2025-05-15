@@ -38,7 +38,8 @@ namespace Tagerly.Repositories.Interfaces
         Task SaveChangesAsync();
         #endregion
 
-        Task<List<TopProductViewModel>> GetTopSellingProductsAsync(int count);
-
+        #region Analytics
+        Task<List<TopProductViewModel>> GetTopSellingProductsAsync(int count); 
+        #endregion
     }
 }
