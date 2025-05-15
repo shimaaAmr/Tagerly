@@ -7,7 +7,7 @@ using Tagerly.ViewModels;
 
 namespace Tagerly.Controllers
 {
-    [Authorize]
+    [Authorize (Roles="Buyer")]
     public class CartController : Controller
     {
         private readonly ICartService _cartService;
