@@ -20,7 +20,8 @@ namespace Tagerly.Controllers
                 TotalUsers = await _dashboardService.GetTotalUsersAsync(),
                 TotalProducts = await _dashboardService.GetTotalProductsAsync(),
                 TotalOrders = await _dashboardService.GetTotalOrdersAsync(),
-                TotalRevenue = await _dashboardService.GetTotalRevenueAsync()
+                TotalRevenue = await _dashboardService.GetTotalRevenueAsync(),
+                TopSellingProducts = await _dashboardService.GetTopSellingProductsAsync(5) // مثلاً Top 5
             };
 
             return View(model);

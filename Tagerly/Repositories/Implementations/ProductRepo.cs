@@ -8,6 +8,7 @@ using Tagerly.DataAccess.DbContexts;
 using Tagerly.Models;
 using Tagerly.Models.Enums;
 using Tagerly.Repositories.Interfaces;
+using Tagerly.ViewModels.AdminViewModel;
 
 namespace Tagerly.Repositories.Implementations
 {
@@ -163,5 +164,21 @@ namespace Tagerly.Repositories.Implementations
             await _context.SaveChangesAsync();
         }
         #endregion
+
+        public async Task<List<TopProductViewModel>> GetTopSellingProductsAsync(int count)
+        {
+            return await _context.OrderDetails
+                .GroupBy(od => new { od.Product.Id, od.Product.Name, od.Product.ImageUrl })
+                .Select(g => new TopProductViewModel
+                {
+                    ProductName = g.Key.Name,
+                    ImageUrl = g.Key.ImageUrl,
+                    TotalQuantitySold = g.Sum(od => od.Quantity)
+                })
+                .OrderByDescending(p => p.TotalQuantitySold)
+                .Take(count)
+                .ToListAsync();
+        }
+
     }
 }
