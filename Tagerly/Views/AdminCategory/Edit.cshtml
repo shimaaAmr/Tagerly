@@ -10,9 +10,8 @@
         --wood-dark: #5E3023;
         --wood-medium: #895737;
         --wood-light: #B88B4A;
-        --cream: #E3DCCB;
-        --beige: #D8C4A7;
-        --light-bg: #F5F1EB;
+        --cream: #F2E9DC;
+        --light-bg: #F9F6F1;
     }
 
     body {
@@ -22,42 +21,79 @@
     .form-container {
         background-color: var(--cream);
         border-radius: 12px;
-        padding: 30px;
-        max-width: 600px;
-        margin: auto;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 40px 30px;
+        max-width: 550px;
+        margin: 50px auto;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
     }
 
     h2 {
         color: var(--wood-dark);
         text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .form-group {
         margin-bottom: 20px;
     }
 
     label {
+        display: block;
+        margin-bottom: 8px;
         color: var(--wood-dark);
+        font-weight: 500;
     }
 
     input.form-control,
     textarea.form-control {
+        width: 100%;
+        padding: 12px 14px;
+        font-size: 16px;
         border: 1px solid var(--wood-light);
         border-radius: 8px;
-        padding: 8px;
-        background-color: var(--light-bg);
+        background-color: #fff;
+        transition: all 0.3s ease;
     }
+
+        input.form-control:focus,
+        textarea.form-control:focus {
+            border-color: var(--wood-medium);
+            box-shadow: 0 0 0 3px rgba(137, 87, 55, 0.2);
+            outline: none;
+        }
 
     .btn-wood {
         background-color: var(--wood-dark);
         color: white;
         border: none;
-        padding: 10px 16px;
-        border-radius: 6px;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 500;
         transition: background-color 0.3s;
     }
 
         .btn-wood:hover {
             background-color: var(--wood-medium);
         }
+
+    .btn-secondary {
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 500;
+    }
+
+    .text-center {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .text-danger {
+        font-size: 0.85rem;
+        color: #dc3545;
+        margin-top: 5px;
+    }
 </style>
 
 <div class="form-container mt-5">
