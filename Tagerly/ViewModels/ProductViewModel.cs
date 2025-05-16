@@ -28,7 +28,7 @@ namespace Tagerly.ViewModels
         #endregion
 
         #region Approval Status
-        public bool? IsApproved { get; set; } // Null = Pending, True = Approved, False = Rejected
+        public bool? IsApproved { get; set; } 
         #endregion
     }
 }
