@@ -3,8 +3,6 @@
     public enum PaymentMethod
     {
         CreditCard,
-        PayPal,
-        CashOnDelivery,
-        BankTransfer
+
     }
 }
