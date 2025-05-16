@@ -31,8 +31,6 @@ namespace Tagerly.Services.Implementations.Admin
             await _orderRepo.UpdateAsync(order);
             await _orderRepo.SaveChangesAsync();
 
-            // TODO: Send notification to user
-
             return true;
         }
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Tagerly.Models;
@@ -6,7 +7,8 @@ using Tagerly.ViewModels;
 
 namespace Tagerly.Controllers
 {
-	public class RoleController : Controller
+    [Authorize(Roles = "Admin")]
+    public class RoleController : Controller
 	{
 		readonly RoleManager<IdentityRole> _roleManager;
 		public RoleController(RoleManager<IdentityRole> roleManager)
