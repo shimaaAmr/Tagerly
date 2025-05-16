@@ -10,8 +10,8 @@ namespace Tagerly.Models
         public decimal Price { get; set; }
         public int Quantity { get; set; }
         public string ImageUrl { get; set; }
-        public bool IsDeleted { get; set; } = false;        // للحذف المنطقي
-        public bool? IsApproved { get; set; } = null;       // null = لسه، true = موافق، false = مرفوض
+        public bool IsDeleted { get; set; } = false;        
+        public bool? IsApproved { get; set; } = null;      
         public ProductStatus Status { get; set; }
         public string SellerId { get; set; }
 

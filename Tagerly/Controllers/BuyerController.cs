@@ -53,11 +53,6 @@ namespace Tagerly.Controllers
             {
             	return NotFound();
             }
-            //Only show approved products to buyers
-            //if (product == null || product.IsApproved != true)
-            //{
-            //	return NotFound();
-            //}
 
             return View(_mapper.Map<ProductViewModel>(product));
         }
