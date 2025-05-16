@@ -23,13 +23,15 @@ namespace Tagerly.Services.Implementations.Admin
             _mapper = mapper;
         }
 
+        #region GetAll Products
         public async Task<IEnumerable<ProductApprovingVM>> GetAllProductsAsync()
         {
             var products = await _productRepo.GetAllWithDetailsAsync();
             return _mapper.Map<IEnumerable<ProductApprovingVM>>(products);
         }
+        #endregion
 
-
+        #region Approve
         public async Task<bool> ChangeApprovalStatusAsync(int id, bool isApproved)
         {
             var product = await _repo.GetByIdAsync(id);
@@ -40,8 +42,9 @@ namespace Tagerly.Services.Implementations.Admin
             await _repo.SaveChangesAsync();
             return true;
         }
+        #endregion
 
-
+        #region Reject
         public async Task<bool> RejectProductAsync(int id)
         {
             var product = await _repo.GetByIdAsync(id);
@@ -51,7 +54,9 @@ namespace Tagerly.Services.Implementations.Admin
             await _repo.SaveChangesAsync();
             return true;
         }
+        #endregion
 
+        #region Delete
         public async Task<bool> DeleteProductAsync(int id)
         {
             var product = await _productRepo.GetByIdAsync(id);
@@ -63,14 +68,17 @@ namespace Tagerly.Services.Implementations.Admin
 
             return true;
         }
+        #endregion
 
+        #region GetProductById 
         public async Task<ProductApprovingVM> GetProductByIdAsync(int id)
         {
             var product = await _productRepo.GetByIdAsync(id);
             if (product == null) return null;
 
             return _mapper.Map<ProductApprovingVM>(product);
-        }
+        } 
+        #endregion
 
     }
 }

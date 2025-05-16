@@ -19,6 +19,7 @@ namespace Tagerly.Controllers
             _mapper = mapper;
         }
 
+        #region GetAll Users
         public async Task<IActionResult> Users()
         {
             var users = _userManager.Users.ToList();
@@ -34,7 +35,9 @@ namespace Tagerly.Controllers
 
             return View(viewModels);
         }
+        #endregion
 
+        #region Accounts Activation
         [HttpPost]
         public async Task<IActionResult> ToggleActivation(string id)
         {
@@ -54,7 +57,8 @@ namespace Tagerly.Controllers
 
             await _userManager.UpdateAsync(user);
             return RedirectToAction("Users");
-        }
+        } 
+        #endregion 
     }
 
 }

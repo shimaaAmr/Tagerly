@@ -37,7 +37,6 @@
 			<a class="menu-item" asp-controller="AdminOrder" asp-action="Index">
 				<i class="fas fa-shopping-basket"></i>
 				<span>Orders</span>
-				<span class="badge"></span>
 			</a>
 
 			<a class="menu-item" asp-controller="AdminUser" asp-action="Users">
@@ -49,19 +48,15 @@
 				<i class="fas fa-user-plus"></i>
 				<span>Add Role</span>
 			</a>
+			<a class="menu-item" asp-controller="Role" asp-action="DeleteRole">
+				<i class="fas fa-user-times"></i>
+				<span>Delete Role</span>
+			</a>
 
-			@*  <div class="menu-item">
-                <i class="fas fa-comment-alt"></i>
-                <span>Reviews</span>
-                <span class="badge new">3</span>
-            </div> *@
-
-			<div class="logout">
-				<div class="menu-item">
-					<i class="fas fa-sign-out-alt"></i>
-					<span>Logout</span>
-				</div>
-			</div>
+			<a class="menu-item" asp-controller="Account" asp-action="Logout">
+				<i class="fas fa-sign-out-alt"></i>
+				<span>Logout</span>
+			</a>
 		</div>
 
 		<!-- ========== MAIN CONTENT ========== -->
@@ -70,10 +65,10 @@
 			<div class="header">
 				<h1 class="page-title"></h1>
 				<div class="profile-container">
-					<div class="notification-bell">
+					@* <div class="notification-bell">
 						<i class="fas fa-bell"></i>
 						<span class="notification-badge">5</span>
-					</div>
+					</div> *@
 					<div class="profile-dropdown">
 						<span class="profile-name">Admin Profile</span>
 						<img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Profile" class="profile-img">
