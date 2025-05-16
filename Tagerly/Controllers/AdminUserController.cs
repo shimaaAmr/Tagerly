@@ -7,7 +7,7 @@ using Tagerly.ViewModels.AdminViewModel;
 
 namespace Tagerly.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class AdminUserController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;

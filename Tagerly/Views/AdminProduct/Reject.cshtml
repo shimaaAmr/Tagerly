@@ -1,27 +1,31 @@
 ﻿@model ProductApprovingVM
+
 @{
     ViewData["Title"] = "Reject Product";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
-<h2>Reject Product</h2>
+<h2 class="text-danger mb-4">Reject Product</h2>
 
-<div class="card p-4" style="background-color: var(--light-bg); border: 1px solid var(--beige);">
-    <div class="row">
-        <div class="col-md-4">
-            <img src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid" />
-        </div>
-        <div class="col-md-8">
-            <h3>@Model.Name</h3>
+<div class="card">
+    <div class="product-info">
+        <!-- Text Info -->
+        <div class="product-text">
+            <p><strong>Name:</strong> @Model.Name</p>
             <p><strong>Description:</strong> @Model.Description</p>
-            <p><strong>Seller:</strong> @Model.SellerName</p>
-            <p><strong>Status:</strong> @Model.Status</p>
+            <p><strong>Status:</strong> <span class="text-danger">@Model.Status</span></p>
 
-            <form asp-action="RejectConfirmation" method="post">
+            <form asp-action="RejectConfirmation" method="post" class="mt-4 d-flex gap-3">
+                @Html.AntiForgeryToken()
                 <input type="hidden" name="id" value="@Model.Id" />
                 <button type="submit" class="btn btn-danger">Confirm Reject</button>
-                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
             </form>
+        </div>
+
+        <!-- Image -->
+        <div class="product-image">
+            <img src="@Model.ImageUrl" alt="Product Image" class="img-fluid" />
         </div>
     </div>
 </div>
@@ -36,8 +40,64 @@
         --light-bg: #F5F1EB;
     }
 
+    body {
+        background-color: var(--light-bg);
+    }
+
+    .card {
+        background-color: var(--light-bg);
+        border: 2px solid var(--beige);
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        margin-bottom: 40px;
+    }
+
+    .product-info {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        align-items: flex-start;
+    }
+
+    .product-text {
+        flex: 1 1 300px;
+        font-size: 1.05rem;
+        line-height: 1.8;
+    }
+
+    .product-image {
+        flex: 1 1 300px;
+        text-align: center;
+    }
+
+        .product-image img {
+            max-height: 300px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
     .btn-danger {
         background-color: #c0392b;
         border-color: #922b21;
+        padding: 8px 20px;
     }
+
+        .btn-danger:hover {
+            background-color: #a93226;
+            border-color: #7b241c;
+        }
+
+    .btn-outline-secondary {
+        background-color: var(--cream);
+        border-color: var(--wood-light);
+        color: #333;
+        padding: 8px 20px;
+    }
+
+        .btn-outline-secondary:hover {
+            background-color: #d6c7aa;
+            border-color: var(--wood-medium);
+            color: #000;
+        }
 </style>

@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Tagerly.Services.Interfaces.Admin;
 using Tagerly.ViewModels.AdminViewModel;
 
 namespace Tagerly.Controllers
 {
+    [Authorize(Roles = "Admin")] 
     public class AdminController : Controller
     {
         private readonly IDashboardService _dashboardService;
