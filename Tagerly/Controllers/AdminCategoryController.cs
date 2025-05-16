@@ -17,20 +17,25 @@ namespace Tagerly.Controllers
 			_categoryService = categoryService;
 		}
 
+		#region Index
 		public async Task<IActionResult> Index()
 		{
 			var categories = await _categoryService.GetAllCategoriesAsync();
 			return View(categories);
-		}
+		} 
+		#endregion
 
+		#region Details
 		public async Task<IActionResult> Details(int? id)
 		{
 			if (id == null) return NotFound();
 
 			var category = await _categoryService.GetCategoryByIdAsync(id.Value);
 			return category == null ? NotFound() : View(category);
-		}
+		} 
+		#endregion
 
+		#region Create
 		public IActionResult Create() => View();
 
 		[HttpPost]
@@ -41,8 +46,10 @@ namespace Tagerly.Controllers
 
 			await _categoryService.AddCategoryAsync(categoryViewModel);
 			return RedirectToAction(nameof(Index));
-		}
+		} 
+		#endregion
 
+		#region Edit
 		public async Task<IActionResult> Edit(int? id)
 		{
 			if (id == null) return NotFound();
@@ -69,8 +76,10 @@ namespace Tagerly.Controllers
 					return NotFound();
 				throw;
 			}
-		}
+		} 
+		#endregion
 
+		#region Delete
 		public async Task<IActionResult> Delete(int? id)
 		{
 			if (id == null) return NotFound();
@@ -85,6 +94,7 @@ namespace Tagerly.Controllers
 		{
 			await _categoryService.DeleteCategoryAsync(id);
 			return RedirectToAction(nameof(Index));
-		}
+		} 
+		#endregion 
 	}
 }

@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Tagerly.Services.Interfaces.Admin;
 
 namespace Tagerly.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminOrderController : Controller
     {
         private readonly IAdminOrderService _AdminOrderService;

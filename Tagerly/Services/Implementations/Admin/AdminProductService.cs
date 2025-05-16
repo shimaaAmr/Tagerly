@@ -23,21 +23,6 @@ namespace Tagerly.Services.Implementations.Admin
             _mapper = mapper;
         }
 
-        //public async Task<IEnumerable<ProductApprovingVM>> GetAllProductsAsync()
-        //{
-        //    var products = await _repo.GetAllAsync();
-        //    return _mapper.Map<IEnumerable<ProductApprovingVM>>(products);
-
-        //}
-
-        //public async Task<IEnumerable<ProductApprovingVM>> GetAllProductsAsync()
-        //{
-        //    var products = await _productRepo.GetAllBySellerRoleAsync();
-        //    return _mapper.Map<IEnumerable<ProductApprovingVM>>(products);
-        //}
-
-
-        //بيحذف product من الموقع
         public async Task<IEnumerable<ProductApprovingVM>> GetAllProductsAsync()
         {
             var products = await _productRepo.GetAllWithDetailsAsync();
@@ -66,13 +51,6 @@ namespace Tagerly.Services.Implementations.Admin
             await _repo.SaveChangesAsync();
             return true;
         }
-
-
-        //================================
-        //public async Task<bool> DeleteProductAsync(int id)
-        //{
-        //    return await _productRepo.SoftDeleteAsync(id);
-        //}
 
         public async Task<bool> DeleteProductAsync(int id)
         {
