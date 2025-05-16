@@ -33,5 +33,15 @@ namespace Tagerly.Controllers
 
             return RedirectToAction("Index");
         }
+
+        public async Task<IActionResult> OrderDetails(int id)
+        {
+            var orderDetailsVM = await _AdminOrderService.GetOrderDetailsViewModelByIdAsync(id);
+
+            if (orderDetailsVM == null)
+                return NotFound();
+
+            return View(orderDetailsVM);
+        }
     }
 }
