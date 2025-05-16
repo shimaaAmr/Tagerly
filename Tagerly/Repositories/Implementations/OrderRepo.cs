@@ -44,6 +44,7 @@ namespace Tagerly.Repositories.Implementations
                 .Include(o => o.OrderDetails)
                 .ThenInclude(od => od.Product)
                 .Include(o => o.Payment)
+                .Include(o => o.User)
                 .FirstOrDefaultAsync(o => o.Id == orderId);
         }
         public async Task UpdateAsync(Order order)

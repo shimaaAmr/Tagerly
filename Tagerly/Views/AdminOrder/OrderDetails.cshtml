@@ -1,0 +1,74 @@
+﻿@model OrderDetailsViewModel
+@{
+    ViewData["Title"] = "Order Details";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h2 class="mb-4" style="color: var(--wood-dark); font-size: 28px; font-weight: bold;">Order Details</h2>
+
+<div class="card p-4 mb-5 shadow-sm"
+     style="background-color: var(--light-bg); border: 1px solid var(--beige); border-radius: 16px; font-size: 16px; line-height: 1.6;">
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <p><strong>Order ID:</strong> @Model.OrderId</p>
+            <p><strong>User Email:</strong> @Model.UserEmail</p>
+            <p><strong>Order Date:</strong> @Model.OrderDate.ToString("dd/MM/yyyy")</p>
+            <p>
+                <strong>Status:</strong>
+                <span class="badge px-3 py-2"
+                      style="background-color:@(Model.Status == "Pending" ? "#e74c3c" : "#27ae60"); color: white; border-radius: 8px;">
+                    @Model.Status
+                </span>
+            </p>
+        </div>
+        <div class="col-md-6">
+            <p><strong>Total Amount:</strong> @Model.TotalAmount.ToString("C")</p>
+            <p><strong>Address:</strong> @Model.Address</p>
+            <p><strong>Governorate:</strong> @Model.Governorate</p>
+        </div>
+    </div>
+
+    @if (Model.Status == "Pending")
+    {
+        <form asp-action="MarkAsDelivered" asp-route-id="@Model.OrderId" method="post"
+              onsubmit="return confirm('Are you sure you want to mark this order as delivered?');"
+              style="display: inline;">
+            <button type="submit" class="btn btn-sm text-white"
+                    style="background-color: var(--wood-medium); border: none; border-radius: 6px; padding: 6px 12px;">
+                <i class="fas fa-check"></i> Mark as Delivered
+            </button>
+        </form>
+    }
+
+    <h4 class="mt-5 mb-3" style="color: var(--wood-medium); font-size: 22px; font-weight: bold; border-bottom: 2px solid var(--wood-light); padding-bottom: 8px;">
+        Ordered Items
+    </h4>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover shadow-sm"
+               style="background-color: white; border-radius: 10px; overflow: hidden; font-size: 15px;">
+            <thead style="background-color: var(--beige); color: black;">
+                <tr>
+                    <th>Image</th>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td><img src="@item.ImageUrl" alt="@item.ProductName" width="80" class="rounded shadow-sm" /></td>
+                        <td>@item.ProductName</td>
+                        <td>@item.Price.ToString("C")</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.TotalPrice.ToString("C")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

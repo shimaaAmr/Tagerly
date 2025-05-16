@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Tagerly.Repositories.Interfaces;
 using Tagerly.Services.Interfaces.Admin;
+using Tagerly.ViewModels;
 using Tagerly.ViewModels.AdminViewModel;
 
 namespace Tagerly.Services.Implementations.Admin
@@ -47,6 +48,33 @@ namespace Tagerly.Services.Implementations.Admin
             var orders = await query.ToListAsync();
 
             return _mapper.Map<List<AdminOrderViewModel>>(orders);
+        }
+
+        public async Task<OrderDetailsViewModel> GetOrderDetailsViewModelByIdAsync(int orderId)
+        {
+            var order = await _orderRepo.GetOrderByIdWithDetails(orderId);
+
+            if (order == null)
+                return null;
+
+            return new OrderDetailsViewModel
+            {
+                OrderId = order.Id,
+                UserEmail = order.Email,
+                OrderDate = order.OrderDate,
+                Status = order.Status,
+                TotalAmount = order.TotalAmount,
+                Address = order.Address,
+                Governorate = order.SelectedGovernorate.ToString(),
+                Items = order.OrderDetails.Select(od => new OrderItemViewModel
+                {
+                    ProductId = od.Product.Id,
+                    ProductName = od.Product.Name,
+                    ImageUrl = od.Product.ImageUrl,
+                    Price = od.Price,
+                    Quantity = od.Quantity
+                }).ToList()
+            };
         }
 
 
