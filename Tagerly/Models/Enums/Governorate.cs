@@ -26,6 +26,7 @@
     SouthSinai,
     PortSaid,
     Ismailia,
-    Suez
+    Suez,
+    Damietta
     }
 }
