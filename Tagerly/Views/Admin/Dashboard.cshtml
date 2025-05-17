@@ -21,41 +21,25 @@
     }
 
     .dashboard-grid {
-        display: grid;
-        grid-template-areas:
-            "stats"
-            "top-products"
-            "future";
-        gap: 2rem;
         padding: 2rem;
-        /* max-width: 100%; */
         max-width: 1200px;
         margin: auto;
-    }
-
-    .stats-section {
-        grid-area: stats;
-    }
-
-    .top-products-section {
-        grid-area: top-products;
-    }
-
-    .future-widgets {
-        grid-area: future;
     }
 
     .stat-card {
         background-color: white;
         border-left: 6px solid var(--wood-medium);
         border-radius: 1rem;
-        padding: 1.5rem;
+        padding: 1rem;
         color: var(--wood-dark);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
         transition: transform 0.2s ease;
         display: flex;
+        flex-direction: column;
+        justify-content: center;
         align-items: center;
-        gap: 1rem;
+        min-height: 180px;
+        text-align: center;
     }
 
         .stat-card:hover {
@@ -64,11 +48,8 @@
 
     .stat-icon {
         font-size: 2.5rem;
+        margin-bottom: 0.5rem;
         color: var(--wood-medium);
-    }
-
-    .stat-details {
-        flex-grow: 1;
     }
 
     .stat-title {
@@ -77,7 +58,7 @@
     }
 
     .stat-value {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
         font-weight: bold;
         color: var(--wood-dark);
     }
@@ -104,7 +85,6 @@
         justify-content: space-between;
     }
 
-
         .product-card:hover {
             transform: scale(1.02);
         }
@@ -119,8 +99,6 @@
         border-bottom: 1px solid var(--beige);
         border-radius: 1rem 1rem 0 0;
     }
-
-
 
     .product-details {
         padding: 1rem;
@@ -144,64 +122,52 @@
     <!-- Stats Section -->
     <section class="stats-section">
         <h2 style="color: var(--wood-dark);" class="mb-4">Admin Dashboard</h2>
-        <div class="row g-4">
-            <div class="col-md-3 col-sm-6">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+            <div class="col">
                 <div class="stat-card">
                     <i class="bi bi-people-fill stat-icon"></i>
-                    <div class="stat-details">
-                        <div class="stat-title">Users</div>
-                        <div class="stat-value">@Model.TotalUsers</div>
-                    </div>
+                    <div class="stat-title">Users</div>
+                    <div class="stat-value">@Model.TotalUsers</div>
                 </div>
             </div>
-            <div class="col-md-3 col-sm-6">
+            <div class="col">
                 <div class="stat-card">
                     <i class="bi bi-box-seam stat-icon"></i>
-                    <div class="stat-details">
-                        <div class="stat-title">Products</div>
-                        <div class="stat-value">@Model.TotalProducts</div>
-                    </div>
+                    <div class="stat-title">Products</div>
+                    <div class="stat-value">@Model.TotalProducts</div>
                 </div>
             </div>
-            <div class="col-md-3 col-sm-6">
+            <div class="col">
                 <div class="stat-card">
                     <i class="bi bi-receipt-cutoff stat-icon"></i>
-                    <div class="stat-details">
-                        <div class="stat-title">Orders</div>
-                        <div class="stat-value">@Model.TotalOrders</div>
-                    </div>
+                    <div class="stat-title">Orders</div>
+                    <div class="stat-value">@Model.TotalOrders</div>
                 </div>
             </div>
-            <div class="col-md-3 col-sm-6">
+            <div class="col">
                 <div class="stat-card">
                     <i class="bi bi-currency-dollar stat-icon"></i>
-                    <div class="stat-details">
-                        <div class="stat-title">Revenue</div>
-                        <div class="stat-value">@Model.TotalRevenue EGP</div>
-                    </div>
+                    <div class="stat-title">Revenue</div>
+                    <div class="stat-value">@Model.TotalRevenue EGP</div>
                 </div>
             </div>
-
-            <!-- Site Profit Card -->
-            <div class="col-md-3 col-sm-6">
+            <div class="col">
                 <div class="stat-card">
                     <i class="bi bi-graph-up-arrow stat-icon"></i>
-                    <div class="stat-details">
-                        <div class="stat-title">Site Profit</div>
-                        <div class="stat-value">@Model.SiteProfit EGP</div>
-                    </div>
+                    <div class="stat-title">Site Profit</div>
+                    <div class="stat-value">@Model.SiteProfit EGP</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Top Selling Products Section -->
-    <section class="top-products-section">
+    <section class="top-products-section mt-5">
         <div class="top-products-title">Top Selling Products</div>
-        <div class="row">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
             @foreach (var product in Model.TopSellingProducts)
             {
-                <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                <div class="col">
                     <div class="product-card">
                         <img src="@product.ImageUrl" alt="@product.ProductName" class="product-image" />
                         <div class="product-details">
@@ -215,7 +181,9 @@
     </section>
 
     <!-- Future Widgets Section -->
-    <section class="future-widgets">
+    <section class="future-widgets mt-5">
         <!-- حطي هنا اللي انتي عايزاه زي Charts، Activity Logs، Notifications... -->
     </section>
 </div>
+
+
